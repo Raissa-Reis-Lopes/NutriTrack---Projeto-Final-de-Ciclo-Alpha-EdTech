@@ -1,0 +1,28 @@
+{
+  "name": "nutritrack---projeto-final-de-ciclo-alpha-edtech",
+  "version": "1.0.0",
+  "description": "Projeto final do Ciclo 1 da Alpha EdTech",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech/issues"
+  },
+  "homepage": "https://github.com/Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
