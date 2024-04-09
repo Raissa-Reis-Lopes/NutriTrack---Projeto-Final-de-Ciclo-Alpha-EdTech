@@ -1,0 +1,14 @@
+body{
+    display: flex;
+}
+.flex_grow{
+    flex-grow: 4;
+}
+/* background da pagina inicial */
+.back_initial{
+    display: block;
+    width: 400px;
+    background: url(../../img/decoracao/fundoDireito.svg) no-repeat right bottom;
+}
+
+/* background geral */
