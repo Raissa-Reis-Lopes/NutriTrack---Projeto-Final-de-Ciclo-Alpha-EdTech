@@ -1,0 +1,11 @@
+.footer{
+ z-index: -1;
+ display: flex;
+ padding: 30px;
+ justify-content: flex-start;
+ align-items: center;
+ background-color: var(--cor-p1);
+ font-size: 0.75rem;
+ color: var(--cor-12);
+ text-transform: capitalize;
+}
