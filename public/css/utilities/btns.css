@@ -9,7 +9,7 @@
 
 .btn_colorLinear{
     border: 1px solid var(--cor-p0);
-    background: linear-gradient(to bottom, var(--cor-p0), var(--cor-p3));
+    background: linear-gradient(to bottom, var(--cor-p0), var(--cor-p4));
 }
 .btn_colorLinear:hover{
     cursor: pointer;
@@ -29,9 +29,9 @@
     color: var(--cor-p4);
 }
 
-.btns_column{
+.btns{
     padding-top: 40px;
     display: flex;
-    flex-direction: column;
     gap: 20px;
+    
 }

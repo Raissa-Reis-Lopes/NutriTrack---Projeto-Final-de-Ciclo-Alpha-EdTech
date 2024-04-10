@@ -1,14 +1,43 @@
-body{
-    display: flex;
-}
-.flex_grow{
-    flex-grow: 4;
-}
+
+
 /* background da pagina inicial */
 .back_initial{
+    position: absolute;
     display: block;
+    width: 470px;
+    height: 100%;
+    right: 0px;
+    background: url(../../img/decoracao/fundoTelaInicial.svg) no-repeat right bottom;
+    background-size: 470px;
+    z-index: -2;
+}
+.back_initial::after{
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: 300px;
+    background: url(../../img/decoracao/yoga.svg) no-repeat right bottom;
+}
+
+.back_initial_2{
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url("../../img/decoracao/fundo_verdeClaro.svg") no-repeat left center;
+    background-size: 1200px;
+    z-index: -1;
+}
+
+
+/* background geral */
+.back_general{
+    position: absolute;
+    display: block;
+    height: 100%;
+    right: 0px;
+    background-size: 470px;
     width: 400px;
     background: url(../../img/decoracao/fundoDireito.svg) no-repeat right bottom;
 }
-
-/* background geral */

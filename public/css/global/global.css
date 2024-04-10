@@ -29,13 +29,19 @@ ul {
     max-width: 250px;
   }
 
-  .container{
+  .container, .container_left{
     max-width: 900px;
-    margin: 0 auto;
     display: flex;
     padding: 40px 0;
     justify-content: center;
     align-items: center;
     flex-direction: column;
    
+  }
+
+  .container{
+    margin: 0 auto;
+  }
+  .container_left{
+    padding-left: 80px;
   }
