@@ -1,3 +1,4 @@
+import createCustomEvent from "./event.js";
 export function Register() {
     const div = document.createElement("div");
 
@@ -25,8 +26,8 @@ export function Register() {
             <input type="checkbox" name="terms" id="terms">
 
             <div class="btns_index">
-                <button class="btn_stroke">Voltar</button>
-                <button class="btn_colorLinear">Próximo</button>
+                <button id="btn_back" class="btn_stroke">Voltar</button>
+                <button id="btn_next" class="btn_colorLinear">Próximo</button>
             </div>
         </div>
         <span><a href="">Não tem conta? Cadastre-se</a></span>
@@ -42,3 +43,21 @@ export function Register() {
     return div
 }
 
+// precisa ver se não tem informação repetida e adicionar informações no banco de dados
+
+export function registerBtns (){
+    const btnBack = document.getElementById("btn_back");
+    const btnNext = document.getElementById("btn_next");
+
+    btnBack.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/');
+        history.pushState({}, '', '/');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnNext.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/forms');
+        history.pushState({}, '', '/forms');
+        window.dispatchEvent(customEvent); 
+    })
+}

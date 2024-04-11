@@ -1,4 +1,4 @@
-import stateChange from "./event.js";
+import createCustomEvent from "./event.js";
 
 export function Initial() {
     const div = document.createElement("div");
@@ -43,4 +43,21 @@ export function Initial() {
     return div
 }
 
-// export function 
+export function initialBtns (){
+    const btnLogin = document.getElementById("btn_login");
+    const btnRegister = document.getElementById("btn_register");
+
+    btnLogin.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/login');
+        history.pushState({}, '', '/login');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnRegister.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/register');
+        history.pushState({}, '', '/register');
+        window.dispatchEvent(customEvent); 
+    })
+}
+
+

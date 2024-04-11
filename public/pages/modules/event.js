@@ -1,7 +1,11 @@
-export default function stateChange(urlParam, criteriaParam = {}) {
-    const eventStateChange = new CustomEvent("onstatechange", {
-        detail: { url: urlParam, criteria: criteriaParam },
+function createCustomEvent(path) {
+    const event = new CustomEvent("onstatechange", {
+      detail: {
+        path: path,
+      },
     });
-
-    return stateChange;
-}
+    return event;
+  }
+  
+  export default createCustomEvent;
+  
