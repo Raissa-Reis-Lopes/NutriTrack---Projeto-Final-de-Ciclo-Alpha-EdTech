@@ -1,3 +1,4 @@
+import createCustomEvent from "./event.js";
 export function Login() {
     const div = document.createElement("div");
 
@@ -39,3 +40,4 @@ export function Login() {
     return div
 }
 
+// aqui autenticar as infos do usuario
