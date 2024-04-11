@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <title>NutriTraker - contagem de calorias</title>
-</head>
-<body>
+import createCustomEvent from "./event.js";
+export function Login() {
+    const div = document.createElement("div");
+
+    div.innerHTML=`
     <div class="back_general"></div>
     <header>
         <div class="logo" id="logo">
@@ -39,6 +35,9 @@
     </main>
     <footer class="footer">
         <span>all rights reserved</span>
-    </footer>
-</body>
-</html>
+    </footer>`;
+
+    return div
+}
+
+// aqui autenticar as infos do usuario
