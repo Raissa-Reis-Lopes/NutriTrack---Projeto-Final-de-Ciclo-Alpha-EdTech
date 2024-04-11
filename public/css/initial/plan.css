@@ -1,0 +1,52 @@
+.title_plan {
+  text-align: center;
+}
+
+.container_center {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+  height: 200px;
+  perspective: 1000px; /*3D effect */
+}
+  
+/* Container to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+  
+/* Do the flip when you move the mouse over the container */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+  
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border: 2px solid var(--cor-p5);
+}
+
+.flip-card-front {
+  background-color: var(--cor-0);
+  color: var(--cor-12);
+}
+
+.flip-card-back {
+  background-color: var(--cor-0);
+  color: var(--cor-12);
+  transform: rotateY(180deg);
+}
