@@ -1,4 +1,3 @@
-const { deleteUser } = require('../repositories/userRepository');
 const userServices = require('../services/userServices');
 
 const getAllUsers = async(req, res) => {
