@@ -5,7 +5,7 @@ export function Register() {
     div.innerHTML=`
     <header>
     <div class="logo" id="logo">
-            <img src="../../img/logo.svg" alt="NutriTrack">
+            <img src="./img/logo.svg" alt="NutriTrack">
     </div>
 </header>
 <main class="welcome"> 

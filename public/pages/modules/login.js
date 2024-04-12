@@ -6,7 +6,7 @@ export function Login() {
     <div class="back_general"></div>
     <header>
         <div class="logo" id="logo">
-                <img src="../../img/logo.svg" alt="NutriTrack">
+                <img src="./img/logo.svg" alt="NutriTrack">
         </div>
     </header>
     <main class="container_left">
