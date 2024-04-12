@@ -28,8 +28,6 @@ export function Login() {
             </div>
             <span><a href="">Não tem conta? Cadastre-se</a></span>
         </div>
-
-
     </main>
     <footer class="footer">
         <span>all rights reserved</span>
