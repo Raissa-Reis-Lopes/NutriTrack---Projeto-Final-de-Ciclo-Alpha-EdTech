@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.static(publicPath));
 
 //Pode mudar depois, mas a princípio deixei assim para usar as rotas com a rota /nutritrack na frente
-app.use('/nutritrack', routes)
+app.use('/api', routes)
 
 // Captura todas as requisições que não correspondem a nenhuma outra rota definida anteriormente.
 app.get('*', (req, res)=>{
