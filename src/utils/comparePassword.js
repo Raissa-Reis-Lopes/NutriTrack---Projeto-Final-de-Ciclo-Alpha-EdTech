@@ -10,4 +10,6 @@ async function comparePassword(password, hashedPassword) {
     }
 }
 
-module.exports = comparePassword;
+module.exports = { 
+    comparePassword 
+};

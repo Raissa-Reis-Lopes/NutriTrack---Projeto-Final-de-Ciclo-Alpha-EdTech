@@ -1,43 +1,28 @@
-const hashPassword = require('../utils/hashPassword')
-const comparePassword = require('../utils/comparePassword')
+const loginServices = require('../services/loginServices')
 
-const { SECRET_KEY } = require('../config');
-const jwt = require('jsonwebtoken');
-
-//Tem que pegar o login de todos os usuários no banco de dados
-
-const getLogin = async(req, res) => {
-    const user = req.user;
-    return res.json(user);
-}
-
-const autenticate = async (req, res) => {
+const authenticate = async(req, res) => {
     const { username, password } = req.body;
+    try {
+        const user = await loginServices.getUser(username);
+        
+        if(!user){
+            return res.status(400).json({ error:'Usuário não encontrado'});
+        }
 
-    if(!username){
-        res.cookie('session_id', '',{ expires: new Date(0) });
-        return res.status(400).json({ error: 'Usuário inválido' });
-    }
+        const { auth, token } = await loginServices.authenticateUser(username, password);
 
-    if(!password){
-        res.cookie('session_id', '',{ expires: new Date(0) });
-        return res.status(400).json({ error: 'Senha inválida' });
-    }
+        if(auth){
+            res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });
+            return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!' });
+        }
 
-    // ****************************************************
-    //Aqui tem que buscar nos usuários do banco de dados qual deles tem o username e senha que combinam com esses recebidos
-
-    //Gera o toke jwt com informações personalizadas como cookie session_id
-    try{
-        const sessionToken = await jwt.sign({ user }, SECRET_KEY);
-        res.cookie('session_id', sessionToken, { maxAge: 900000, httpOnly: true });
-        res.json({ success: true }); 
-    } catch(err){
-        res.status(500).json({ error:'Erro ao gerar toke JWT' })
+        return res.status(400).json({ error: 'Usuário e/ou senha inválidos'});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Falha ao autenticar usuário, erro no servidor'});
     }
 };
 
 module.exports = {
-    getLogin,
-    autenticate
+    authenticate,
 }
