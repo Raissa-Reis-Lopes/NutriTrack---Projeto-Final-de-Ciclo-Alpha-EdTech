@@ -4,7 +4,7 @@ const foodPlanRepository = require('../repositories/foodPlanRepository');
 
 const getAllPlans = async () => {
     try {
-        const plans = await foodPlanRepository.getAllPlans;
+        const plans = await foodPlanRepository.getAllPlans();
         return plans;
     } catch (error) {
         console.log(error);
@@ -14,7 +14,7 @@ const getAllPlans = async () => {
 
 const getPlanById = async(id) =>{
     try {
-        const plan = await foodPlanRepository.getPlanById;
+        const plan = await foodPlanRepository.getPlanById(id);
         return plan;
     } catch (error) {
         console.log(error);

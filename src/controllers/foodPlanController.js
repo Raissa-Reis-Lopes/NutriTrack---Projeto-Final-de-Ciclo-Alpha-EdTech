@@ -1,4 +1,4 @@
-const foodPlanServices = require('../services/userServices');
+const foodPlanServices = require('../services/foodPlanServices');
 
 
 const getAllPlans = async(req, res) => {

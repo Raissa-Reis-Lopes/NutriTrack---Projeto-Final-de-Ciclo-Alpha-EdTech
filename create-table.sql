@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS users (
   activity_level VARCHAR(30),
   username VARCHAR(255),
   email VARCHAR(255) UNIQUE,
-  password VARCHAR(15),
+  password TEXT,
   weight DECIMAL,
   height DECIMAL,
   birth_date DATE,

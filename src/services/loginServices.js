@@ -5,7 +5,7 @@ const loginRepository = require('../repositories/loginRepository');
 
 const getUser = async(username) => {
     try {
-        const user = await loginRepository.getUserByUsername();
+        const user = await loginRepository.getUserByUsername(username);
         return user;
     } catch (error) {
         throw error;
@@ -15,11 +15,10 @@ const getUser = async(username) => {
 const authenticateUser = async(username, password) => {
     try {
         const user = await loginRepository.getUserByUsername(username);
-        const matchPassword = await comparePassword(password, user.password);
+        const matchPassword = await comparePassword(password, user[0].password);
 
-        //Vai durar 10 dias - 864000ms
         if(user && matchPassword){
-            const token = jwt.sign({ id: user.id}, SECRET_KEY, { maxAge: 864000});
+            const token = jwt.sign({ id: user.id}, SECRET_KEY, {expiresIn: '10d'});
             return{ auth: true, token};
         }
         return { auth: false, error:'Usuário e/ou senha inválidos'};
