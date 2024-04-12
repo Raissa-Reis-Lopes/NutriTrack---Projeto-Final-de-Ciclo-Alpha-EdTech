@@ -9,9 +9,7 @@ export function Initial() {
 
         <header>
             <div class="logo" id="logo">
-                <a href="">
-                    <img src="../img/logo.svg" alt="NutriTrack">
-                </a>
+                    <img src="../../img/logo.svg" alt="NutriTrack">
             </div>
         </header>
         <main class="container_left">
@@ -39,11 +37,12 @@ export function Initial() {
         </footer>
  
     `;
-
+    document.getElementById("root").appendChild(div);
+    initialBtns();
     return div
 }
 
-export function initialBtns (){
+export function initialBtns(){
     const btnLogin = document.getElementById("btn_login");
     const btnRegister = document.getElementById("btn_register");
 

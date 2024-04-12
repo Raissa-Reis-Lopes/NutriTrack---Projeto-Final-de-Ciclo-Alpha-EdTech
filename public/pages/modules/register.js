@@ -5,9 +5,7 @@ export function Register() {
     div.innerHTML=`
     <header>
     <div class="logo" id="logo">
-        <a href="">
-            <img src="" alt="NutriTrack">
-        </a>
+            <img src="../../img/logo.svg" alt="NutriTrack">
     </div>
 </header>
 <main class="welcome"> 
@@ -40,24 +38,56 @@ export function Register() {
 </footer>
   `;
 
+  document.getElementById("root").innerHTML = '';
+    document.getElementById("root").appendChild(div);
+  registerBtns();
     return div
 }
 
 // precisa ver se não tem informação repetida e adicionar informações no banco de dados
 
-export function registerBtns (){
+export function registerBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
+ 
+    if(btnBack){
+        btnBack.addEventListener ("click",()=>{
+            const customEvent = createCustomEvent('/');
+            history.pushState({}, '', '/');
+            window.dispatchEvent(customEvent); 
+        })
+    }
+    // sem verificação
+    if(btnNext){
+        btnNext.addEventListener ("click",()=>{
+            const customEvent = createCustomEvent('/forms');
+            history.pushState({}, '', '/forms');
+            window.dispatchEvent(customEvent); 
+        })
+    }
+    // btnNext.addEventListener("click", async () => {
+    //     const name = document.getElementById("name").value;
+    //     const email = document.getElementById("email").value;
+    //     const password = document.getElementById("password").value;
 
-    btnBack.addEventListener ("click",()=>{
-        const customEvent = createCustomEvent('/');
-        history.pushState({}, '', '/');
-        window.dispatchEvent(customEvent); 
-    })
+    //     try {
+    //         const response = await fetch('/api/register', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ name, email, password }),
+    //         });
 
-    btnNext.addEventListener ("click",()=>{
-        const customEvent = createCustomEvent('/forms');
-        history.pushState({}, '', '/forms');
-        window.dispatchEvent(customEvent); 
-    })
+    //         if (!response.ok) {
+    //             throw new Error('Erro ao registrar');
+    //         }
+
+    //         const customEvent = createCustomEvent('/forms');
+    //         history.pushState({}, '', '/forms');
+    //         window.dispatchEvent(customEvent); 
+    //     } catch (error) {
+    //         console.error('Erro ao registrar:', error);
+    //     }
+    // });
 }
