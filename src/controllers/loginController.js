@@ -1,15 +1,15 @@
 const loginServices = require('../services/loginServices')
 
 const authenticate = async(req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const user = await loginServices.getUser(username);
+        const user = await loginServices.getUser(email);
         
         if(!user){
             return res.status(400).json({ error:'Usuário não encontrado'});
         }
 
-        const { auth, token } = await loginServices.authenticateUser(username, password);
+        const { auth, token } = await loginServices.authenticateUser(email, password);
 
         if(auth){
             res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });

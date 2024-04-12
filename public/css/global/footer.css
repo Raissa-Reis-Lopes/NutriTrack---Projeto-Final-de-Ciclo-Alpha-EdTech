@@ -3,7 +3,7 @@
 }
 
 .footer_withoutBack, .footer{
-display: flex;
+ display: flex;
  padding: 30px;
  justify-content: flex-start;
  align-items: center;
@@ -11,6 +11,9 @@ display: flex;
  color: var(--cor-12);
  text-transform: capitalize;
  z-index: -1;
+ position: absolute;
+ bottom: 50px;
+ left: 10px;
 }
 
 .footer_withoutBack{

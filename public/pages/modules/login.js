@@ -54,37 +54,37 @@ export function loginBtns(){
         });
     }
 
-    if (btnEnter) {
-        btnEnter.addEventListener("click", () => {
-            const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
-            window.dispatchEvent(customEvent);
-        });
-    }
-
-    // btnEnter.addEventListener("click", async () => {
-    //     const email = document.getElementById("email").value;
-    //     const password = document.getElementById("password").value;
-
-    //     try {
-    //         const response = await fetch('/api/login', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ email, password }),
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao fazer login');
-    //         }
-
+    // if (btnEnter) {
+    //     btnEnter.addEventListener("click", () => {
     //         const customEvent = createCustomEvent('/home');
     //         history.pushState({}, '', '/home');
-    //         window.dispatchEvent(customEvent); 
+    //         window.dispatchEvent(customEvent);
+    //     });
+    // }
 
-    //     } catch (error) {
-    //         console.error('Erro ao fazer login:', error);
-    //     }
-    // });
+    btnEnter.addEventListener("click", async () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao fazer login');
+            }
+
+            const customEvent = createCustomEvent('/home');
+            history.pushState({}, '', '/home');
+            window.dispatchEvent(customEvent); 
+
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+        }
+    });
 }
