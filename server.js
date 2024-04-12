@@ -16,7 +16,6 @@ app.use(express.json());
 //Middleware para lidar com os cookies
 app.use(cookieParser());
 
-
 // Configura o Express para servir os arquivos estáticos da SPA
 app.use(express.static(publicPath));
 
