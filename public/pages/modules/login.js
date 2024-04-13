@@ -48,11 +48,12 @@ export function loginBtns(){
     const register = document.getElementById("register");
    
     if(register){
-        register.addEventListener("click", () => {
+        register.addEventListener ("click",function(e){
+            e.preventDefault();
             const customEvent = createCustomEvent('/register');
             history.pushState({}, '', '/register');
-            window.dispatchEvent(customEvent);
-        });
+            window.dispatchEvent(customEvent); 
+        })
     }
 
     if (btnBack) {
