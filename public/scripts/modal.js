@@ -7,6 +7,7 @@ const modalTerms = document.querySelector("#modal-terms");
 const fadePrivacy = document.querySelector("#fade-privacy");
 const fadeTerms = document.querySelector("#fade-terms");
 
+// adiciona ou remove a classe "hide"
 const toggleModalPrivacy = () => {
     modalPrivacy.classList.toggle("hide");
     fadePrivacy.classList.toggle("hide");
@@ -17,6 +18,7 @@ const toggleModalTerms= () => {
     fadeTerms.classList.toggle("hide");
 }
 
+// Para cada variável cria um EventListener de click e chama a função
 [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
     el.addEventListener("click", () => toggleModalPrivacy());
 });
