@@ -36,7 +36,8 @@ ul {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-   
+    height: calc(100vh - 90px);
+    max-height: 100vh;
   }
 
   .container{
@@ -45,3 +46,5 @@ ul {
   .container_left{
     padding-left: 80px;
   }
+
+  

@@ -3,16 +3,26 @@
 }
 
 .footer_withoutBack, .footer{
-display: flex;
- padding: 30px;
+ display: flex;
+ padding: 10px;
  justify-content: flex-start;
  align-items: center;
  font-size: 0.75rem;
  color: var(--cor-12);
  text-transform: capitalize;
  z-index: -1;
+ position: absolute;
+ bottom: 50px;
+ left: 10px;
 }
 
 .footer_withoutBack{
 margin-top: 50px;
+}
+
+.footer_full{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width:90%
 }
