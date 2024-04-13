@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
-    <title>NutriTraker - contagem de calorias</title>
-</head>
-<body>
+import createCustomEvent from "./event.js";
+
+export function Initial() {
+    const div = document.createElement("div");
+
+    div.innerHTML=`
     <div class="back_initial"></div>
     <div class="back_initial_2"></div>
 
         <header>
             <div class="logo" id="logo">
-                <a href="">
-                    <img src="../img/logo.svg" alt="NutriTrack">
-                </a>
+                    <img src="../../img/logo.svg" alt="NutriTrack">
             </div>
         </header>
         <main class="container_left">
@@ -41,7 +36,27 @@
             <span>all rights reserved</span>
         </footer>
  
-    
-    
-</body>
-</html>
+    `;
+    document.getElementById("root").appendChild(div);
+    initialBtns();
+    return div
+}
+
+export function initialBtns(){
+    const btnLogin = document.getElementById("btn_login");
+    const btnRegister = document.getElementById("btn_register");
+
+    btnLogin.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/login');
+        history.pushState({}, '', '/login');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnRegister.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/register');
+        history.pushState({}, '', '/register');
+        window.dispatchEvent(customEvent); 
+    })
+}
+
+
