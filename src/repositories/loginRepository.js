@@ -1,10 +1,10 @@
 const { connectToDatabase } = require('../db/postgresql');
 
-const getUserByUsername = async (username) =>{
+const getUserByEmail = async (email) =>{
     const pool = await connectToDatabase();
-    const query = 'SELECT * FROM users WHERE username=$1'
+    const query = 'SELECT * FROM users WHERE email=$1'
     try{
-        const result = await pool.query(query,[username]);
+        const result = await pool.query(query,[email]);
         return result.rows;
     }catch(error){
         console.log(error);
@@ -15,5 +15,5 @@ const getUserByUsername = async (username) =>{
 }
 
 module.exports = {
-    getUserByUsername,
+    getUserByEmail,
 }
