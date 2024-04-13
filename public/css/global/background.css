@@ -44,7 +44,9 @@
     display: block;
     height: 100%;
     right: 0px;
-    background-size: 470px;
-    width: 400px;
+    /* background-size: 470px; */
+    /* width: 400px; */
     background: url(../../img/decoracao/fundoDireito.svg) no-repeat right bottom;
+    width: 300px;
+    background-size: cover;
 }

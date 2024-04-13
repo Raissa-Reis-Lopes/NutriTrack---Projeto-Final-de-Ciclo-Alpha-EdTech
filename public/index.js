@@ -29,3 +29,4 @@ window.addEventListener('popstate', () => {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(page);
 });
+

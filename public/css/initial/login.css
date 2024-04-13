@@ -2,3 +2,65 @@
     max-width: 40ch;
     text-align: center;
 }
+
+.div_input{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: center;
+    gap: 3px;
+    font-size: medium;
+    font-weight: 600;
+}
+
+.input_email, .input_pass{
+    width: 300px;
+    border-radius: 10px;
+    height: 30px;
+}
+
+label{
+    margin: 8px 0;
+}
+
+.align_row{
+    display: flex;
+    flex-direction: row;
+}
+
+.connect{
+    margin: 0 5px;
+}
+
+.login_wrapper{
+    max-height: 100vh;;
+}
+
+.container_login{
+    max-width: 900px;
+    display: flex;
+    padding: 40px 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: calc(100vh - 108px);
+    max-height: 100vh;
+  }
+
+  .title_login::after{
+    content: "";
+    display: block;
+    width: 110%;
+    height: 2px;
+    border-radius: 5px;
+    background-color: var(--cor-p3);
+  }
+
+  .register::before{
+    content: "";
+    display: block;
+    width: 110%;
+    height: 2px;
+    border-radius: 5px;
+    background-color: var(--cor-p3);
+  }
