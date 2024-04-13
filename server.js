@@ -22,9 +22,14 @@ app.use(express.static(publicPath));
 app.use('/api', routes)
 
 // Captura todas as requisições que não correspondem a nenhuma outra rota definida anteriormente.
-app.get('*', (req, res)=>{
-    res.sendFile(path.join(publicPath, 'index.html'));
+// app.get('*', (req, res)=>{
+//     res.sendFile(path.join(publicPath, 'index.html'));
+// })
+
+app.get('/*', (req, res)=>{
+    res.sendFile(path.resolve('public', 'index.html'));
 })
+
 
 app.listen(port, ()=>{
     console.log(`Server running on http://localhost:${port}`);
