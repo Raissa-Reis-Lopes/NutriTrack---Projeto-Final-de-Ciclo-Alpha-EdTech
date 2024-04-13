@@ -1,3 +1,8 @@
+.div_input {
+    display: flex;
+    flex-direction: column;
+}
+
 span {
     color: var(--cor-p5);
 }
