@@ -54,7 +54,7 @@ const getAllUsers = async () => {
 
 const getUserById = async(id) =>{
     try {
-        const user = await userRepository.getUserById;
+        const user = await userRepository.getUserById(id);
         return user;
     } catch (error) {
         console.log(error);

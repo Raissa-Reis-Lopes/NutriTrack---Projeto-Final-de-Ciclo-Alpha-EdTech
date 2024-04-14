@@ -89,10 +89,10 @@ export function loginBtns(){
 
             if (!response.ok) {
                 message.innerText = "Por favor, forneça um email e/ou senha válidos!"
-                throw new Error('Erro ao fazer login');
+                throw new Error('Erro ao fazer login, usuário não localizado');
             }
 
-            message.innerText = "Usuário autenticado com sucesso!"
+            message.innerText = "Seja bem-vindo!"
             const customEvent = createCustomEvent('/home');
             history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
