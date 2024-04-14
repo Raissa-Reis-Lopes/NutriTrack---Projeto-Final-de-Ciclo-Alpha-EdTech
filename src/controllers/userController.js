@@ -19,6 +19,18 @@ const getUserById = async(req, res) => {
     }
 }
 
+const getDailyCaloriesByUserId = async (req, res) => {
+    try {
+        const userId = req.params.id; // Supondo que você esteja passando o ID do usuário como parâmetro na URL
+        
+        const dailyCalories = await userService.getDailyCaloriesByUserId(userId);
+        
+        res.status(200).json(dailyCalories);
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting daily calories', error: error.message });
+    }
+}
+
 const createUser = async(req, res) => {
     try {
         const { food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender } = req.body;
@@ -140,6 +152,7 @@ const deleteUser = async(req, res) => {
 module.exports = {
     getAllUsers,
     getUserById,
+    getDailyCaloriesByUserId,
     createUser,
     updateUser,
     deleteUser
