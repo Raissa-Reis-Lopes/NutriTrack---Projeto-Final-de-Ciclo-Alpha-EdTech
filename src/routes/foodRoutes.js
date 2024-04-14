@@ -8,9 +8,6 @@ router.use(permissionVerify);
 // Pega os alimentos fixos do bancos de dados, sem incluir os alimentos do usuário
 router.get('/', foodController.getFoods);
 
-// Pega todos os alimentos (talvez seja retirado)
-router.get('/all', foodController.getAllFoods);
-
 // Pega os alimentos personalizados do usuário a partir do id do mesmo
 router.get('/user/:user_id', foodController.getUserFoods);
 

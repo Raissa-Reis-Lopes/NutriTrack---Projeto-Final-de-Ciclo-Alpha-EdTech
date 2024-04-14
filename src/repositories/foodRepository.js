@@ -14,20 +14,6 @@ async function getFoods(){
     }
 }
 
-async function getAllFoods(){
-    const pool = await connectToDatabase();
-    const query = 'SELECT * FROM food';
-    try {
-        const result = await pool.query(query);
-        return result.rows;
-    } catch (error) {
-        console.log('Falha ao pegar os dados dos alimentos', error);
-        throw error;
-    }finally{
-        pool.end();
-    }
-}
-
 async function getUserFoods(user_id){
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM food WHERE user_id=$1';
@@ -73,9 +59,9 @@ async function createUserFood(user_id, name, calorie, carbohydrate, protein, lip
 
 async function updateUserFood(id, user_id, name, calorie, carbohydrate, protein, lipid){
     const pool = await connectToDatabase();
-    const query = 'UPDATE food SET user_id=$1, name=$2, calorie=$3, carbohydrate=$4, protein=$5, lipid=$6 WHERE id=$7 AND user_id IS NOT NULL';
+    const query = 'UPDATE food SET name=$3, calorie=$4, carbohydrate=$5, protein=$6, lipid=$7 WHERE id=$1 AND user_id=$2';
     try {
-        await pool.query(query,[user_id, name, calorie, carbohydrate, protein, lipid, id]);
+        await pool.query(query,[id, user_id, name, calorie, carbohydrate, protein, lipid]);
         console.log("Alimento atualizado com sucesso");
         return { user_id, name, calorie, carbohydrate, protein, lipid };
     } catch (error) {
