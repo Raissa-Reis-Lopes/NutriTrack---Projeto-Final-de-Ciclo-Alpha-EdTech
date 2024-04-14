@@ -7,10 +7,6 @@ span {
     color: var(--cor-p5);
 }
 
-body {
-    padding: 16px;
-}
-
 .open-modal-privacy {
     cursor: pointer;
 }

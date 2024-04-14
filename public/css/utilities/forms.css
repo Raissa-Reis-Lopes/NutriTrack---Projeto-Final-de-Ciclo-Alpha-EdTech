@@ -1,0 +1,13 @@
+input {
+    border: 1px solid var(--cor-p5);
+    border-radius: 8px;
+    width: 350px;
+    height: 40px;
+  }
+  
+  select {
+    width: 350px;
+    height: 40px;
+    border: 1px solid var(--cor-p5);
+    border-radius: 8px;
+  }
