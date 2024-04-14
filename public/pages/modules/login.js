@@ -23,6 +23,7 @@ export function Login() {
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
                 </div>
+                <p id="message"></p>
             </div>
             <div class="btns_index btn_register">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
@@ -46,6 +47,7 @@ export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
+    const message = document.getElementById("message")
    
     if(register){
         register.addEventListener ("click",function(e){
@@ -86,9 +88,11 @@ export function loginBtns(){
             });
 
             if (!response.ok) {
+                message.innerText = "Por favor, forneça um email e/ou senha válidos!"
                 throw new Error('Erro ao fazer login');
             }
 
+            message.innerText = "Usuário autenticado com sucesso!"
             const customEvent = createCustomEvent('/home');
             history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
