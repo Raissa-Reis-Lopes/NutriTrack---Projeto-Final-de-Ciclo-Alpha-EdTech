@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-export function Register() {
+export function Calculator() {
     const div = document.createElement("div");
 
     div.innerHTML=`
@@ -48,8 +48,8 @@ export function Register() {
                 
             </div>
             <div class="calculator_btn">
-                <button class="btn_stroke">Voltar</button>
-                <button class="btn_colorLinear">Próximo</button>
+                <button id="btn_back" class="btn_stroke">Voltar</button>
+                <button id="btn_next" class="btn_colorLinear">Próximo</button>
             </div>
         </div>
   `;
@@ -68,43 +68,43 @@ export function registerBtns(){
  
     if(btnBack){
         btnBack.addEventListener ("click",()=>{
-            const customEvent = createCustomEvent('/');
-            history.pushState({}, '', '/');
+            const customEvent = createCustomEvent('/register');
+            history.pushState({}, '', '/register');
             window.dispatchEvent(customEvent); 
         })
     }
     // sem verificação
     // if(btnNext){
     //     btnNext.addEventListener ("click",()=>{
-    //         const customEvent = createCustomEvent('/forms');
-    //         history.pushState({}, '', '/forms');
+    //         const customEvent = createCustomEvent('/plan');
+    //         history.pushState({}, '', '/plan');
     //         window.dispatchEvent(customEvent); 
     //     })
     // }
     
-    btnNext.addEventListener("click", async () => {
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+    // btnNext.addEventListener("click", async () => {
+    //     const name = document.getElementById("name").value;
+    //     const email = document.getElementById("email").value;
+    //     const password = document.getElementById("password").value;
 
-        try {
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password }),
-            });
+    //     try {
+    //         const response = await fetch('/api/register', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ name, email, password }),
+    //         });
 
-            if (!response.ok) {
-                throw new Error('Erro ao registrar');
-            }
+    //         if (!response.ok) {
+    //             throw new Error('Erro ao registrar');
+    //         }
 
-            const customEvent = createCustomEvent('/forms');
-            history.pushState({}, '', '/forms');
-            window.dispatchEvent(customEvent); 
-        } catch (error) {
-            console.error('Erro ao registrar:', error);
-        }
-    });
+    //         const customEvent = createCustomEvent('/forms');
+    //         history.pushState({}, '', '/forms');
+    //         window.dispatchEvent(customEvent); 
+    //     } catch (error) {
+    //         console.error('Erro ao registrar:', error);
+    //     }
+    // });
 }

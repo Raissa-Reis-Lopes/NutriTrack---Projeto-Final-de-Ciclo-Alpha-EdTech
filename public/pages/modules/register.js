@@ -98,8 +98,8 @@ export function registerBtns(){
     // sem verificação
     // if(btnNext){
     //     btnNext.addEventListener ("click",()=>{
-    //         const customEvent = createCustomEvent('/forms');
-    //         history.pushState({}, '', '/forms');
+    //         const customEvent = createCustomEvent('/calculator');
+    //         history.pushState({}, '', '/calculator');
     //         window.dispatchEvent(customEvent); 
     //     })
     // }
