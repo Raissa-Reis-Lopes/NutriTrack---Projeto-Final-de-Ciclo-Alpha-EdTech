@@ -88,7 +88,6 @@ async function deleteUserFood(id){
 
 module.exports = {
     getFoods,
-    getAllFoods,
     getUserFoods,
     getFoodById,
     createUserFood,

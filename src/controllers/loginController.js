@@ -11,9 +11,10 @@ const authenticate = async(req, res) => {
 
         const { auth, token } = await loginServices.authenticateUser(email, password);
 
-        if(auth){
+        if(auth){          
             res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });
-            return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!' });
+            console.log(req.user);
+            return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!'});
         }
 
         return res.status(400).json({ error: 'Usuário e/ou senha inválidos'});

@@ -61,7 +61,6 @@ const deleteUserFood = async(id) => {
 
 module.exports = {
     getFoods,
-    getAllFoods,
     getUserFoods,
     getFoodById,
     createUserFood,
