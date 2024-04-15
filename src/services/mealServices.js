@@ -30,6 +30,8 @@ const getMealById = async(id) => {
     }
 }
 
+
+//Pegar pelo id e pelo user_id depois faz um filtro no front com os dados recebidos
 const getMealByUserByPeriodByDate = async(user_id,period, date) => {
     try {
         const meal = await mealRepository.getMealByUserByPeriodByDate(user_id,period, date);

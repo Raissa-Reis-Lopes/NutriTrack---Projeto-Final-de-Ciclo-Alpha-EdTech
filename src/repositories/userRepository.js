@@ -31,7 +31,6 @@ async function getAllUsers(){
     }
 }
 
-
 async function getUserById(id) {
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM users WHERE id=$1';

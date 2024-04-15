@@ -12,6 +12,6 @@ router.use('/users', userRoutes);          //checked on postman
 router.use('/login', loginRoutes);         //checked on postman
 router.use('/foodPlan', foodPlanRoutes);  //checked on postman
 router.use('/food', foodRoutes);          //checked on postman 
-router.use('/meal', mealRoutes);
+router.use('/meal', mealRoutes);          //checked on postman  
 
 module.exports = router;
