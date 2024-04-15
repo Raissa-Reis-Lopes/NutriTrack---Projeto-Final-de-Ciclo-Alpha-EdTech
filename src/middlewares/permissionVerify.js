@@ -16,7 +16,6 @@ function permissionVerify(req, res, next) {
             return res.status(403).json({ error: 'Token JWT inválido'});
         } else{
             req.user = decoded.user; //Armazena a info do usuário decodificada no objeto req
-            console.log(req.user)
             next(); 
         }
     })

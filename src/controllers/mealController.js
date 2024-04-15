@@ -23,12 +23,12 @@ const getMealById = async(req, res) => {
         const meal = await mealService.getMealById(id);
         return res.status(200).json(meal);
     } catch (error) {
-        return res.status(500).json({ error: 'Erro ao buscar dados do usuário' });
+        return res.status(500).json({ error: 'Erro ao buscar dados da refeição' });
     }
 }
 
 const getMealByUserByPeriodByDate = async(req, res) => {
-    const { user_id, period, date} = req.body;
+    const { user_id, period, date} = req.query;
     try {
         const meal = await mealService.getMealByUserByPeriodByDate(user_id, period, date);
         return res.status(200).json(meal);

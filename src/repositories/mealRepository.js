@@ -5,7 +5,7 @@
 const { connectToDatabase } = require('../db/postgresql');
 
 async function insertMeal(user_id, food_id, food_quantity, period, date){
-    const pool = connectToDatabase();
+    const pool = await connectToDatabase();
     const query = 'INSERT INTO meal(user_id, food_id, food_quantity, period, date) VALUES ($1, $2, $3, $4, $5)';
     try {
         await pool.query(query,[user_id, food_id, food_quantity, period, date]);
@@ -14,8 +14,6 @@ async function insertMeal(user_id, food_id, food_quantity, period, date){
     } catch (error) {
         console.log('Erro ao inserir os dados da refeição');
         throw error;
-    } finally{
-        pool.end();
     }
 }
 
@@ -35,11 +33,11 @@ async function getAllMeals(){
 }
 
 async function getMealById(id){
-    const pool = connectToDatabase();
+    const pool = await connectToDatabase();
     const query = 'SELECT * FROM meal WHERE id=$1';
     try {
         const result = await pool.query(query,[id]);
-        return result.row;
+        return result.rows;
     } catch (error) {
         console.log('Erro ao buscar a refeição', error);
         throw error;
@@ -66,19 +64,25 @@ async function getMealByUserByPeriodByDate(user_id, period, date){
 //Pensando no update, acho que a data não pode ser atualizada, ela pode ser usada para buscar o dia que aquele alimento foi cadastrado, mas não alterada
 async function updateMeal(id, user_id, food_id, food_quantity, period, date){
     const pool = await connectToDatabase();
-    const query = "UPDATE meal SET user_id=$2, food_id=$3, food_quantity=$4, period=$5  WHERE id = $1 AND date=$6";
+    const query = "UPDATE meal SET user_id=$2, food_id=$3, food_quantity=$4, period=$5 WHERE id = $1 AND date=$6";
+    
     try {
-        await pool.query(query,[id, user_id, food_id, food_quantity, period, date]);
-        console.log("Usuário atualizado com sucesso!");
-        return { id, user_id, food_id, food_quantity, period, period, date }
-    } catch (error) {
-        console.log('Erro ao atualizar os dados do usuário!', error);
-        throw error;
-    } finally{
-        pool.end();
-    }    
-}
+        const result = await pool.query(query, [id, user_id, food_id, food_quantity, period, date]);
+            
+        if (result.rowCount === 0) {
+            console.log("Nenhuma refeição atualizada. Verifique os parâmetros.");
+        } else {
+            console.log("Refeição atualizada com sucesso!");
+        }
 
+        return { id, user_id, food_id, food_quantity, period, date };
+    } catch (error) {
+        console.log('Erro ao atualizar os dados da refeição!', error);
+        throw error;
+    } finally {
+        pool.end();
+    }
+}
 
 async function deleteMeal(id){
     const pool = await connectToDatabase();

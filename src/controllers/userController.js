@@ -23,7 +23,7 @@ const getDailyCaloriesByUserId = async (req, res) => {
     try {
         const userId = req.params.id; // Supondo que você esteja passando o ID do usuário como parâmetro na URL
         
-        const dailyCalories = await userService.getDailyCaloriesByUserId(userId);
+        const dailyCalories = await userServices.getDailyCaloriesByUserId(userId);
         
         res.status(200).json(dailyCalories);
     } catch (error) {
