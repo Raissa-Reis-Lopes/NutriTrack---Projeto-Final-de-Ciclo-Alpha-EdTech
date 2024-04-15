@@ -1,3 +1,5 @@
+import { Calculator } from "./calculator.js";
+import { Plan } from "./plan.js";
 import createCustomEvent from "./event.js";
 export function Register() {
     const div = document.createElement("div");
@@ -87,7 +89,7 @@ export function Register() {
 export function registerBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
- 
+
     if(btnBack){
         btnBack.addEventListener ("click",()=>{
             const customEvent = createCustomEvent('/');
@@ -95,38 +97,124 @@ export function registerBtns(){
             window.dispatchEvent(customEvent); 
         })
     }
-    // sem verificação
-    // if(btnNext){
-    //     btnNext.addEventListener ("click",()=>{
-    //         const customEvent = createCustomEvent('/calculator');
-    //         history.pushState({}, '', '/calculator');
-    //         window.dispatchEvent(customEvent); 
-    //     })
-    // }
-    
-    btnNext.addEventListener("click", async () => {
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        try {
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao registrar');
+    if(btnNext){
+        btnNext.addEventListener ("click",()=>{
+            Calculator();
+            if(btnBack){
+                btnBack.addEventListener ("click",()=>{
+                    const customEvent = createCustomEvent('/');
+                    history.pushState({}, '', '/');
+                    window.dispatchEvent(customEvent); 
+                })
             }
+            if(btnNext){
+                btnNext.addEventListener ("click",()=>{
+                    Plan();
+                })
+            }
+        })
+    }
+ }
 
-            const customEvent = createCustomEvent('/forms');
-            history.pushState({}, '', '/forms');
-            window.dispatchEvent(customEvent); 
-        } catch (error) {
-            console.error('Erro ao registrar:', error);
-        }
-    });
-}
+// export function registerBtns(){
+//     const btnBack = document.getElementById("btn_back");
+//     const btnNext = document.getElementById("btn_next");
+ 
+//     if(btnBack){
+//         btnBack.addEventListener ("click",()=>{
+//             const customEvent = createCustomEvent('/');
+//             history.pushState({}, '', '/');
+//             window.dispatchEvent(customEvent); 
+//         })
+//     }
+//     // sem verificação
+//     if(btnNext){
+//         btnNext.addEventListener ("click",()=>{
+//             Calculator();
+//             function registerBtnsCalculator(){
+//                 const btnBackCalculator = document.getElementById("btn_back_calculator");
+//                 const btnNextCalculator = document.getElementById("btn_next_calculator");
+             
+//                 if(btnBackCalculator){
+//                     btnBackCalculator.addEventListener ("click",()=>{
+//                         const customEvent = createCustomEvent('/');
+//                         history.pushState({}, '', '/');
+//                         window.dispatchEvent(customEvent); 
+//                     })
+//                 }
+//                 if(btnNextCalculator){
+//                     Plan();
+//                     const btnBackPlan = document.getElementById("btn_back_plan");
+//                     const btnNextPlan = document.getElementById("btn_next_plan");
+//                     return {
+//                         btnBackPlan,
+//                         btnNextPlan,
+//                     }
+//                 }
+//                 if(btnBackPlan){
+//                     btnBackPlan.addEventListener ("click",()=>{
+//                         const customEvent = createCustomEvent('/');
+//                         history.pushState({}, '', '/');
+//                         window.dispatchEvent(customEvent); 
+//                     })
+//                 }
+//                 if(btnNextPlan){
+//                     btnNextPlan.addEventListener ("click",()=>{
+//                         const customEvent = createCustomEvent('/home');
+//                         history.pushState({}, '', '/home');
+//                         window.dispatchEvent(customEvent);
+//                     })
+//                 }
+//             }
+//         })
+//         if(btnNextCalculator){
+//             btnNextCalculator.addEventListener ("click",()=>{
+//                 Plan();
+//                 function registerBtnsPlan(){
+//                     const btnBackPlan = document.getElementById("btn_back_plan");
+//                     const btnNextPlan = document.getElementById("btn_next_plan");
+                 
+//                     if(btnBackPlan){
+//                         btnBackPlan.addEventListener ("click",()=>{
+//                             const customEvent = createCustomEvent('/');
+//                             history.pushState({}, '', '/');
+//                             window.dispatchEvent(customEvent);
+//                         })
+//                     }
+//                     if(btnNextPlan){
+//                         btnNextPlan.addEventListener ("click",()=>{
+//                             const customEvent = createCustomEvent('/home');
+//                             history.pushState({}, '', '/home');
+//                             window.dispatchEvent(customEvent);
+//                         })
+//                         btnNextPlan.addEventListener("click", async () => {
+//                             const name = document.getElementById("name").value;
+//                             const email = document.getElementById("email").value;
+//                             const password = document.getElementById("password").value;
+                    
+//                             try {
+//                                 const response = await fetch('/api/register', {
+//                                     method: 'POST',
+//                                     headers: {
+//                                         'Content-Type': 'application/json',
+//                                     },
+//                                     body: JSON.stringify({ name, email, password }),
+//                                 });
+                    
+//                                 if (!response.ok) {
+//                                     throw new Error('Erro ao registrar');
+//                                 }
+                    
+//                                 const customEvent = createCustomEvent('/forms');
+//                                 history.pushState({}, '', '/forms');
+//                                 window.dispatchEvent(customEvent); 
+//                             } catch (error) {
+//                                 console.error('Erro ao registrar:', error);
+//                             }
+//                         });
+//                     }
+//                 }
+//             })
+//         }
+//     }
+// }
