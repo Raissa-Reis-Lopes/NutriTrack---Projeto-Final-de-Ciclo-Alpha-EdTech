@@ -1,4 +1,5 @@
 import createCustomEvent from "./event.js";
+import { registerBtns } from "./register.js";
 export function Plan() {
     const div = document.createElement("div");
 
@@ -13,7 +14,7 @@ export function Plan() {
     </header>
     <main>
         <h1 class="title_plan">Escolha o seu plano alimentar!</h1>
-        <div class="container_center">
+        <div id="form3" class="container_center">
             <div class="plan">
                 <div>
                     <h1>Perder peso</h1>
@@ -62,8 +63,8 @@ export function Plan() {
                 </div>
             </div>
             <div class="btns-bot">
-                <button id="btn_back" class="btn_stroke">Voltar</button>
-                <button id="btn_next" class="btn_colorLinear">Próximo</button>
+                <button id="btn_back_plan" class="btn_stroke">Voltar</button>
+                <button id="btn_next_plan" class="btn_colorLinear">Próximo</button>
             </div>
         </div>
     </main>

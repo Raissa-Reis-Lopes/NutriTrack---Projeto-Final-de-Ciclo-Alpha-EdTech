@@ -14,14 +14,14 @@ export function Calculator() {
     <main class="container_center">
         <div class="calculator">
             <h1 class="title_calculator">Agora, vamos calcular seu gasto energético diário!</h1>
-            <div class="calculator_input">
+            <div id="form2" class="calculator_input">
                 <div class="form">
                     <label for="weight">Peso</label>
-                    <input type="text" name="weight" id="weight" />
+                    <input type="number" name="weight" id="weight" placeholder="CM" required />
                 </div>
                 <div class="form">
                     <label for="height">Altura</label>
-                    <input type="text" name="height" id="height" />
+                    <input type="number" name="height" id="height" placeholder="KG" required />
                 </div>
                 <div class="form">
                     <label for="date">Data de nascimento</label>
@@ -39,17 +39,17 @@ export function Calculator() {
                     <label for="activity">Nivel de atividade</label>
                     <select name="activity" id="activity">
                         <option value="">Selecione</option>
-                        <option value="Alto">Alto</option>
-                        <option value="Moderado">Moderado</option>
-                        <option value="Baixo">Baixo</option>
-                        <option value="Nenhuma">Nenhuma</option>
+                        <option value="sedentary">Sedentário</option>
+                        <option value="light">Leve</option>
+                        <option value="moderate">Moderado</option>
+                        <option value="active">Ativo</option>
+                        <option valur="very_active">Muito Ativo</option>
                     </select>
                 </div>
-                
             </div>
             <div class="calculator_btn">
-                <button id="btn_back" class="btn_stroke">Voltar</button>
-                <button id="btn_next" class="btn_colorLinear">Próximo</button>
+                <button id="btn_back_calculator" class="btn_stroke">Voltar</button>
+                <button id="btn_next_calculator" class="btn_colorLinear">Próximo</button>
             </div>
         </div>
   `;
