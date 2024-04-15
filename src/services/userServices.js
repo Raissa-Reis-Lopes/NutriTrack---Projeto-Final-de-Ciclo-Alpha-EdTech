@@ -10,7 +10,7 @@ const calculateDailyCalories = (age, weight, height, gender, activityLevel) => {
 
     // Calculando a taxa metabólica basal (BMR) com base no sexo do usuário
     //A equação usada é a Equação de Harris-Benedict
-    if (gender === 'male') {
+    if (gender === 'M') {
         bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
     } else {
         bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
@@ -44,7 +44,7 @@ const calculateDailyCalories = (age, weight, height, gender, activityLevel) => {
 
 const getAllUsers = async () => {
     try {
-        const users = await userRepository.getAllUsers;
+        const users = await userRepository.getAllUsers();
         return users;
     } catch (error) {
         console.log(error);
@@ -66,7 +66,7 @@ const getDailyCaloriesByUserId = async (userId) => {
     try {
         const user = await userRepository.getUserById(userId);
         if (!user) {
-            throw new Error('User não encontrado');
+            throw new Error('Usuário não encontrado');
         }
 
         // Calculando as calorias diárias recomendadas com base nos dados do usuário
@@ -106,7 +106,8 @@ const createUser = async(food_plan_id, activity_level, username , email , passwo
 const updateUser = async(id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender) => {
     try {
         const hashedPassword = await hashPassword(password);
-        await userRepository.updateUser(id, food_plan_id, activity_level, username , email , hashedPassword , weight , height , birth_date , gender)
+       const result = await userRepository.updateUser(id, food_plan_id, activity_level, username , email , hashedPassword , weight , height , birth_date , gender);
+       return result;
     } catch (error) {
         console.log(error);
         throw error;

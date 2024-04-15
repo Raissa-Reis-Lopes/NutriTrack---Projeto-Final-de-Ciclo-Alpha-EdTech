@@ -15,10 +15,12 @@ function permissionVerify(req, res, next) {
         if(err){
             return res.status(403).json({ error: 'Token JWT inválido'});
         } else{
-            req.user = decoded.user; //Armazena a info do usuário decodificada no objeto req
+            req.user = decoded.id; //Armazena a info do usuário decodificada no objeto req
+            // console.log(req.user);
             next(); 
         }
     })
 }
+
 
 module.exports = permissionVerify;

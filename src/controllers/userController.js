@@ -23,7 +23,7 @@ const getDailyCaloriesByUserId = async (req, res) => {
     try {
         const userId = req.params.id; // Supondo que você esteja passando o ID do usuário como parâmetro na URL
         
-        const dailyCalories = await userService.getDailyCaloriesByUserId(userId);
+        const dailyCalories = await userServices.getDailyCaloriesByUserId(userId);
         
         res.status(200).json(dailyCalories);
     } catch (error) {
@@ -126,7 +126,7 @@ const updateUser = async(req, res) => {
         }
 
         const result = await userServices.updateUser(id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender);
-        return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso'});
+        return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso', data: result});
         
     } catch (error) {
         return res.status(500).json({ error: error.message });

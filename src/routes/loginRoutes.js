@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const loginController = require('../controllers/loginController.js');
+const permissionVerify = require('../middlewares/permissionVerify.js')
 
 router.post('/', loginController.authenticate);
+// router.get('/getData', permissionVerify, loginController.getUserData); // Nova rota GET
+
 
 module.exports = router;
 
