@@ -138,7 +138,6 @@ const deleteUserFood = async(req, res) => {
 
 module.exports = {
     getFoods,
-    getAllFoods,
     getUserFoods,
     getFoodById,
     createUserFood,

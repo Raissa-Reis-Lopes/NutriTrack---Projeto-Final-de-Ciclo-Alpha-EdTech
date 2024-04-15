@@ -66,7 +66,7 @@ const getDailyCaloriesByUserId = async (userId) => {
     try {
         const user = await userRepository.getUserById(userId);
         if (!user) {
-            throw new Error('User não encontrado');
+            throw new Error('Usuário não encontrado');
         }
 
         // Calculando as calorias diárias recomendadas com base nos dados do usuário
@@ -106,7 +106,8 @@ const createUser = async(food_plan_id, activity_level, username , email , passwo
 const updateUser = async(id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender) => {
     try {
         const hashedPassword = await hashPassword(password);
-        await userRepository.updateUser(id, food_plan_id, activity_level, username , email , hashedPassword , weight , height , birth_date , gender)
+       const result = await userRepository.updateUser(id, food_plan_id, activity_level, username , email , hashedPassword , weight , height , birth_date , gender);
+       return result;
     } catch (error) {
         console.log(error);
         throw error;
