@@ -13,7 +13,6 @@ const authenticate = async(req, res) => {
 
         if(auth){          
             res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });
-            console.log(req.user);
             return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!'});
         }
 

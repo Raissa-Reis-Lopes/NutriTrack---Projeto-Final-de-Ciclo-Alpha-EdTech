@@ -30,9 +30,9 @@ const getFoodById = async(id) =>{
     }
 }
 
-const createUserFood = async(user_id, name, calorie, carbohydrate, protein, lipid) => {
+const createUserFood = async(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) => {
     try {
-        const result = await foodRepository.createUserFood(user_id, name, calorie, carbohydrate, protein, lipid)
+        const result = await foodRepository.createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g)
         return result;
     } catch (error) {
         console.log(error);
@@ -40,9 +40,9 @@ const createUserFood = async(user_id, name, calorie, carbohydrate, protein, lipi
     }
 }
 
-const updateUserFood = async(id, user_id, name, calorie, carbohydrate, protein, lipid) => {
+const updateUserFood = async(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) => {
     try {
-        const result = await foodRepository.updateUserFood(id, user_id, name, calorie, carbohydrate, protein, lipid)
+        const result = await foodRepository.updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g)
         return result;
     } catch (error) {
         console.log(error);
