@@ -34,7 +34,7 @@ async function populateFood() {
     for (const item of jsonData) {
         if (validateNum(item.energy_kcal) && validateNum(item.carbohydrate_g) && validateNum(item.protein_g) && validateNum(item.lipid_g)) {
             try {
-                await pool.query('INSERT INTO food (name, calorie, carbohydrate, protein, lipid) VALUES ($1, $2, $3, $4, $5)', [
+                await pool.query('INSERT INTO food (name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES ($1, $2, $3, $4, $5)', [
                     item.description.replace(/,/g, ''),
                     item.energy_kcal,
                     item.carbohydrate_g,
