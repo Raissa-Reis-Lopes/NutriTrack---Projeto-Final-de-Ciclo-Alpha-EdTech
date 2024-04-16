@@ -1,4 +1,5 @@
 import createCustomEvent from "./event.js";
+import { emailValid, passwordValid, escapeHtml } from "./validation.js"
 export function Login() {
     const div = document.createElement("div");
     div.classList.add('login_wrapper');
@@ -16,8 +17,10 @@ export function Login() {
             <div class="div_input">
                 <label for="email">E-mail</label>
                 <input type="email" name="email" id="email" class="input_email">
+                <div id ="erroEmail" class="erro"></div>
                 <label for="password">Senha</label>
                 <input type="password" name="password" id="password" class="input_pass">
+                <div id ="erroPassword" class="erro"></div>
                 <span><a href="">Esqueceu a senha?</a></span>
                 <div class="align_row">
                 <input type="checkbox" name="connect" id="connect" class="connect">
@@ -75,6 +78,27 @@ export function loginBtns(){
     btnEnter.addEventListener("click", async () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
+
+        const erroEmail = document.getElementById("erroEmail");
+        const erroPassword = document.getElementById("erroPassword");
+        let messageEmail;
+        let messagePassword;
+
+        erroEmail.innerText = ''; // Limpa mensagens antigas de erro
+        erroPassword.innerText = ''; // Limpa mensagens antigas de erro
+
+
+        if (!emailValid(email)) {
+            messageEmail.innerText = escapeHtml("Por favor, insira um email válido.");
+            erroEmail.appendChild(messageEmail);
+            return;
+        }
+        
+        if (!passwordValid(password)) {
+            messagePassword.innerText = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial).");
+            erroPassword.appendChild(messagePassword);
+            return;
+        }
 
         try {
             const response = await fetch('/api/login', {
