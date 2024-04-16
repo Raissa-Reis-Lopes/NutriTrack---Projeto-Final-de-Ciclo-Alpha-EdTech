@@ -1,0 +1,38 @@
+.section_food{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-bottom: 40px;
+}
+
+.section_food_title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.section_food_decoration{
+    width: 80%;
+    height: 2px;
+    background-color: var(--cor-p5);
+    border-radius: 10px;
+}
+
+.meal_add{
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.food_card{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.food_edit{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+}
