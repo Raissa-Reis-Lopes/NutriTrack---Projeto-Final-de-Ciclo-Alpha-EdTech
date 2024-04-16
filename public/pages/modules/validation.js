@@ -52,3 +52,19 @@ export function emailValid(email) {
     const weightRegex = /^\d+(\.\d{1,2})?$/; // Regex para validar números com até duas casas decimais
     return weightRegex.test(weight) && !isNaN(weight) && weight > 0 && weight <= maxWeight;
   }
+
+
+  // escape function
+  export function escapeHtml(html) {
+    const escapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    return html.replace(/[&<>"'\/]/g, function(match) {
+        return escapeMap[match];
+    });
+}
