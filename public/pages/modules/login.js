@@ -82,13 +82,13 @@ export function loginBtns(){
         erroPassword.innerText = ''; // Limpa mensagens antigas de erro
 
         if (!emailValid(email)) {
-            messageEmail = escapeHtml("Por favor, insira um email válido."); // Ajuste aqui
+            messageEmail = escapeHtml("Por favor, insira um email válido."); 
             erroEmail.appendChild(document.createTextNode(messageEmail));
             return;
         }
         
         if (!passwordValid(password)) {
-            messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); // Ajuste aqui
+            messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
             erroPassword.appendChild(document.createTextNode(messagePassword));
             return;
         }
