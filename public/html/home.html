@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <title>NutriTrack - contagem de calorias</title>
-    
+
 </head>
+
 <body>
+
     <header>
         <div class="logo" id="logo">
-            <a href="">
+            <a href="/home">
                 <img src="../img/logo.svg" alt="NutriTrack">
             </a>
         </div>
-        <nav>
+        <nav class="header_nav">
             <a href="/profile">Perfil</a>
             <a href="/historic">Histórico</a>
             <a href="/chalenge">Desafios</a>
-            <a href="/">Sair</a>
+            <button class="btn_stroke btn_exit">Sair</button>
         </nav>
     </header>
-    
-    <main>
+<div class="container_home">
+   <main class="main_home">
+    <div class="welcome_message">
         <div class="img_profile">
             <img src="" alt="">
         </div>
@@ -30,39 +34,40 @@
             <h1>Olá, <span>User</span></h1>
             <p>Animado? Hoje é um novo dia de transformação!</p>
         </div>
+    </div>
         <div class="goal">
             <p>Objetivo <span>1800</span> calorias</p>
         </div>
     </main>
-    <section>
-        <div>
+    <section class="section_home">
+        <div class="calories_eat">
             <p>Você ainda pode ingerir <span>1800</span> calorias!</p>
-            <div></div>
+            <div id="calories_bar"></div>
             <p><span>0</span> calorias ingeridas</p>
         </div>
 
-        <div>
+        <div id="date">
             <input type="date" name="date" id="date">
         </div>
     </section>
-    <section class="porcent">
+    <section class="porcent section_home">
         <div>
             <div class="chart"></div>
-            <span>Proteinas</span>
+            <span class="span_black">Proteinas</span>
             <span>0/300g</span>
         </div>
         <div>
             <div class="chart"></div>
-            <span>Proteinas</span>
+            <span class="span_black">Carboidratos</span>
             <span>0/300g</span>
         </div>
         <div>
             <div class="chart"></div>
-            <span>Proteinas</span>
+            <span class="span_black">Gorduras</span>
             <span>0/300g</span>
         </div>
     </section>
-    <section>
+    <section class="section_home">
         <div>
             <h2>Café da manha</h2>
             <button id="btn_add">Adicionar</button>
@@ -80,9 +85,9 @@
                 </div>
             </div>
         </div>
-               
+
     </section>
-    <section>
+    <section class="section_home">
         <div>
             <h2>Almoço</h2>
             <button id="btn_add">Adicionar</button>
@@ -100,9 +105,9 @@
                 </div>
             </div>
         </div>
-               
+
     </section>
-    <section>
+    <section class="section_home">
         <div>
             <h2>Jantar</h2>
             <button id="btn_add">Adicionar</button>
@@ -120,9 +125,9 @@
                 </div>
             </div>
         </div>
-               
+
     </section>
-    <section>
+    <section class="section_home">
         <div>
             <h2>Lanche</h2>
             <button id="btn_add">Adicionar</button>
@@ -140,10 +145,11 @@
                 </div>
             </div>
         </div>
-               
-    </section>
 
-    <footer class="footer">
+    </section>
+    </div>
+
+    <footer class="footer footer_home">
         <span>all rights reserved</span>
         <a href=""><span>Termos de uso</span></a>
         <a href=""><span>Politica de Privacidade</span></a>
@@ -153,4 +159,5 @@
         </div>
     </footer>
 </body>
+
 </html>

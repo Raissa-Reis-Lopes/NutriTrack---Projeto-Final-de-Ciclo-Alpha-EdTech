@@ -1,14 +1,10 @@
-.div_input {
+.form_input {
     display: flex;
     flex-direction: column;
 }
 
 span {
     color: var(--cor-p5);
-}
-
-body {
-    padding: 16px;
 }
 
 .open-modal-privacy {
