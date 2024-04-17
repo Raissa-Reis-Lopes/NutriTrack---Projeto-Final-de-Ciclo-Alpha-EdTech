@@ -50,13 +50,16 @@ export function loginBtns(){
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
    
+    let messageEmail = ''; // Inicialização das variáveis
+    let messagePassword = ''; // Inicialização das variáveis
+
     if(register){
         register.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/register');
             history.pushState({}, '', '/register');
             window.dispatchEvent(customEvent); 
-        })
+        });
     }
 
     if (btnBack) {
@@ -67,36 +70,26 @@ export function loginBtns(){
         });
     }
 
-    // if (btnEnter) {
-    //     btnEnter.addEventListener("click", () => {
-    //         const customEvent = createCustomEvent('/home');
-    //         history.pushState({}, '', '/home');
-    //         window.dispatchEvent(customEvent);
-    //     });
-    // }
-
     btnEnter.addEventListener("click", async () => {
+
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
         const erroEmail = document.getElementById("erroEmail");
         const erroPassword = document.getElementById("erroPassword");
-        let messageEmail;
-        let messagePassword;
 
         erroEmail.innerText = ''; // Limpa mensagens antigas de erro
         erroPassword.innerText = ''; // Limpa mensagens antigas de erro
 
-
         if (!emailValid(email)) {
-            messageEmail.innerText = escapeHtml("Por favor, insira um email válido.");
-            erroEmail.appendChild(messageEmail);
+            messageEmail = escapeHtml("Por favor, insira um email válido."); // Ajuste aqui
+            erroEmail.appendChild(document.createTextNode(messageEmail));
             return;
         }
         
         if (!passwordValid(password)) {
-            messagePassword.innerText = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial).");
-            erroPassword.appendChild(messagePassword);
+            messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); // Ajuste aqui
+            erroPassword.appendChild(document.createTextNode(messagePassword));
             return;
         }
 
@@ -120,5 +113,8 @@ export function loginBtns(){
         } catch (error) {
             console.error('Erro ao fazer login:', error);
         }
+           // Limpar os valores dos inputs
+           document.getElementById("email").value = "";
+           document.getElementById("password").value = "";
     });
 }
