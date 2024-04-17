@@ -31,7 +31,6 @@ async function getAllUsers(){
     }
 }
 
-
 async function getUserById(id) {
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM users WHERE id=$1';
@@ -52,6 +51,7 @@ async function updateUser(id, food_plan_id, activity_level, username , email , p
     try {
         await pool.query(query,[food_plan_id,activity_level, username,email,password,weight,height,birth_date,gender,id]);
         console.log('Usuário atualizado com sucesso!');
+        return { id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender };
     } catch (error) {
         console.log('Erro ao atualizar os dados do usuário', error);
         throw error;

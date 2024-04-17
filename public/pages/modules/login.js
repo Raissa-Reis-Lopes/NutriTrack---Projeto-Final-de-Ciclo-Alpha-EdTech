@@ -8,7 +8,7 @@ export function Login() {
     <div class="back_general"></div>
     <header>
         <div class="logo" id="logo">
-                <img src="./img/logo.svg" alt="NutriTrack">
+                <img src="../img/logo.svg" alt="NutriTrack">
         </div>
     </header>
     <main class="container_left container_login">
@@ -26,6 +26,7 @@ export function Login() {
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
                 </div>
+                <p id="message"></p>
             </div>
             <div class="btns_index btn_register">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
@@ -49,6 +50,7 @@ export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
+    const message = document.getElementById("message")
    
     let messageEmail = ''; // Inicialização das variáveis
     let messagePassword = ''; // Inicialização das variáveis
@@ -103,9 +105,11 @@ export function loginBtns(){
             });
 
             if (!response.ok) {
-                throw new Error('Erro ao fazer login');
+                message.innerText = "Por favor, forneça um email e/ou senha válidos!"
+                throw new Error('Erro ao fazer login, usuário não localizado');
             }
 
+            message.innerText = "Seja bem-vindo!"
             const customEvent = createCustomEvent('/home');
             history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 

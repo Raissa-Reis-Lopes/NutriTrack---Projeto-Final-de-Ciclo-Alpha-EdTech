@@ -19,7 +19,7 @@ const authenticateUser = async(email, password) => {
         
 
         if(user && matchPassword){
-            const token = jwt.sign({ id: user.id}, SECRET_KEY, {expiresIn: '10d'});
+            const token = jwt.sign({ id: user[0].id}, SECRET_KEY, {expiresIn: '10d'});
             return{ auth: true, token};
         }
         return { auth: false, error:'Usuário e/ou senha inválidos'};

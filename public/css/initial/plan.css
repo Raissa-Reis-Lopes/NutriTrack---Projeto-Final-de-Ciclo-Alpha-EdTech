@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-.container_center {
+.plan {
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -38,6 +38,7 @@
   height: 100%;
   backface-visibility: hidden;
   border: 2px solid var(--cor-p5);
+  border-radius: 20px;
 }
 
 .flip-card-front {
@@ -49,4 +50,11 @@
   background-color: var(--cor-0);
   color: var(--cor-12);
   transform: rotateY(180deg);
+}
+
+.btns-bot {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }

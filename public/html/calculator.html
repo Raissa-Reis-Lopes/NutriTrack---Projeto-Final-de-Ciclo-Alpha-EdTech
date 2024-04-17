@@ -7,8 +7,7 @@
     <title>NutriTrack - contagem de calorias</title>
 </head>
 <body>
-    <div class="back_calculator"></div>
-    <div class="back_calculator_2"></div>
+    <div class="back_general"></div>
     <header>
         <div class="logo" id="logo">
             <a href="">
@@ -20,28 +19,30 @@
         <div class="calculator">
             <h1 class="title_calculator">Agora, vamos calcular seu gasto energético diário!</h1>
             <div class="calculator_input">
-                <div>
+                <div class="form">
                     <label for="weight">Peso</label>
                     <input type="text" name="weight" id="weight" />
                 </div>
-                <div>
+                <div class="form">
                     <label for="height">Altura</label>
                     <input type="text" name="height" id="height" />
                 </div>
-                <div>
+                <div class="form">
                     <label for="date">Data de nascimento</label>
                     <input type="date" name="date" id="date" />
                 </div>
-                <div>
+                <div class="form">
                     <label for="gender">Sexo biológico</label>
                     <select name="gender" id="gender">
-                        <option value="masculino">Masculino</option>
-                        <option value="feminino">Feminino</option>
+                        <option value="">Selecione</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
                     </select>
                 </div>
-                <div>
+                <div class="form">
                     <label for="activity">Nivel de atividade</label>
                     <select name="activity" id="activity">
+                        <option value="">Selecione</option>
                         <option value="Alto">Alto</option>
                         <option value="Moderado">Moderado</option>
                         <option value="Baixo">Baixo</option>
@@ -49,10 +50,10 @@
                     </select>
                 </div>
                 
-                <div class="btns_index">
-                    <button class="btn_stroke">Voltar</button>
-                    <button class="btn_colorLinear">Próximo</button>
-                </div>
+            </div>
+            <div class="calculator_btn">
+                <button class="btn_stroke">Voltar</button>
+                <button class="btn_colorLinear">Próximo</button>
             </div>
         </div>
     </main>

@@ -10,16 +10,6 @@ const getFoods = async () => {
     }
 }
 
-const getAllFoods = async () => {
-    try {
-        const foods = await foodRepository.getAllFoods();
-        return foods;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
-
 const getUserFoods = async (user_id) => {
     try {
         const foods = await foodRepository.getUserFoods(user_id);
@@ -71,7 +61,6 @@ const deleteUserFood = async(id) => {
 
 module.exports = {
     getFoods,
-    getAllFoods,
     getUserFoods,
     getFoodById,
     createUserFood,

@@ -9,15 +9,6 @@ const getFoods = async(req, res) => {
     }
 }
 
-const getAllFoods = async(req, res) => {
-    try {
-        const foods = await foodServices.getAllFoods();
-        return res.status(200).json(foods);
-    } catch (error) {
-        return res.status(500).json({ error: 'Erro ao buscar dados dos alimentos!'});
-    }
-}
-
 const getUserFoods = async(req, res) => {
     const { user_id } = req.params;
     try {
@@ -147,7 +138,6 @@ const deleteUserFood = async(req, res) => {
 
 module.exports = {
     getFoods,
-    getAllFoods,
     getUserFoods,
     getFoodById,
     createUserFood,
