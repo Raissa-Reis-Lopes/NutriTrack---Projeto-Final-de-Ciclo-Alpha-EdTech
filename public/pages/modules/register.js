@@ -1,4 +1,5 @@
 import createCustomEvent from "./event.js";
+import { nameValid, emailValid, passwordValid, escapeHtml } from "./validation.js"
 
 export function Register() {
     const div = document.createElement("div");
@@ -14,12 +15,15 @@ export function Register() {
     <h1>Para começar, precisamos te conhecer um pouco melhor!</h1>
         <label for="name">Nome</label>
         <input type="text" name="name" id="name">
+        <div id ="erroNameRegister" class="erro"></div>
         <label for="email">E-mail</label>
         <input type="email" name="email" id="email">
+        <div id ="erroEmailRegister" class="erro"></div>
         <label for="password">Senha</label>
         <input type="password" name="password" id="password">
         <label for="password">Repetir Senha</label>
         <input type="password" name="password" id="confirm_password">
+        <div id ="erroPasswordRegister" class="erro"></div>
         
         <label for="terms">Li e concordo com a <span id="open-modal-privacy">política de privacidade</span> e <span id="open-modal-terms">termos de uso</span></label>
         <input type="checkbox" name="terms" id="terms">
@@ -170,9 +174,17 @@ export function registerBtns() {
 
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
+  
+    let messageName = ''; // Inicialização das variáveis
+    let messageEmail = ''; // Inicialização das variáveis
+    let messagePassword = ''; // Inicialização das variáveis
 
     btnBack.addEventListener("click", () => {
-        if (currentForm > 1) {
+      if(currentForm === 1) {
+            const customEvent = createCustomEvent('/');
+            history.pushState({}, '', '/');
+            window.dispatchEvent(customEvent);
+        } else if (currentForm > 1) {
             currentForm--;
             showForm(currentForm);
         }
@@ -184,8 +196,8 @@ export function registerBtns() {
             showForm(currentForm);
         } else if(currentForm === 3) {
             submitForm();
-            const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
+            const customEvent = createCustomEvent('/login');
+            history.pushState({}, '', '/login');
             window.dispatchEvent(customEvent);
         }
     });
@@ -219,14 +231,38 @@ async function submitForm() {
     const activityLevel = document.getElementById("activity").value;
     const foodPlan = document.getElementById("food_plan").value;
     const terms = document.getElementById("terms").checked;
+  
+    const erroName = document.getElementById("erroNameRegister");
+    const erroEmail = document.getElementById("erroEmailRegister");
+    const erroPassword = document.getElementById("erroPasswordRegister");
+    const erroConfirmPass = document.getElementById("erroConfirmPassRegister");
+  
+    erroName.innerText = ''; // Limpa mensagens antigas de erro
+    erroEmail.innerText = ''; // Limpa mensagens antigas de erro
+    erroPassword.innerText = ''; // Limpa mensagens antigas de erro
+    erroConfirmPass.innerText = ''; // Limpa mensagens antigas de erro
 
-    if (password !== confirmPassword) {
-        alert("Senhas diferentes!");
-        return
+    if (!nameValid(name)) {
+        messageName = escapeHtml("Por favor, insira um name válido."); 
+        erroName.appendChild(document.createTextNode(messageName));
+        return;
     }
 
-    if (!terms) {
-        alert("Voce precisa concordar com a politica de privacidade e termos de condições!");
+    if (!emailValid(email)) {
+        messageEmail = escapeHtml("Por favor, insira um email válido."); 
+        erroEmail.appendChild(document.createTextNode(messageEmail));
+        return;
+    }
+        
+    if (!passwordValid(password) || !!passwordValid(confirmPassword) ) {
+        messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
+        erroPassword.appendChild(document.createTextNode(messagePassword));
+        return;
+    }
+
+    if (password !== confirmPassword){
+        messagePassword = escapeHtml("Por favor, as senhas precisam ser iguais"); 
+        erroPassword.appendChild(document.createTextNode(messagePassword));
         return;
     }
 
@@ -261,5 +297,11 @@ async function submitForm() {
         console.error("Erro ao realizar o registro:", error);
         alert("Erro ao realizar o registro. Tente novamente");
     }
+  
+    // Limpar os valores dos inputs
+    document.getElementById("name").value= "";
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("confirm_password").value = "";
 }
 
