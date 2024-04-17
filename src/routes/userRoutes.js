@@ -5,7 +5,7 @@ const permissionVerify = require('../middlewares/permissionVerify')
 
 //Essa rota vai ficar aqui em cima pq ela não precisa do permissionVerify, fazem parte do cadastro
 router.post('/', userController.createUser);
-router.get('/:id/dailyCalories', userController.getDailyCaloriesByUserId)
+// router.get('/:id/dailyCalories', userController.getDailyCaloriesByUserId)
 
 //As outras precisam da validação, então todas usarão o permissionVerify
 router.use(permissionVerify);

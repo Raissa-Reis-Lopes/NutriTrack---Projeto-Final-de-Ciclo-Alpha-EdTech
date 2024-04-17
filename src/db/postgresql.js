@@ -8,6 +8,8 @@ async function connectToDatabase(){
         database: process.env.DB_DATABASE,
         password: process.env.DB_PASSWORD,
         port: process.env.DB_PORT,
+        max: 30                    
+        // Máximo de conexões que podem estar abertas no pool ao mesmo tempo
     });
 
     try{

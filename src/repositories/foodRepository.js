@@ -42,13 +42,13 @@ async function getFoodById(id) {
     }
 }
 
-async function createUserFood(user_id, name, calorie, carbohydrate, protein, lipid){
+async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate, protein, lipid) VALUES($1, $2, $3, $4, $5, $6)';
+    const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES($1, $2, $3, $4, $5, $6)';
     try {
-        await pool.query(query,[user_id, name, calorie, carbohydrate, protein, lipid]);
+        await pool.query(query,[user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
         console.log("Alimento adicionado com sucesso");
-        return { user_id, name, calorie, carbohydrate, protein, lipid };
+        return { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g };
     } catch (error) {
         console.log('Erro ao criar alimento do usuário', error);
         throw error;
@@ -57,13 +57,13 @@ async function createUserFood(user_id, name, calorie, carbohydrate, protein, lip
     }
 }
 
-async function updateUserFood(id, user_id, name, calorie, carbohydrate, protein, lipid){
+async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
     const pool = await connectToDatabase();
-    const query = 'UPDATE food SET name=$3, calorie=$4, carbohydrate=$5, protein=$6, lipid=$7 WHERE id=$1 AND user_id=$2';
+    const query = 'UPDATE food SET name=$3, calorie=$4, carbohydrate_g=$5, protein_g=$6, lipid_g=$7 WHERE id=$1 AND user_id=$2';
     try {
-        await pool.query(query,[id, user_id, name, calorie, carbohydrate, protein, lipid]);
+        await pool.query(query,[id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
         console.log("Alimento atualizado com sucesso");
-        return { user_id, name, calorie, carbohydrate, protein, lipid };
+        return { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g };
     } catch (error) {
         console.log('Erro ao atualizar alimento do usuário', error);
         throw error;
