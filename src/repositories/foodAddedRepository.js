@@ -15,7 +15,7 @@ async function getAllFoodsAdded(){
     }
 }
 
-async function getAllFoodsAddedByUserId(userId){
+async function getFoodsAddedByUserId(userId){
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE user_id=$1';
     try {
@@ -41,11 +41,11 @@ async function insertFoodAdded(user_id, food_id, food_quantity, meal){
     }
 } 
 
-async function updateFoodAdded(user_id, food_id, food_quantity, meal){
+async function updateFoodAdded(id, user_id, food_id, food_quantity, meal){
     const pool = await connectToDatabase();
-    const query = 'UPDATE food_added SET user_id=$1, food_id=$2, food_qunatity=$3, meal=$4';
+    const query = 'UPDATE food_added SET food_id=$3, food_qunatity=$4, meal=$5 WHERE id=$1 AND user_id=$2 ';
     try {
-        await pool.query(query,[user_id, food_id, food_quantity, meal]);
+        await pool.query(query,[id, user_id, food_id, food_quantity, meal]);
         console.log('Atualização de food_added realizada com sucesso!')
         return { user_id, food_id, food_quantity, meal }
     } catch (error) {
@@ -68,7 +68,7 @@ async function deleteFoodAdded(id){
 
 module.exports = {
     getAllFoodsAdded,
-    getAllFoodsAddedByUserId,
+    getFoodsAddedByUserId,
     insertFoodAdded,
     updateFoodAdded,
     deleteFoodAdded

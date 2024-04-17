@@ -35,7 +35,7 @@ const createUser = async(username , email , password, avatar_img) => {
 
         const hashedPassword = await hashPassword(password);
 
-        const result = await userRepository.insertUser(username , email , hashedPassword, avatar_img)
+        const result = await userRepository.insertUser(username , email , hashedPassword, avatar_img);
         return result;
     } catch (error) {
         console.log(error);
