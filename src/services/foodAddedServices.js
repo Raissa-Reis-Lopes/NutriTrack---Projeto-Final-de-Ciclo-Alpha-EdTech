@@ -11,9 +11,20 @@ const getAllFoodsAdded = async() => {
     }
 }
 
-const getFoodsAddedByUserId = async()=> {
+const getFoodAddedById = async(id) => {
     try {
-        const foodsAdded = await foodAddedRepository.getFoodsAddedByUserId();
+        const foodAddedById = await foodAddedRepository.getFoodAddedById(id);
+        return foodAddedByID;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
+const getFoodsAddedByUserId = async(id)=> {
+    try {
+        const foodsAdded = await foodAddedRepository.getFoodsAddedByUserId(id);
         return foodsAdded;
     } catch (error) {
         console.log(error);
@@ -53,9 +64,10 @@ const deleteFoodAdded = async(id) => {
 }
 
 module.exports = {
-    newFoodAdded,
     getAllFoodsAdded,
+    getFoodAddedById
     getFoodsAddedByUserId,
+    newFoodAdded,
     updateFoodAdded,
     deleteFoodAdded
 }

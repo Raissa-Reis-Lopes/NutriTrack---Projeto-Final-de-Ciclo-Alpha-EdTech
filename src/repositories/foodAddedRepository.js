@@ -15,6 +15,18 @@ async function getAllFoodsAdded(){
     }
 }
 
+async function getFoodAddedById(id){
+    const pool = await connectToDatabase();
+    const query = 'SELECT * FROM food_added WHERE id=$1';
+    try {
+        const result = await pool.query(query,[id]);
+        return result.rows[0];
+    } catch (error) {
+        console.log("Falha ao buscar os dados de alimentos adicionados");
+        throw error;
+    }
+}
+
 async function getFoodsAddedByUserId(userId){
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE user_id=$1';
@@ -68,6 +80,7 @@ async function deleteFoodAdded(id){
 
 module.exports = {
     getAllFoodsAdded,
+    getFoodAddedById,
     getFoodsAddedByUserId,
     insertFoodAdded,
     updateFoodAdded,
