@@ -11,7 +11,7 @@ export function emailValid(email) {
   }
 
   export function passwordValid(password) {
-    const valid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+    const valid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,15}$/;
     return valid.test(password);
   }
 
@@ -38,3 +38,33 @@ export function emailValid(email) {
     return true;
   }
   
+  export function heightValid(height) {
+    const maxHeightCm = 300; // Define o limite máximo de altura em centímetros
+  
+    // Verifica se a altura é um número e está dentro do limite máximo
+    return !isNaN(height) && height > 0 && height <= maxHeightCm;
+  }
+
+  export function weightValid(weight) {
+    const maxWeight = 500; // Define o limite máximo de peso em quilogramas
+  
+    // Verifica se o peso é um número com até duas casas decimais e está dentro do limite máximo
+    const weightRegex = /^\d+(\.\d{1,2})?$/; // Regex para validar números com até duas casas decimais
+    return weightRegex.test(weight) && !isNaN(weight) && weight > 0 && weight <= maxWeight;
+  }
+
+
+  // escape function
+  export function escapeHtml(html) {
+    const escapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    return html.replace(/[&<>"'\/]/g, function(match) {
+        return escapeMap[match];
+    });
+}

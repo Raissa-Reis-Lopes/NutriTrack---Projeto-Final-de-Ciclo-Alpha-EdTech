@@ -58,3 +58,12 @@ ul {
     margin: 0 auto;
     padding: 80px 0;
   }
+
+
+  /* erro messages */
+
+  .erro{
+    font-size: 1rem;
+    color: red;
+    font-weight: 600;
+  }
