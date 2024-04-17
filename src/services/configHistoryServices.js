@@ -28,28 +28,6 @@ const isValidDate = (dateString) => {
     return date instanceof Date && !isNaN(date);
 };
 
-
-const getAllConfigHistory = async () =>{
-    try {
-        const configHistory = await configHistoryRepository.getAllConfigHistory();
-        return configHistory.rows;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
-
-
-const getAllConfigHistoryByUserId = async(user_id) => {
-    try {
-        const configHistory = await configHistoryRepository.getConfigHistoryByUserId(user_id);
-        return configHistory.rows;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
-
 const getLatestConfigHistoryByUserId = async(user_id) => {
     try {
         const configHistory = await configHistoryRepository.getLatestConfigHistoryByUserId(user_id);
@@ -59,45 +37,6 @@ const getLatestConfigHistoryByUserId = async(user_id) => {
         throw error;
     }
 };
-
-
-//Trocando o createConfig por configOrUpdate e testando no postman
-// const createConfigHistory = async(user_id, food_plan_id, activity_level, weight, height, birth_date, gender) => {
-//     try {
-        
-//         if(!user_id){
-//             throw new Error('Usuário não existe');
-//         }
-
-//         if(food_plan_id !== "1" && food_plan_id !== "2" && food_plan_id !== "3"){
-//             throw new Error('Plano alimentar inválido, escolha um plano existente (1 para perda de peso; 2 para manter o peso ou 3 para ganho de peso)')
-//         }
-
-//         if(gender !== 'M' && gender !== 'F'){
-//             throw new Error('Formato inválido para o gênero, opções válidas "M" ou "F" ');
-//         }
-
-//         validateHeight(height);
-
-//         validateWeight(weight);
-
-//         isValidDate(birth_date);
-
-//         const validActivityLevels = ['sedentary', 'lightlyActive', 'moderatelyActive', 'veryActive', 'extraActive'];
-//         if (!validActivityLevels.includes(activity_level)) {
-//             throw new Error('Escolha um nível de atividade válido: "sedentary", "lightlyActive", "moderatelyActive", "veryActive", "extraActive"');
-//         }
-
-
-//         const result = await configHistoryRepository.insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender);
-//         return result;
-
-//     } catch (error) {
-//         console.log(error);
-//         throw error;
-//     }   
-// }
-
 
 const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level, weight, height, birth_date, gender) => {
     try {
@@ -124,9 +63,8 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
             throw new Error('Escolha um nível de atividade válido: "sedentary", "lightlyActive", "moderatelyActive", "veryActive", "extraActive"');
         }
 
+        const currentDate = new Date(); 
 
-        const currentDate = new Date().toISOString().split('T')[0];  // Pega a data atual no formato YYYY-MM-DD
-    
         const existingConfig = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, currentDate);
     
         if (existingConfig) {
@@ -143,15 +81,89 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
         console.log(error);
         throw error;
     }
-
-   
 };
 
 
+const findConfigByDate = async (userId, targetDate) => {
+    try {
+        // Primeiro, obtemos todas as configurações do usuário ordenadas por data
+        const configs = await configHistoryRepository.getConfigsByUserId(userId);
+
+        // Percorremos as configurações do mais recente para o mais antigo
+        for (let i = 0; i < configs.length; i++) {
+            const config = configs[i];
+
+            // Se a data da configuração for menor ou igual à data desejada, retornamos essa configuração
+            if (new Date(config.created_at) <= new Date(targetDate)) {
+                return config;
+            }
+        }
+
+        // Se não encontrarmos nenhuma configuração válida, lançamos um erro
+        throw new Error('Nenhuma configuração válida encontrada para a data fornecida');
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+//Essa função vai pegar a configuração do usuário que estver dentro de um período estipulado (para usarmos no histórico e na busca de dias anteriores na Home);
+const getConfigHistoryForPeriod = async (user_id, startDate, endDate) => {
+    try {
+        const configHistoryForPeriod = {};
+
+        // Convertendo as datas para o formato YYYY-MM-DD
+        startDate = new Date(startDate).toISOString().split('T')[0];
+        endDate = new Date(endDate).toISOString().split('T')[0];
+
+        // Pegando todas as datas entre startDate e endDate
+        const currentDate = new Date(startDate);
+        while (currentDate <= new Date(endDate)) {
+            const date = currentDate.toISOString().split('T')[0];
+            
+            // Verificando se existe config_history para a data atual
+            const configHistory = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, date);
+
+            if (configHistory) {
+                // Se encontrou config_history para a data atual, usamos ele
+                configHistoryForPeriod[date] = configHistory.id;
+            } else {
+                // Se não encontrou config_history para a data atual, usamos o último anterior
+                const lastConfigHistory = await configHistoryRepository.getLatestConfigHistoryBeforeDate(user_id, date);
+                if (lastConfigHistory) {
+                    configHistoryForPeriod[date] = lastConfigHistory.id;
+                } else {
+                    configHistoryForPeriod[date] = null;  // ou outro valor que indique ausência de config_history
+                }
+            }
+
+            // Avançando para o próximo dia
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        return configHistoryForPeriod;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+
+const getAllConfigHistory = async () =>{
+    try {
+        const configHistory = await configHistoryRepository.getAllConfigHistory();
+        return configHistory.rows;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
 module.exports = {
-    // createConfigHistory,
     getAllConfigHistory,
-    getAllConfigHistoryByUserId,
     getLatestConfigHistoryByUserId,
-    createOrUpdateConfigHistory
+    createOrUpdateConfigHistory,
+    getConfigHistoryForPeriod,
+    findConfigByDate
 }

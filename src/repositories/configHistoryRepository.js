@@ -20,16 +20,22 @@ async function getAllConfigHistory(){
 }
 
 
-async function getAllConfigHistoryByUserId(user_id){
+const getConfigsByUserId = async (userId) => {
     const pool = await connectToDatabase();
-    const query = 'SELECT FROM config_history WHERE user_id=$1';
     try {
-        const result = await pool.query(query,[id]);
-        return result.rows;
+        const query = `
+            SELECT * FROM config_history
+            WHERE user_id = $1
+            ORDER BY created_at DESC
+        `;
+        const values = [userId];
+        const { rows } = await pool.query(query, values);
+        return rows;
     } catch (error) {
-        console.log('Configuração não localizada')
+        console.log(error);
+        throw error;
     }
-}
+};
 
 async function getLatestConfigHistoryByUserId(user_id){
     const pool = await connectToDatabase();
@@ -54,6 +60,23 @@ async function getConfigHistoryByUserIdAndDate(user_id, date) {
         throw error;
     }
 }
+
+//Esse select será usado para fazer as buscas pelo config_history de um determinado período
+const getLatestConfigHistoryBeforeDate = async (user_id, date) => {
+    const pool = await connectToDatabase();
+    const query = `SELECT *
+    FROM config_history
+    WHERE user_id = $1 AND created_at::date < $2
+    ORDER BY created_at DESC
+    LIMIT 1`;
+    try {
+        const result = await pool.query(query,[user_id, date]);
+        return result.rows[0];
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
 
 async function updateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date) {
     const pool = await connectToDatabase();
@@ -89,8 +112,9 @@ async function insertConfigHistory(user_id, food_plan_id, activity_level, weight
 module.exports = {
     insertConfigHistory,
     getAllConfigHistory,
-    getAllConfigHistoryByUserId,
+    getConfigsByUserId,
     getLatestConfigHistoryByUserId,
     getConfigHistoryByUserIdAndDate,
+    getLatestConfigHistoryBeforeDate,
     updateConfigHistory
 }

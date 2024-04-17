@@ -1,28 +1,5 @@
 const configHistoryServices = require("../services/configHistoryServices");
 
-
-const getAllConfigHistory = async(req, res) =>{
-    try {
-        const configs = await configHistoryServices.getAllConfigHistory();
-        return res.status(200).json(configs);       
-    } catch (error) {
-        return res.status(500).json({ error: 'Erro ao buscar dados das configurações!'});
-    }
-}
-
-const getAllConfigHistoryByUserId = async(req, res) => {
-    const { id } = req.params;
-    try {
-        const configs = await configHistoryServices.getConfigHistoryByUserId(id);
-        if (!configs) {
-            return res.status(404).json({ error: 'Configurações não encontradas' });
-        }
-        return res.status(200).json(configs);
-    } catch (error) {
-        
-    }
-}
-
 const getLatestConfigHistoryByUserId = async(req, res) => {
     const { id } = req.params;
     try {
@@ -75,11 +52,7 @@ const createOrUpdateConfigHistory = async(req,res) => {
     }
 }
 
-
 module.exports = {
-    getAllConfigHistory,
-    getAllConfigHistoryByUserId,
-    // createConfigHistory,
     createOrUpdateConfigHistory,
     getLatestConfigHistoryByUserId
 }
