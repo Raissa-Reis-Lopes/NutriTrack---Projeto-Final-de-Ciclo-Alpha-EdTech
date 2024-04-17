@@ -12,7 +12,7 @@ async function getAllConfigHistory(){
     const query = 'SELECT * FROM config_history'
     try {
         const result = await pool.query(query);
-        return result;
+        return result.rows;
     } catch (error) {
         console.log("Falha ao buscar os dados de histórico de configurações");
         throw error;
