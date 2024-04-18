@@ -35,6 +35,25 @@ const getFoodById = async(req, res) => {
     }
 }
 
+const getFoodNameById = async(req, res) => {
+    try {
+        const { id } = req.params;
+
+        const food = await foodServices.getFoodById(id);
+
+        if (!food) {
+            return res.status(404).json({ error: 'Alimento não encontrado!' })
+        }
+
+        const foodName = await foodServices.getFoodNameById(id);
+
+        return res.status(200).json(foodName);
+        
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao buscar o nome do alimento!' });
+    }
+}
+
 const createUserFood = async(req, res) => {
     try {
         const { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
@@ -140,6 +159,7 @@ module.exports = {
     getFoods,
     getUserFoods,
     getFoodById,
+    getFoodNameById,
     createUserFood,
     updateUserFood,
     deleteUserFood,

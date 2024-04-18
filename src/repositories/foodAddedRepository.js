@@ -16,6 +16,9 @@ async function getAllFoodsAdded(){
 }
 
 async function getFoodAddedById(id){
+    console.log("*************************************")
+    console.log(`Esse é o id que está sendo recebido${id}`);
+    console.log("*************************************")
     const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE id=$1';
     try {
@@ -40,22 +43,36 @@ async function getFoodsAddedByUserId(userId){
 }
 
 
-
-async function insertFoodAdded(user_id, food_id, food_quantity, meal){
+async function getFoodsAddedByUserByDate(user_id, date){
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO food_added(user_id, food_id, food_quantity, meal) VALUES($1, $2, $3, $4)';
-    try{
-        await pool.query(query, [user_id, food_id, food_quantity, meal]);
-        console.log(`Alimento de id ${food_id} inserido com sucesso na refeição ${meal}`);
-        return { user_id, food_id, food_quantity, meal };
-    } catch(error){
-        console.log('Falha ao adicionar o alimento à refeição');
+    const query = 'SELECT * FROM food_added WHERE user_id=$1 AND created_at::date=$2';
+    try {
+        const result = await pool.query(query,[user_id, date]);
+        return result.rows;
+    } catch (error) {
+        console.log("Falha ao buscar os dados de alimentos adicionados do usuário neste dia");
+        throw error;
     }
-} 
+}
+
+
+//Não estava funcionando, coloquei o RETURNING * para ver o retorno
+async function insertFoodAdded(user_id, food_id, food_quantity, meal) {
+    const pool = await connectToDatabase();
+    const query = 'INSERT INTO food_added(user_id, food_id, food_quantity, meal) VALUES($1, $2, $3, $4) RETURNING *';
+    try {
+        const result = await pool.query(query, [user_id, food_id, food_quantity, meal]);
+        console.log(`Alimento de id ${food_id} inserido com sucesso na refeição ${meal}`);
+        return result.rows[0];  // Retorna o registro inserido
+    } catch (error) {
+        console.log('Falha ao adicionar o alimento à refeição:', error.message);
+        throw error;
+    }
+}
 
 async function updateFoodAdded(id, user_id, food_id, food_quantity, meal){
     const pool = await connectToDatabase();
-    const query = 'UPDATE food_added SET food_id=$3, food_qunatity=$4, meal=$5 WHERE id=$1 AND user_id=$2 ';
+    const query = 'UPDATE food_added SET food_id=$3, food_quantity=$4, meal=$5 WHERE id=$1 AND user_id=$2 ';
     try {
         await pool.query(query,[id, user_id, food_id, food_quantity, meal]);
         console.log('Atualização de food_added realizada com sucesso!')
@@ -82,6 +99,7 @@ module.exports = {
     getAllFoodsAdded,
     getFoodAddedById,
     getFoodsAddedByUserId,
+    getFoodsAddedByUserByDate,
     insertFoodAdded,
     updateFoodAdded,
     deleteFoodAdded

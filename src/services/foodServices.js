@@ -30,6 +30,17 @@ const getFoodById = async(id) =>{
     }
 }
 
+
+const getFoodNameById = async(id) =>{
+    try {
+        const food = await foodRepository.getFoodNameById(id);
+        return food;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 const createUserFood = async(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) => {
     try {
         const result = await foodRepository.createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g)
@@ -63,6 +74,7 @@ module.exports = {
     getFoods,
     getUserFoods,
     getFoodById,
+    getFoodNameById,
     createUserFood,
     updateUserFood,
     deleteUserFood,

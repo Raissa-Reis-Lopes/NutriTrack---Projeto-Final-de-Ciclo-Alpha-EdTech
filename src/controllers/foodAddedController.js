@@ -12,8 +12,8 @@ const getAllFoodsAdded = async(req, res) => {
 const getFoodAddedById = async(req, res) => {
     const { id } = req.params;
     try {
-        const foodAdded = await foodAddedServices.getFoodAddedById(id);
-        return res.status(200).json(foodAdded);
+        const result = await foodAddedServices.getFoodAddedById(id);
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao buscar dados do alimento adicionado!'})
     }
@@ -26,6 +26,17 @@ const getFoodsAddedByUserId =  async(req, res) => {
         return res.status(200).json(foods);
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao buscar dados dos alimentos adicionados pelo usuário' });
+    }
+}
+
+const calculateDailyNutritionWithDetails = async(req, res) => {
+    try {
+        const { user_id, date } = req.query;
+        const result = await foodAddedServices.calculateDailyNutritionWithDetails(user_id, date);
+        return res.status(200).json({success: true, data: result})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error: 'Erro ao calcular os valores nutricionais consumidos no dia e verificar os detalhes'});
     }
 }
 
@@ -52,7 +63,7 @@ const newFoodAdded = async(req, res) =>{
         }
 
         const foodsAdded = await foodAddedServices.newFoodAdded(user_id, food_id, food_quantity, meal);
-        return res.status(200).json({ success: true, message:"Alimento adicionado com sucesso na refeição", data: foodsAdded };
+        return res.status(200).json({ success: true, message:"Alimento adicionado com sucesso na refeição", data: foodsAdded });
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -94,13 +105,13 @@ const updateFoodAdded = async(req, res) => {
 const deleteFoodAdded = async(req, res) => {
     const { id } = req.params;
     try {
-        const foodAdded = await foodAddedServices.getFoodAddedById(id);
+        // const foodAdded = await foodAddedServices.getFoodAddedById(id);
         
-        if(!foodAdded){
-            throw new Error('Registro de alimento adicionado não encontrado');
-        }
+        // if(!foodAdded){
+        //     throw new Error('Registro de alimento adicionado não encontrado');
+        // }
         await foodAddedServices.deleteFoodAdded(id);
-        return res.status(200).json({ success: true, message: 'Registro de alimento adicionado deletado com sucesso!'})
+        return res.status(200).json({ success: true, message: 'Registro deletado com sucesso!'})
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -112,6 +123,7 @@ module.exports = {
     getAllFoodsAdded,
     getFoodAddedById,
     getFoodsAddedByUserId,
+    calculateDailyNutritionWithDetails,
     newFoodAdded,
     updateFoodAdded,
     deleteFoodAdded

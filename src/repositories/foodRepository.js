@@ -42,6 +42,20 @@ async function getFoodById(id) {
     }
 }
 
+async function 
+getFoodNameById(food_id) {
+    const pool = await connectToDatabase();
+    const query = 'SELECT name FROM food WHERE id=$1';
+    try {
+        const result = await pool.query(query, [food_id]);
+        return result.rows[0];
+    } catch (error) {
+        console.log("Falha ao buscar o nome do alimento pelo Id");
+        throw error;
+    }
+}
+
+
 async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
     const pool = await connectToDatabase();
     const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES($1, $2, $3, $4, $5, $6)';
@@ -90,6 +104,7 @@ module.exports = {
     getFoods,
     getUserFoods,
     getFoodById,
+    getFoodNameById,
     createUserFood,
     updateUserFood,
     deleteUserFood,
