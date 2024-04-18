@@ -1,5 +1,8 @@
 import createCustomEvent from "./event.js";
 import { emailValid, passwordValid, escapeHtml } from "./validation.js"
+import { showMessage } from "./message.js";
+
+
 export function Login() {
     const div = document.createElement("div");
     div.classList.add('login_wrapper');
@@ -26,7 +29,9 @@ export function Login() {
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
                 </div>
-                <p id="message"></p>
+                <div id="message" class="message-container">
+                <div id="message-content" class="message-content hidden"></div>
+                </div>
             </div>
             <div class="btns_index btn_register">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
@@ -45,12 +50,17 @@ export function Login() {
     return div
 }
 
+
+
+
+
+
 // aqui autenticar as infos do usuario
 export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
-    const message = document.getElementById("message")
+    // const message = document.getElementById("message")
    
     let messageEmail = ''; // Inicialização das variáveis
     let messagePassword = ''; // Inicialização das variáveis
@@ -83,17 +93,18 @@ export function loginBtns(){
         erroEmail.innerText = ''; // Limpa mensagens antigas de erro
         erroPassword.innerText = ''; // Limpa mensagens antigas de erro
 
-        if (!emailValid(email)) {
-            messageEmail = escapeHtml("Por favor, insira um email válido."); 
-            erroEmail.appendChild(document.createTextNode(messageEmail));
-            return;
-        }
+        //Essas validações vou deixar só no rgeister
+        // if (!emailValid(email)) {
+        //     messageEmail = escapeHtml("Por favor, insira um email válido."); 
+        //     erroEmail.appendChild(document.createTextNode(messageEmail));
+        //     return;
+        // }
         
-        if (!passwordValid(password)) {
-            messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
-            erroPassword.appendChild(document.createTextNode(messagePassword));
-            return;
-        }
+        // if (!passwordValid(password)) {
+        //     messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
+        //     erroPassword.appendChild(document.createTextNode(messagePassword));
+        //     return;
+        // }
 
         try {
             const response = await fetch('/api/login', {
@@ -104,12 +115,12 @@ export function loginBtns(){
                 body: JSON.stringify({ email, password }),
             });
 
-            if (!response.ok) {
-                message.innerText = "Por favor, forneça um email e/ou senha válidos!"
-                throw new Error('Erro ao fazer login, usuário não localizado');
-            }
+            // if (!response.ok) {
+            //     message.innerText = "Por favor, forneça um email e/ou senha válidos!"
+            //     throw new Error('Erro ao fazer login, usuário não localizado');
+            // }
 
-            message.innerText = "Seja bem-vindo!"
+            // message.innerText = "Seja bem-vindo!"
             const customEvent = createCustomEvent('/home');
             history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 

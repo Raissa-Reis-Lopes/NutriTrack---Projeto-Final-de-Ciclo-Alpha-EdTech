@@ -23,8 +23,6 @@ const createUser = async(req, res) => {
     try {
         const { username , email , password, avatar_img } = req.body;  
 
-        
-
         if(!username){
             throw new Error('O nome é obrigatório');
         }
