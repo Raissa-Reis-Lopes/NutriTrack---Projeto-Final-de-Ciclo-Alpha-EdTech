@@ -30,9 +30,20 @@ const getFoodById = async(id) =>{
     }
 }
 
-const createUserFood = async(user_id, name, calorie, carbohydrate, protein, lipid) => {
+
+const getFoodNameById = async(id) =>{
     try {
-        const result = await foodRepository.createUserFood(user_id, name, calorie, carbohydrate, protein, lipid)
+        const food = await foodRepository.getFoodNameById(id);
+        return food;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+const createUserFood = async(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) => {
+    try {
+        const result = await foodRepository.createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g)
         return result;
     } catch (error) {
         console.log(error);
@@ -40,9 +51,9 @@ const createUserFood = async(user_id, name, calorie, carbohydrate, protein, lipi
     }
 }
 
-const updateUserFood = async(id, user_id, name, calorie, carbohydrate, protein, lipid) => {
+const updateUserFood = async(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) => {
     try {
-        const result = await foodRepository.updateUserFood(id, user_id, name, calorie, carbohydrate, protein, lipid)
+        const result = await foodRepository.updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g)
         return result;
     } catch (error) {
         console.log(error);
@@ -63,6 +74,7 @@ module.exports = {
     getFoods,
     getUserFoods,
     getFoodById,
+    getFoodNameById,
     createUserFood,
     updateUserFood,
     deleteUserFood,

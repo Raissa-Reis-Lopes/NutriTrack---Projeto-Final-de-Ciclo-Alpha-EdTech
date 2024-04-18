@@ -14,6 +14,8 @@ router.get('/user/:user_id', foodController.getUserFoods);
 // Pega um alimento pelo seu id
 router.get('/:id', foodController.getFoodById);
 
+router.get('/name/:id', foodController.getFoodNameById);
+
 router.post('/', foodController.createUserFood);
 router.put('/:id', foodController.updateUserFood);
 router.delete('/:id', foodController.deleteUserFood);

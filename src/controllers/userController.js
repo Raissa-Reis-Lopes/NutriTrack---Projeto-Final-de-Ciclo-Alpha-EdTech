@@ -19,29 +19,11 @@ const getUserById = async(req, res) => {
     }
 }
 
-const getDailyCaloriesByUserId = async (req, res) => {
-    try {
-        const userId = req.params.id; // Supondo que você esteja passando o ID do usuário como parâmetro na URL
-        
-        const dailyCalories = await userServices.getDailyCaloriesByUserId(userId);
-        
-        res.status(200).json(dailyCalories);
-    } catch (error) {
-        res.status(500).json({ message: 'Error getting daily calories', error: error.message });
-    }
-}
-
 const createUser = async(req, res) => {
     try {
-        const { food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender } = req.body;
+        const { username , email , password, avatar_img } = req.body;  
 
-        if(!food_plan_id){
-            throw new Error ('Escolha o plano alimentar');
-        }
-
-        if(!activity_level){
-            throw new Error ('Escolha o nível de atividade');
-        }    
+        
 
         if(!username){
             throw new Error('O nome é obrigatório');
@@ -55,23 +37,7 @@ const createUser = async(req, res) => {
             throw new Error('A senha é obrigatório');
         }
 
-        if(!weight){
-            throw new Error('O peso é obrigatório');
-        }
-
-        if(!height){
-            throw new Error('A altura é obrigatória');
-        }
-
-        if(!birth_date){
-            throw new Error('A data de nascimento é obrigatória');
-        }
-
-        if(!gender){
-            throw new Error('O sexo biológico é obrigatório');
-        }
-
-        const user = await userServices.createUser(food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender);
+        const user = await userServices.createUser(username , email , password, avatar_img);
         return res.status(200).json({ success: true, message: "Usuário cadastrado com sucesso!", data: user });
     } catch (error) {
         return res.status(500).json({ error: error.message})
@@ -79,18 +45,13 @@ const createUser = async(req, res) => {
 }
 
 const updateUser = async(req, res) => {
-    const { id } = req.params;
-    const { food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender } = req.body;
-
     try {
-        
-        if(!food_plan_id){
-            throw new Error ('Escolha o plano alimentar');
-        }
+        const { id } = req.params;
+        const {username , email , password, avatar_img  } = req.body;
 
-        if(!activity_level){
-            throw new Error ('Escolha o nível de atividade');
-        }    
+        if(!id){
+            throw new Error("O id do usuário é obrigatório")
+        }
 
         if(!username){
             throw new Error('O nome é obrigatório');
@@ -104,28 +65,13 @@ const updateUser = async(req, res) => {
             throw new Error('A senha é obrigatório');
         }
 
-        if(!weight){
-            throw new Error('O peso é obrigatório');
-        }
-
-        if(!height){
-            throw new Error('A altura é obrigatória');
-        }
-
-        if(!birth_date){
-            throw new Error('A data de nascimento é obrigatória');
-        }
-
-        if(!gender){
-            throw new Error('O sexo biológico é obrigatório');
-        }
-
         const user = await userServices.getUserById(id);
         if(!user){
             throw new Error('O usuário não existe');
         }
 
-        const result = await userServices.updateUser(id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender);
+        const result = await userServices.updateUser(id, username , email , password, avatar_img);
+
         return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso', data: result});
         
     } catch (error) {
@@ -152,7 +98,6 @@ const deleteUser = async(req, res) => {
 module.exports = {
     getAllUsers,
     getUserById,
-    getDailyCaloriesByUserId,
     createUser,
     updateUser,
     deleteUser

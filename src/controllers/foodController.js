@@ -35,9 +35,28 @@ const getFoodById = async(req, res) => {
     }
 }
 
+const getFoodNameById = async(req, res) => {
+    try {
+        const { id } = req.params;
+
+        const food = await foodServices.getFoodById(id);
+
+        if (!food) {
+            return res.status(404).json({ error: 'Alimento não encontrado!' })
+        }
+
+        const foodName = await foodServices.getFoodNameById(id);
+
+        return res.status(200).json(foodName);
+        
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao buscar o nome do alimento!' });
+    }
+}
+
 const createUserFood = async(req, res) => {
     try {
-        const { user_id, name, calorie, carbohydrate, protein, lipid } = req.body;
+        const { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
 
         if(!user_id){
             throw new Error ('O user_id é obrigatório');
@@ -51,19 +70,19 @@ const createUserFood = async(req, res) => {
             throw new Error('Informe as calorias');
         }
 
-        if(!carbohydrate){
+        if(!carbohydrate_g){
             throw new Error('A quantidade de carboidratos é obrigatória');
         }
 
-        if(!protein){
-            throw new Error('A quantidade de proteinas é obrigatória');
+        if(!protein_g){
+            throw new Error('A quantidade de protein_gas é obrigatória');
         }
 
-        if(!lipid){
+        if(!lipid_g){
             throw new Error('A quantidade de lipídios é obrigatória');
         }
 
-        const food = await foodServices.createUserFood(user_id, name, calorie, carbohydrate, protein, lipid);
+        const food = await foodServices.createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g);
         return res.status(200).json({ success: true, message: "Alimento cadastrado com sucesso!", data: food });
     } catch (error) {
         return res.status(500).json({ error: error.message})
@@ -82,7 +101,7 @@ const updateUserFood = async(req, res) => {
         return res.status(405).json({ error: 'Este alimento não pode ser alterado!' })
     }
 
-    const { user_id, name, calorie, carbohydrate, protein, lipid } = req.body;
+    const { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
     try {
         if(!user_id){
             throw new Error ('O user_id é obrigatório');
@@ -96,19 +115,19 @@ const updateUserFood = async(req, res) => {
             throw new Error('Informe as calorias');
         }
 
-        if(!carbohydrate){
+        if(!carbohydrate_g){
             throw new Error('A quantidade de carboidratos é obrigatória');
         }
 
-        if(!protein){
-            throw new Error('A quantidade de proteinas é obrigatória');
+        if(!protein_g){
+            throw new Error('A quantidade de protein_gas é obrigatória');
         }
 
-        if(!lipid){
+        if(!lipid_g){
             throw new Error('A quantidade de lipídios é obrigatória');
         }
 
-        const food = await foodServices.updateUserFood(id, user_id, name, calorie, carbohydrate, protein, lipid);
+        const food = await foodServices.updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g);
         return res.status(200).json({ success: true, message: "Alimento atualizado com sucesso!", data: food });
     } catch (error) {
         return res.status(500).json({ error: error.message })
@@ -140,6 +159,7 @@ module.exports = {
     getFoods,
     getUserFoods,
     getFoodById,
+    getFoodNameById,
     createUserFood,
     updateUserFood,
     deleteUserFood,
