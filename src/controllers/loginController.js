@@ -37,4 +37,5 @@ const getUserId = async (req, res) => {
 
 module.exports = {
     authenticate,
+    getUserId
 }
