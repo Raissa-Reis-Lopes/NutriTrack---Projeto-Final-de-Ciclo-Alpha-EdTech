@@ -4,6 +4,14 @@ const userRepository = require('../repositories/userRepository');
 const { hashPassword } = require('../utils/hashPassword');
 
 
+const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+
+    if (!passwordRegex.test(password)) {
+        throw new Error("A senha deve conter no mínimo 8 caracteres e no máximo 15, pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.");
+    }
+}
+
 const getAllUsers = async () => {
     try {
         const users = await userRepository.getAllUsers();
@@ -29,9 +37,7 @@ const getUserById = async(id) =>{
 const createUser = async(username , email , password, avatar_img) => {
     try {
 
-        if(password.length < 8 || password.length > 15 ){
-            throw new Error("A senha deve conter no mínimo 8 caracteres e no máximo 15!")
-        }
+        validatePassword(password);
 
         const hashedPassword = await hashPassword(password);
 
@@ -46,11 +52,7 @@ const createUser = async(username , email , password, avatar_img) => {
 const updateUser = async(id, username , email , password, avatar_img) => {
     try {
 
-        const verifyPassword = String(password);
-
-        if(verifyPassword.length < 8 || verifyPassword.length > 15 ){
-            throw new Error("A senha deve conter no mínimo 8 caracteres e no máximo 15")
-        }
+        validatePassword(password);
 
         const hashedPassword = await hashPassword(password);
        const result = await userRepository.updateUser(id, username , email , hashedPassword, avatar_img);
