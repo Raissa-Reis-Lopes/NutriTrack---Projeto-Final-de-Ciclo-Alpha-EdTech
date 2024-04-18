@@ -50,11 +50,6 @@ export function Login() {
     return div
 }
 
-
-
-
-
-
 // aqui autenticar as infos do usuario
 export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
@@ -87,25 +82,6 @@ export function loginBtns(){
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        const erroEmail = document.getElementById("erroEmail");
-        const erroPassword = document.getElementById("erroPassword");
-
-        erroEmail.innerText = ''; // Limpa mensagens antigas de erro
-        erroPassword.innerText = ''; // Limpa mensagens antigas de erro
-
-        //Essas validações vou deixar só no rgeister
-        // if (!emailValid(email)) {
-        //     messageEmail = escapeHtml("Por favor, insira um email válido."); 
-        //     erroEmail.appendChild(document.createTextNode(messageEmail));
-        //     return;
-        // }
-        
-        // if (!passwordValid(password)) {
-        //     messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
-        //     erroPassword.appendChild(document.createTextNode(messagePassword));
-        //     return;
-        // }
-
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -115,12 +91,11 @@ export function loginBtns(){
                 body: JSON.stringify({ email, password }),
             });
 
-            // if (!response.ok) {
-            //     message.innerText = "Por favor, forneça um email e/ou senha válidos!"
-            //     throw new Error('Erro ao fazer login, usuário não localizado');
-            // }
+            if (!response.ok) {
+                showMessage("fail", "Usuário e/ou senha inválidos!");
+                throw new Error('Erro ao fazer login, usuário não localizado');
+            }
 
-            // message.innerText = "Seja bem-vindo!"
             const customEvent = createCustomEvent('/home');
             history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
@@ -128,8 +103,5 @@ export function loginBtns(){
         } catch (error) {
             console.error('Erro ao fazer login:', error);
         }
-           // Limpar os valores dos inputs
-           document.getElementById("email").value = "";
-           document.getElementById("password").value = "";
     });
 }
