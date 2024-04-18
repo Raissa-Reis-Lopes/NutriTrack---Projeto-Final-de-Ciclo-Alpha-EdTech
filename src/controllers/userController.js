@@ -19,19 +19,6 @@ const getUserById = async(req, res) => {
     }
 }
 
-//Isso vai estar vinculado ao config_history, depois uso o config no services e retorno aqui
-// const getDailyCaloriesByUserId = async (req, res) => {
-//     try {
-//         const userId = req.params.id; // Supondo que você esteja passando o ID do usuário como parâmetro na URL
-        
-//         const dailyCalories = await userServices.getDailyCaloriesByUserId(userId);
-        
-//         res.status(200).json(dailyCalories);
-//     } catch (error) {
-//         res.status(500).json({ message: 'Error getting daily calories', error: error.message });
-//     }
-// }
-
 const createUser = async(req, res) => {
     try {
         const { username , email , password, avatar_img } = req.body;  

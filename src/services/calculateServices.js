@@ -1,8 +1,5 @@
 const configService = require('./configHistoryServices');
-const userService = require('./userServices')
 const foodPlanService = require('./foodPlanServices'); 
-
-
 
 //Função para calcular a quantidade de calorias diárias recomendadas (Essa fórmula de Harris-Benedict foi extraída do Manual MSD para profissionais de Saúde)
 const calculateDailyCalories = (gender, weight, height, age, activityLevel) => {
