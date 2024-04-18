@@ -12,8 +12,8 @@ export function History() {
             </a>
         </div>
         <nav class="header_nav">
-            <a href="/profile">Perfil</a>
-            <a href="/historic">Histórico</a>
+            <a href="/home" class="btn_home">Home</a>
+            <a href="/profile" class="btn_profile">Perfil</a>
             <a href="/chalenge">Desafios</a>
             <button class="btn_exit">Sair</button>
         </nav>
@@ -47,4 +47,26 @@ export function History() {
     document.getElementById("root").appendChild(div);
   registerBtns();
     return div
+}
+
+export function registerBtns() {
+    const btnHome = document.getElementById("btn_home");
+    const btnProfile = document.getElementById("btn_profile");
+
+    if(btnHome){
+        register.addEventListener ("click",function(e){
+            e.preventDefault();
+            const customEvent = createCustomEvent('/home');
+            history.pushState({}, '', '/home');
+            window.dispatchEvent(customEvent); 
+        });
+    }
+
+    if (btnProfile) {
+        btnBack.addEventListener("click", () => {
+            const customEvent = createCustomEvent('/profile');
+            history.pushState({}, '', '/profile');
+            window.dispatchEvent(customEvent);
+        });
+    }
 }

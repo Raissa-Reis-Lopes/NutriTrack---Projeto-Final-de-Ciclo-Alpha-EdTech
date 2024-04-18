@@ -14,8 +14,8 @@ export function Profile() {
             <img src="../img/camera.png" alt="Imagem do usuario" />
         </div>
         <nav class="header_nav">
-            <a href="/home">Home</a>
-            <a href="/historic">Histórico</a>
+            <a href="/home" class="btn_home">Home</a>
+            <a href="/history" class="btn_history">Histórico</a>
             <a href="/chalenge">Desafios</a>
         </nav>
     </header>
@@ -72,7 +72,7 @@ export function Profile() {
                     <input type="number" name="height" id="height">
                     <div id ="erroHeightRegister" class="erro"></div>
                     
-                    <button class="btn_stroke">Salvar alterações</button>
+                    <button id="save" class="btn_stroke">Salvar alterações</button>
                 </section>
             </form>
         </div>
@@ -96,38 +96,88 @@ export function Profile() {
     return div
 }
 
+export function registerBtns() {
+    const btnHome = document.getElementById("btn_home");
+    const btnHistory = document.getElementById("btn_history");
+    const btnAccount = document.getElementById("btn_account");
 
+    if(btnHome){
+        btnHome.addEventListener ("click",function(e){
+            e.preventDefault();
+            const customEvent = createCustomEvent('/home');
+            history.pushState({}, '', '/home');
+            window.dispatchEvent(customEvent); 
+        });
+    }
 
-// export function registerBtns() {
-//     let currentForm = 1;
+    if (btnHistory) {
+        btnHistory.addEventListener("click", () => {
+            const customEvent = createCustomEvent('/history');
+            history.pushState({}, '', '/history');
+            window.dispatchEvent(customEvent);
+        });
+    }
 
-//     const btnBack = document.getElementById("btn_back");
-//     const btnNext = document.getElementById("btn_next");
-  
-//     let messageName = ''; // Inicialização das variáveis
-//     let messageEmail = ''; // Inicialização das variáveis
-//     let messagePassword = ''; // Inicialização das variáveis
+    if (btnAccount) {
+        btnAccount.addEventListener ("click", function (){
+            const editForms = document.querySelectorAll(".form_profile img");
+            const forms = document.querySelectorAll(".form_input_profile");
+            const formDisplay = document.querySelectorAll(".account > div:nth-child(2)");
+            const btns = document.getElementById("save");
 
-//     btnBack.addEventListener("click", () => {
-//       if(currentForm === 1) {
-//             const customEvent = createCustomEvent('/');
-//             history.pushState({}, '', '/');
-//             window.dispatchEvent(customEvent);
-//         } else if (currentForm > 1) {
-//             currentForm--;
-//             showForm(currentForm);
-//         }
-//     });
+            forms.forEach(function(form) {
+                form.style.display = "none";
+            });
 
-//     btnNext.addEventListener("click", () => {
-//         if(currentForm < 3) {
-//             currentForm++;
-//             showForm(currentForm);
-//         } else if(currentForm === 3) {
-//             submitForm();
-//             const customEvent = createCustomEvent('/login');
-//             history.pushState({}, '', '/login');
-//             window.dispatchEvent(customEvent);
-//         }
-//     });
-// }
+            editForms.forEach(function(img, index) {
+                img.onclick = function() {
+                    formDisplay[index].style.display = "none";
+                    forms[index].style.display = "block";
+                };
+            });
+
+            btns.forEach(function(btn, index) {
+                btn.onclick = async function() {
+                    forms[index].style.display = "none";
+                    formDisplay[index].style.display = "block";
+
+                    const name = document.getElementById("name").value;
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+                    const weight = document.getElementById("weight").value;
+                    const height = document.getElementById("height").value;
+                    const birthDate = document.getElementById("birth_date").value;
+
+                    const userData = {
+                        name,
+                        email,
+                        password,
+                        weight,
+                        height,
+                        birth_date: birthDate,
+                    };
+
+                    try {
+                        const response = await fetch("/api/register", {
+                            method: "UPDATE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(userData),
+                        });
+                
+                        if (!response.ok) {
+                            throw new Error("Erro ao realizar o registro");
+                        }
+                
+                        alert('Cadastro de usuário realizado com sucesso!');
+                    }
+                    catch (error) {
+                        console.error("Erro ao realizar o registro:", error);
+                        alert("Erro ao realizar o registro. Tente novamente");
+                    }
+                }
+            })
+        })
+    }
+}
