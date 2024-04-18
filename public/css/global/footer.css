@@ -33,3 +33,10 @@ margin-top: 50px;
     align-items: center;
     justify-content: space-around;
 }
+
+.footer_history{
+    display: flex;
+    gap:20px;
+    align-items: center;
+    justify-content: left;
+}
