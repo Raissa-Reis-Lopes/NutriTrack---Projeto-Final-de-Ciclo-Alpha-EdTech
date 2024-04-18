@@ -8,6 +8,7 @@
 @import "./utilities/colors.css";
 @import "./utilities/forms.css";
 @import "./initial/history.css";
+@import "./initial/profile.css";
 
 @import "./initial/initial.css";
 @import "./initial/login.css";
