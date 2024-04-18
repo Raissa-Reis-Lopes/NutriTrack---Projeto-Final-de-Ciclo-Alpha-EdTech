@@ -1,0 +1,10 @@
+
+#search{
+  border: 2px solid var(--cor-p5);
+  padding: 10px 15px;
+}
+
+.foodSearch:hover{
+  cursor: pointer;
+  color:var(--cor-p3) ;
+}

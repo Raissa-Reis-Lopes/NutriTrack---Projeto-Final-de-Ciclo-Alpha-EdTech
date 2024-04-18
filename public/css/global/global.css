@@ -58,7 +58,11 @@ ul {
     margin: 0 auto;
     padding: 80px 0;
   }
-
+  
+  input:focus,
+  select:focus {
+      outline-color: transparent;
+  }
 
   /* erro messages */
 
