@@ -39,6 +39,13 @@
 .btn_exit{
     padding: 8px 15px;
     font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--cor-p0);
+    border-color: var(--cor-p0);
+    border-radius: 10px;
+    z-index: 2;
+    background-color: transparent;
 }
 
 .btn_add{

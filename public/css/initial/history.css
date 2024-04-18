@@ -1,0 +1,11 @@
+.period {
+    display: flex;
+    justify-content: right;
+    padding-right: 250px;
+}
+
+.titles {
+    color: var(--cor-p5);
+    font-weight: bold;
+    font-size: 1rem;
+}
