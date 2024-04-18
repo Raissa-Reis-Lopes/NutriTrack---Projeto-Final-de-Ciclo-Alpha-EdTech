@@ -1,4 +1,6 @@
 import createCustomEvent from "./event.js";
+import {AddFood, SearchFood} from "./modals.js";
+
 
 export function Home() {
     const div = document.createElement("div");
@@ -123,6 +125,35 @@ export function Home() {
         </footer>
     `;
     document.getElementById("root").appendChild(div);
-    initialBtns();
+    homeBtns();
     return div
+}
+
+export function homeBtns(){
+    const btnBreakfast = document.getElementById("btn_add_breakfast");
+    const btnLunch = document.getElementById("btn_add_lunch");
+    const btnDinner = document.getElementById("btn_add_dinner");
+    const btnSnack = document.getElementById("btn_add_snack");
+
+    btnBreakfast.addEventListener('click', ()=>{
+        const modal = SearchFood();
+        document.body.appendChild(modal);
+    });
+    btnLunch.addEventListener('click', ()=>{
+        const modal = SearchFood();
+        document.body.appendChild(modal);
+    });
+    btnDinner.addEventListener('click', ()=>{
+        const modal = SearchFood();
+        document.body.appendChild(modal);
+    });
+    btnSnack.addEventListener('click', ()=>{
+        const modal = SearchFood();
+        document.body.appendChild(modal);
+    });
+
+
+    document.querySelector('.modal_img img').addEventListener('click', () => {
+        document.querySelector('.modal').remove();
+    });
 }

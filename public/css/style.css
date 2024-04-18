@@ -18,5 +18,10 @@
 @import "./home/sectionHome.css";
 @import "./home/sectionFood.css";
 
+@import "./modals/container.css";
+@import "./modals/searchFood.css";
+@import "./modals/addFood.css";
+
+
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap')
