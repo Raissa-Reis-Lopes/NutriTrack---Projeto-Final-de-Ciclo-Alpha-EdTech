@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css" />
-    <title>NutriTrack - contagem de calorias</title>
-</head>
-<body>
+import createCustomEvent from "./event.js";
+
+export function Profile() {
+    const div = document.createElement("div");
+
+    div.innerHTML=`
     <header>
         <div>
             <div class="logo" id="logo">
@@ -91,5 +88,46 @@
             <span id="open-modal-privacy">política de privacidade</span>
         </div>
     </footer>
-</body>
-</html>
+  `;
+
+  document.getElementById("root").innerHTML = '';
+    document.getElementById("root").appendChild(div);
+  registerBtns();
+    return div
+}
+
+
+
+// export function registerBtns() {
+//     let currentForm = 1;
+
+//     const btnBack = document.getElementById("btn_back");
+//     const btnNext = document.getElementById("btn_next");
+  
+//     let messageName = ''; // Inicialização das variáveis
+//     let messageEmail = ''; // Inicialização das variáveis
+//     let messagePassword = ''; // Inicialização das variáveis
+
+//     btnBack.addEventListener("click", () => {
+//       if(currentForm === 1) {
+//             const customEvent = createCustomEvent('/');
+//             history.pushState({}, '', '/');
+//             window.dispatchEvent(customEvent);
+//         } else if (currentForm > 1) {
+//             currentForm--;
+//             showForm(currentForm);
+//         }
+//     });
+
+//     btnNext.addEventListener("click", () => {
+//         if(currentForm < 3) {
+//             currentForm++;
+//             showForm(currentForm);
+//         } else if(currentForm === 3) {
+//             submitForm();
+//             const customEvent = createCustomEvent('/login');
+//             history.pushState({}, '', '/login');
+//             window.dispatchEvent(customEvent);
+//         }
+//     });
+// }
