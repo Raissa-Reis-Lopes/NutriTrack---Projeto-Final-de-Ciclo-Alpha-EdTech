@@ -13,10 +13,9 @@ export function Home() {
                 </a>
             </div>
             <nav class="header_nav">
-                <a href="/profile">Perfil</a>
-                <a href="/historic">Histórico</a>
-                <a href="/chalenge">Desafios</a>
-                <button class="btn_stroke btn_exit">Sair</button>
+                <div id="navProfile">Perfil</div>
+                <div id="navHistory">Histórico</div>
+                <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
             </nav>
         </header>
         <div class="container_home">
@@ -125,35 +124,86 @@ export function Home() {
         </footer>
     `;
     document.getElementById("root").appendChild(div);
+    navRoutes();
     homeBtns();
+    
     return div
 }
 
-export function homeBtns(){
+export function navRoutes(){
+    const navProfile = document.getElementById("navProfile");
+    const navHistory = document.getElementById("navHistory");
+    const btnExit = document.getElementById("btnExit");
+
+
+    navProfile.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/profile');
+        history.pushState({}, '', '/profile');
+        window.dispatchEvent(customEvent); 
+    })
+
+    navHistory.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/history');
+        history.pushState({}, '', '/history');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnExit.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/');
+        history.pushState({}, '', '/');
+        window.dispatchEvent(customEvent); 
+        // falta limpar os cookies
+    })
+}
+
+export function homeBtns() {
     const btnBreakfast = document.getElementById("btn_add_breakfast");
     const btnLunch = document.getElementById("btn_add_lunch");
     const btnDinner = document.getElementById("btn_add_dinner");
     const btnSnack = document.getElementById("btn_add_snack");
 
-    btnBreakfast.addEventListener('click', ()=>{
-        const modal = SearchFood();
-        document.body.appendChild(modal);
-    });
-    btnLunch.addEventListener('click', ()=>{
-        const modal = SearchFood();
-        document.body.appendChild(modal);
-    });
-    btnDinner.addEventListener('click', ()=>{
-        const modal = SearchFood();
-        document.body.appendChild(modal);
-    });
-    btnSnack.addEventListener('click', ()=>{
-        const modal = SearchFood();
-        document.body.appendChild(modal);
-    });
-
+    btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
+    btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
+    btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
+    btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
 
     document.querySelector('.modal_img img').addEventListener('click', () => {
         document.querySelector('.modal').remove();
     });
+}
+
+// Função para abrir o modal de pesquisa de comida
+function openModalWithMeal(meal) {
+    const modal = SearchFood();
+    const datafoodContainer = modal.getElementById("datafood");
+
+    // fazer o fetch aqui
+
+    
+
+    document.body.appendChild(modal); // Adiciona o modal ao body
+}
+
+// Função para abrir o modal de adicionar comida
+function openAddFoodModal(item, meal) {
+    const modal = AddFood(); // Chama a função que cria o modal de adicionar comida
+    // Define os valores no modal com base nos dados do item clicado
+    modal.querySelector("#nameFood").textContent = item.name;
+    modal.querySelector("#quantity_calories").textContent = item.calories;
+    modal.querySelector("#quantity_carb").textContent = item.carbs;
+    modal.querySelector("#quantity_proteins").textContent = item.proteins;
+    modal.querySelector("#quantity_fat").textContent = item.fat;
+    // Define a opção do select com base no meal
+    modal.querySelector("#meal").value = meal;
+
+    const btnSave = modal.querySelector(".btns_addFood button:last-child");
+    btnSave.addEventListener("click", () => {
+        const gramsInput = modal.querySelector("#grams").value;
+        const mealSelect = modal.querySelector("#meal").value;
+        console.log("Quantidade em gramas:", gramsInput);
+        console.log("Refeição selecionada:", mealSelect);
+        modal.remove(); // Fecha o modal após clicar em "Salvar"
+    });
+
+    document.body.appendChild(modal); // Adiciona o modal ao body
 }

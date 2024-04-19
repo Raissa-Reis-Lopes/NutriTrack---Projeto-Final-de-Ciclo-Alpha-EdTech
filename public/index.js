@@ -21,7 +21,7 @@ document.getElementById("root").appendChild(initialPage);
 window.addEventListener('popstate', () => {
     // Obtém o novo path após a mudança de estado
     const newPath = window.location.pathname; 
-    console.log('Novo path:', newPath);
+    // console.log('Novo path:', newPath);
     
     const page = router.getPage(newPath); 
     
