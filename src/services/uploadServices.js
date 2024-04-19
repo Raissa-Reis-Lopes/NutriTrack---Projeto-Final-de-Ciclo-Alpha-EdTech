@@ -1,8 +1,18 @@
 const uploadRepository = require('../repositories/uploadRepository');
 
-const uploadAvatar = async(user_id, avatar) => {
+const getActualAvatar = async(user_id) => {
     try {
-        await uploadRepository.uploadAvatar(user_id, avatar);
+        const actual_avatar = await uploadRepository.getActualAvatar(user_id);
+        return actual_avatar;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+const changeAvatar = async(user_id, new_avatar) => {
+    try {
+        await uploadRepository.changeAvatar(user_id, new_avatar);
     } catch (error) {
         console.log(error);
         throw error;
@@ -10,5 +20,6 @@ const uploadAvatar = async(user_id, avatar) => {
 }
 
 module.exports = {
-    uploadAvatar
+    getActualAvatar,
+    changeAvatar
 }
