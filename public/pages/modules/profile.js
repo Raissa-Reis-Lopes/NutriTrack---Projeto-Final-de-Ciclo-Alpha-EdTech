@@ -1,3 +1,4 @@
+import { showMessage } from "../utils/message.js";
 import createCustomEvent from "./event.js";
 
 export function Profile() {
@@ -11,11 +12,11 @@ export function Profile() {
                     <img src="../img/logo.svg" alt="NutriTrack" />
                 </a>
             </div>
-            <img src="../img/camera.png" alt="Imagem do usuario" />
+            <img src="../img/camera.png" alt="Imagem do usuario" id="profile_img"/>
         </div>
         <nav class="header_nav">
-            <a href="/home" class="btn_home">Home</a>
-            <a href="/history" class="btn_history">Histórico</a>
+            <a href="/home" id="btn_home">Home</a>
+            <a href="/history" id="btn_history">Histórico</a>
             <a href="/chalenge">Desafios</a>
         </nav>
     </header>
@@ -41,7 +42,6 @@ export function Profile() {
                     <label for="confirmNewPassword">Confirmar Nova Senha</label>
                     <input type="password" name="confirmNewPassword" id="confirmNewPassword">
                     <div id ="erroPasswordRegister" class="erro"></div>
-                    
                     <button class="btn_stroke">Salvar alterações</button>
                 </section>
             </form>
@@ -92,8 +92,56 @@ export function Profile() {
 
   document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-  registerBtns();
+    fillProfileData();
+//   registerBtns();
     return div
+}
+
+
+//FUnção para resgatar os dados dos usuários e preencher os campos dos fomulários para mostrar ao usuário
+export async function fillProfileData(){
+
+    try {
+        const userInfo = await fetch("/api/login/", {
+            method: "GET",
+          });
+
+          if(!userInfo){
+            throw new Error("Falha ao tentar localizar o id do usuário")
+          }
+
+          const userData = await userInfo.json();
+          const userId = userData.user;
+
+           // Obter dados do usuário com base no ID para o form 1
+           const userMainInfo = await fetch(`/api/users/${userId}`,{
+            method: "GET"
+           });
+
+           if(!userMainInfo){
+            throw new Error("Falha ao buscar as informações do usuário")
+           }
+
+           const user = await userMainInfo.json();
+        
+           // Preencher os campos do formulário com os dados do usuário
+           document.getElementById("name").value = user.name;
+           document.getElementById("email").value = user.email;
+           document.getElementById("password").value = user.password;
+
+           const userConfigInfo = await fetch(`/api/config${userId}`,{
+            method: 'GET',
+            });
+            document.getElementById("weight").value = user.weight;
+            document.getElementById("height").value = user.height;
+            document.getElementById("birthDate").value = user.birth_date;
+            document.getElementById("gender").value = user.gender;
+            document.getElementById("activityLevel").value = user.activity_level;
+            document.getElementById("plan").value = user.food_plan;
+
+            } catch (error) {
+                console.log(`Falha ao buscar os dados do usuário pelo id: `, error)
+            }
 }
 
 export function registerBtns() {

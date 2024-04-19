@@ -1,7 +1,7 @@
 import createCustomEvent from "./event.js";
-import { heightValid, weightValid, emailValid, passwordValid, escapeHtml } from "./validation.js";
+import {  emailValid, passwordValid } from "./validation.js";
 import { showMessage } from "../utils/message.js";
-import { limitDate } from "../utils/limitDates.js";
+
 
 
 export function Register() {
@@ -75,104 +75,7 @@ export function Register() {
             <button id="btn_back" class="btn_stroke">Voltar</button>
             <button id="btn_next" class="btn_colorLinear">Próximo</button>
         </div>
-        </form>
-        <form id="form2" method="post" class="calculator_input" style="display:none;">
-        <h1>Agora, vamos calcular seu gasto energético diário!</h1>
-            <div class="form">
-                <label for="weight">Peso</label>
-                <input type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
-                <div id ="erroWeight" class="erro"></div>
-            </div>
-            <div class="form">
-                <label for="height">Altura</label>
-                <input type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
-                <div id ="erroHeight" class="erro"></div>
-            </div>
-            <div class="form">
-                <label for="date">Data de nascimento</label>
-                <input type="date" name="date" id="birth_date" />
-            </div>
-            <div class="form">
-                <label for="gender">Sexo biológico</label>
-                <select name="gender" id="gender">
-                    <option value="">Selecione</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Feminino</option>
-                </select>
-            </div>
-            <div class="form">
-                <label for="activity">Nivel de atividade</label>
-                <select name="activity" id="activity">
-                    <option value="">Selecione</option>
-                    <option value="sedentary">Sedentário</option>
-                    <option value="lightlyActive">Leve</option>
-                    <option value="moderatelyActive">Moderado</option>
-                    <option value="veryActive">Ativo</option>
-                    <option value="extraActive">Muito Ativo</option>
-                </select>
-            </div>
-            <div class="btns_index">
-                <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
-            </div>
-        </form>
-        <form id="form3" method="post" style="display:none;">
-        <h1>Escolha seu plano alimentar!</h1>
-            <div class="container_center">
-                <div class="plan">
-                    <div id="plan1" class="chosenPlan">
-                        <h1>Perder peso</h1>
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <h1>45% Carboidratos</h1>
-                                    <h1>30% Proteínas</h1>
-                                    <h1>25% Gorduras</h1>
-                                </div>
-                                <div class="flip-card-back">
-                                    <p>Essa dieta contém todos os ingredientes necessários e a alta ingestão de proteína ajuda a manter o corpo em forma e reduzir a fome, auxiliando na manutenção da baixa ingestão de calorias!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="plan2" class="chosenPlan">
-                        <h1>Manter o peso</h1>
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <h1>55% Carboidratos</h1>
-                                    <h1>15% Proteínas</h1>
-                                    <h1>30% Gorduras</h1>
-                                </div>
-                                <div class="flip-card-back">
-                                    <p>Essa dieta se baseia nas diretrizes da boa nutrição e te ajudará a manter o peso atual com uma alimentação saudável e balanceada!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="plan3" class="chosenPlan">
-                        <h1>Ganhar peso</h1>
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <h1>50% Carboidratos</h1>
-                                    <h1>25% Proteínas</h1>
-                                    <h1>25% Gorduras</h1>
-                                </div>
-                                <div class="flip-card-back">
-                                    <p>Essa dieta é recomendada para as pessoas que querem ganhar massa muscular e melhorar a sua performance! O balanceamento de gorduras e carboidratos darão energia, e a proteína auxiliará o desenvolvimento muscular!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="btns_index">
-                <button id="btn_next_3" class="btn_colorLinear">Próximo</button>
-            </div>
-        </form>
-
-       
-
+        </form>      
     </main>
     <footer>
         <span>all rights reserved</span>
@@ -182,94 +85,20 @@ export function Register() {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
     registerBtns();
-    limitDate('birth_date');
-    addEventListenerToPlans();
     return div
 }
 
-
-//Para limitar a data de nascimento (não pode selecionar uma data que ainda não chegou)
-// function limitBirthDate(){
-//       //Limitando a data de nascimento no calendário para não poder selecionar dias acima do dia atual
-//       const today = new Date();
-//       const yyyy = today.getFullYear();
-//       let mm = today.getMonth() + 1;
-//       let dd = today.getDate();
-      
-//       if (mm < 10) {
-//           mm = '0' + mm;
-//       }
-      
-//       if (dd < 10) {
-//           dd = '0' + dd;
-//       }
-      
-//       const maxDate = yyyy + '-' + mm + '-' + dd;
-      
-//       document.getElementById('birth_date').setAttribute('max', maxDate);
-// }
-
-// Armazenar o ID do plano selecionado em uma variável global
-let selectedPlanId = null;
-
-// Função para mudar a borda do plano selecionado
-function selectPlan(planId) {
-    // Resetar a borda de todos os planos
-    const plans = document.querySelectorAll('.chosenPlan');
-    plans.forEach(plan => {
-        plan.classList.remove('selected');
-    });
-
-    // Mudar a borda do plano selecionado
-    const selectedPlan = document.getElementById(planId);
-    selectedPlan.classList.add('selected');
-
-    switch (planId) {
-        case "plan1":
-            selectedPlanId = 1;
-            break;
-        case "plan2":
-            selectedPlanId = 2;
-            break;
-        case "plan3":
-            selectedPlanId = 3;
-            break;
-        default:
-            break;
-    }
-}
-
-function addEventListenerToPlans(){
-    // Adicionar eventos de clique aos planos
-document.getElementById('plan1').addEventListener('click', () => selectPlan('plan1'));
-document.getElementById('plan2').addEventListener('click', () => selectPlan('plan2'));
-document.getElementById('plan3').addEventListener('click', () => selectPlan('plan3'));
-}
-
 export function registerBtns() {
-
-    
-
-    let currentForm = 1;
-
-    // const foodPlan = document.getElementById("food_plan").value;  
-   
-
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
-    const btnNext2 = document.getElementById("btn_next_2");
-    const btnNext3 = document.getElementById("btn_next_3");
   
     let messageName = ''; // Inicialização das variáveis
     let messageEmail = ''; // Inicialização das variáveis
     let messagePassword = ''; // Inicialização das variáveis
     let messageTerms = '';    // Inicialização das variáveis 
-    let messageWeight = ''; // Inicialização das variáveis
-    let messageHeight = '';    // Inicialização das variáveis 
 
     btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/');
-            history.pushState({}, '', '/');
             window.dispatchEvent(customEvent);
     });
 
@@ -295,33 +124,28 @@ export function registerBtns() {
         const terms = document.getElementById("terms").checked;
 
         if(!username){
-            messageName = escapeHtml("Nome inválido!"); 
-            erroName.appendChild(document.createTextNode(messageName));
+            showMessage('fail',"Nome inválido!");
             return;
         }
     
     
         if (!emailValid(email)) {
-            messageEmail = escapeHtml("Por favor, insira um email válido."); 
-            erroEmail.appendChild(document.createTextNode(messageEmail));
+            showMessage('fail',"Formato de email inválido!");
             return;
         }
             
         if (!passwordValid(password)) {
-            messagePassword = escapeHtml("Por favor, insira uma senha válida (Ela deve ter no mín 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)."); 
-            erroPassword.appendChild(document.createTextNode(messagePassword));
+            showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)");
             return;
         }
     
         if (password !== confirmPassword){
-            messagePassword = escapeHtml("As senhas precisam ser iguais"); 
-            erroPassword.appendChild(document.createTextNode(messagePassword));
+            showMessage('fail',"As senhas precisam ser iguais");
             return;
         }
 
         if(!terms){
-            messageTerms = escapeHtml("É necessário ler e concordar com os termos de uso e privacidade"); 
-            erroTerms.appendChild(document.createTextNode(messageTerms));
+            showMessage('fail',"É necessário ler e concordar com os termos de uso e privacidade");
             return;
         }
 
@@ -360,149 +184,19 @@ export function registerBtns() {
                         body: JSON.stringify({ email, password }),
                     });        
                     
-                    showMessage("success", "Parabéns, você deu o primeiro passo para mudar a sua vida!");
+                    showMessage("success", "Parabéns, você começou a sua jornada de transformação!");
+
+
                 } catch (error) {
                     console.error('Erro ao fazer login:', error);
                 }
 
-                            
-                const userInfoResponse = await fetch("/api/login/", {
-                    method: "GET",
-                });
-
-                if (userInfoResponse.ok) {
-                    const userData = await userInfoResponse.json();
-                    // console.log(userData.user);
-                } else {
-                    console.log('Não foi possível obter informações do usuário');
-                }
-
-                currentForm++;
-                showForm(currentForm);
-
+                const customEvent = createCustomEvent('/config');
+                window.dispatchEvent(customEvent); 
             }
             catch (error) {
                 console.error("Erro ao realizar o registro:", error);
                 showMessage("fail", "Erro ao realizar o registro. Tente novamente")
             }
         })
-    
-
-        btnNext2.addEventListener('click', async(event) =>{
-            event.preventDefault();
-
-            
-
-            const erroWeight = document.getElementById("erroWeight");
-            const erroHeight = document.getElementById("erroHeight");
-            erroWeight.innerText = ''; // Limpa mensagens antigas de erro
-            erroHeight.innerText = ''; // Limpa mensagens antigas de erro
-            const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
-    
-
-            const weight = document.getElementById("weight").value;
-            const height = document.getElementById("height").value;
-            const birthDate = document.getElementById("birth_date").value;
-            const gender = document.getElementById("gender").value;
-            const activityLevel = document.getElementById("activity").value;
-
-
-            if(!weightValid(weight)){
-                showMessage('fail',"Insira um peso válido");
-                return;
-            }
-
-            if(!heightValid(height)){
-                showMessage('fail',"Insira uma altura válida, em centímetros");
-                return;
-            }
-
-            if(!birthDate){
-                showMessage('fail',"A data de nascimento é obrigatória");
-                return;
-            }
-
-            if(!gender){
-                showMessage("fail","Selecione o sexo biológico");
-                return;
-            }
-
-            if(!activityLevel){
-                showMessage("fail","Selecione o nível de atividade semanal");
-                return;
-            }
-
-            currentForm++;
-            showForm(currentForm);
-
-            btnNext3.addEventListener('click', async(event)=>{
-                event.preventDefault();
-
-                const getUserId = await fetch("/api/login/", {
-                    method: "GET",
-                });
-
-                if(getUserId){
-                    const userData = await getUserId.json();
-                    const userId = userData.user;
-
-
-                    const date = new Date().toLocaleDateString({
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    }).split('/').reverse().join('-');
-    
-                    const configData = {
-                        user_id: userId, 
-                        food_plan_id: selectedPlanId, 
-                        activity_level: activityLevel, 
-                        weight, 
-                        height, 
-                        birth_date: birthDate, 
-                        gender, 
-                        date
-                    }
-
-
-                    try {
-                        const response = await fetch('/api/config', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(configData),
-                        }); 
-
-                        if (!response.ok) {
-                            showMessage("fail", "Erro ao finalizar o cadastro")
-                            throw new Error("Erro ao finalizar o cadastro");
-                        }                               
-                        const customEvent = createCustomEvent('/home');
-                        history.pushState({}, '', '/home');
-                        window.dispatchEvent(customEvent); 
-                    } catch (error) {
-                        console.error('Erro ao se cadastrar:', error);
-                    }
-                } else {
-                    console.log('Não foi possível obter informações do usuário');
-                }
-            }) 
-        })
 }
-
-function showForm(formNumber) {
-    document.getElementById("form1").style.display = "none";
-    document.getElementById("form2").style.display = "none";
-    document.getElementById("form3").style.display = "none";
-    document.getElementById(`form${formNumber}`).style.display = "block";
-}
-
-function nextStep(step) {
-    if (step === 1) {
-        showForm(2);
-    } else if (step === 2) {
-        showForm(3);
-    }
-}
-
