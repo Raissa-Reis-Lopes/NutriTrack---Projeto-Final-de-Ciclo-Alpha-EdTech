@@ -1,5 +1,6 @@
 import createCustomEvent from "./event.js";
 import {AddFood, SearchFood} from "./modals.js";
+import { limitDate } from "../utils/limitDates.js";
 
 
 export function Home() {

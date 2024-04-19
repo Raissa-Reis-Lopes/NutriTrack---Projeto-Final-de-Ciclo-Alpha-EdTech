@@ -2,19 +2,17 @@
 
 const { connectToDatabase } = require('../db/postgresql');
 
-async function insertUser(food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender){
+async function insertUser(username , email , password){
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO users(food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+    const query = 'INSERT INTO users(username , email , password) VALUES($1, $2, $3)';
     try {
-        await pool.query(query,[food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender]);
-        console.log("Dados inseridos com sucesso");
-        return { food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender };
+        await pool.query(query,[username , email , password]);
+        console.log("Novo usuário criado com sucesso");
+        return { username , email , password };
     } catch (error) {
-        console.log('Erro ao inserir os dados do usuário', error);
+        console.log('Falha ao inserir os dados do novo usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function getAllUsers(){
@@ -26,8 +24,6 @@ async function getAllUsers(){
     } catch (error) {
         console.log('Falha ao pegar os dados dos usuários', error);
         throw error;
-    }finally{
-        pool.end();
     }
 }
 
@@ -40,24 +36,20 @@ async function getUserById(id) {
     } catch (error) {
         console.log('Usuário não encontrado!', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
-async function updateUser(id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender){
+async function updateUser(id, username , email , password){
     const pool = await connectToDatabase();
-    const query = 'UPDATE users SET food_plan_id=$1, activity_level=$2, username=$3 , email=$4 , password=$5 , weight=$6 , height=$7 , birth_date=$8 , gender=$9 WHERE id=$10';
+    const query = 'UPDATE users SET username=$2 , email=$3 , password=$4 WHERE id=$1';
     try {
-        await pool.query(query,[food_plan_id,activity_level, username,email,password,weight,height,birth_date,gender,id]);
+        await pool.query(query,[id, username , email , password]);
         console.log('Usuário atualizado com sucesso!');
-        return { id, food_plan_id, activity_level, username , email , password , weight , height , birth_date , gender };
+        return { id, username , email , password };
     } catch (error) {
         console.log('Erro ao atualizar os dados do usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function deleteUser(id){
@@ -69,15 +61,13 @@ async function deleteUser(id){
     } catch (error) {
         console.log('Erro ao deletar usuário!', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 module.exports ={
-    insertUser,
     getAllUsers,
     getUserById,
+    insertUser,
     updateUser,
     deleteUser
 }

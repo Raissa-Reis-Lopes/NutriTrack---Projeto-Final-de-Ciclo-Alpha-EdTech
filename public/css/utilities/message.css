@@ -1,0 +1,42 @@
+.message-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 30%;
+    height: 10vh;
+    border-radius: 20px 20px;
+    margin: 20px 20px;
+    padding: 20px 0;
+}
+
+.message-content{
+    margin: 20px 20px 20px 50px;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 20px 20px;
+    height: 10%;
+    width: 80%;
+    color: white;
+    font-size: large;
+    font-weight: 600;
+}
+
+.success{
+    background-color: lightgreen;
+}
+
+.fail{
+    background-color: rgb(255, 99, 71);
+}
+
+.hidden{
+    display: none;
+}

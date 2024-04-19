@@ -1,0 +1,11 @@
+.form_input_profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profile_changes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
