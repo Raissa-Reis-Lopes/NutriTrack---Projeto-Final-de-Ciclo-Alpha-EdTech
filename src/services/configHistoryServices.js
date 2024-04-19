@@ -38,13 +38,13 @@ const getLatestConfigHistoryByUserId = async(user_id) => {
     }
 };
 
-const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level, weight, height, birth_date, gender) => {
+const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date) => {
     try {
         if(!user_id){
             throw new Error('Usuário não existe');
         }
 
-        if(food_plan_id !== "1" && food_plan_id !== "2" && food_plan_id !== "3"){
+        if(food_plan_id !== 1 && food_plan_id !== 2 && food_plan_id !== 3){
             throw new Error('Plano alimentar inválido, escolha um plano existente (1 para perda de peso; 2 para manter o peso ou 3 para ganho de peso)')
         }
 
@@ -58,22 +58,36 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
 
         isValidDate(birth_date);
 
+        isValidDate(date);
+
         const validActivityLevels = ['sedentary', 'lightlyActive', 'moderatelyActive', 'veryActive', 'extraActive'];
         if (!validActivityLevels.includes(activity_level)) {
             throw new Error('Escolha um nível de atividade válido: "sedentary", "lightlyActive", "moderatelyActive", "veryActive", "extraActive"');
         }
 
-        const currentDate = new Date(); 
+        // const currentDate = new Date().toLocaleDateString({
+        //     year: 'numeric',
+        //     month: '2-digit',
+        //     day: '2-digit'
+        // }).split('/').reverse().join('-');
 
+        
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês é baseado em zero, então adicionamos 1 e padStart para garantir dois dígitos
+        const day = String(today.getDate()).padStart(2, '0'); // padStart para garantir dois dígitos
+        
+        const currentDate = `${year}-${month}-${day}`;
+        
         const existingConfig = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, currentDate);
-    
+       
         if (existingConfig) {
             // Se existir uma configuração para o usuário na data atual, atualize-a
             const config = await configHistoryRepository.updateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, currentDate);
             return config;
         } else {
             // Se não existir, crie uma nova configuração
-            const config = await configHistoryRepository.insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender);
+            const config = await configHistoryRepository.insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, currentDate);
             return config;
         }
 
@@ -86,10 +100,10 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
 
 const findConfigByDate = async (userId, targetDate) => {
     try {
-        // Primeiro, obtemos todas as configurações do usuário ordenadas por data
+        // Obter todas as configurações de um detemrinado usuário
         const configs = await configHistoryRepository.getConfigsByUserId(userId);
 
-        // Percorremos as configurações do mais recente para o mais antigo
+        // Percorrer as configurações do mais recente para o mais antigo
         for (let i = 0; i < configs.length; i++) {
             const config = configs[i];
 
@@ -125,15 +139,13 @@ const getConfigHistoryForPeriod = async (user_id, startDate, endDate) => {
             const configHistory = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, date);
 
             if (configHistory) {
-                // Se encontrou config_history para a data atual, usamos ele
                 configHistoryForPeriod[date] = configHistory.id;
             } else {
-                // Se não encontrou config_history para a data atual, usamos o último anterior
                 const lastConfigHistory = await configHistoryRepository.getLatestConfigHistoryBeforeDate(user_id, date);
                 if (lastConfigHistory) {
                     configHistoryForPeriod[date] = lastConfigHistory.id;
                 } else {
-                    configHistoryForPeriod[date] = null;  // ou outro valor que indique ausência de config_history
+                    configHistoryForPeriod[date] = null;  
                 }
             }
 

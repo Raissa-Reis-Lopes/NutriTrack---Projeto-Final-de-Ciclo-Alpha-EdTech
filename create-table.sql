@@ -8,7 +8,7 @@ CREATE TABLE users (
     username VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
-    avatar_img TEXT,
+    avatar_img TEXT DEFAULT 'default-avatar.png',
     created_at DATE DEFAULT CURRENT_DATE
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE config_history (
     height DECIMAL,
     birth_date DATE,
     gender VARCHAR(1),
-    created_at DATE DEFAULT CURRENT_DATE
+    created_at DATE 
 );
 
 
@@ -60,5 +60,5 @@ CREATE TABLE IF NOT EXISTS food_added (
     food_id INTEGER REFERENCES food(id) ON DELETE CASCADE,
     food_quantity DECIMAL,
     meal VARCHAR(30),
-    created_at DATE DEFAULT CURRENT_DATE
+    created_at DATE
 );

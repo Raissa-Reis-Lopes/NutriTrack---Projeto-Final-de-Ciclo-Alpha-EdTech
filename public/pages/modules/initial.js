@@ -43,13 +43,11 @@ export function initialBtns(){
 
     btnLogin.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/login');
-        history.pushState({}, '', '/login');
         window.dispatchEvent(customEvent); 
     })
 
     btnRegister.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/register');
-        history.pushState({}, '', '/register');
         window.dispatchEvent(customEvent); 
     })
 }

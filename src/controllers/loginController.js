@@ -23,6 +23,19 @@ const authenticate = async(req, res) => {
     }
 };
 
+const getUserId = async (req, res) => {
+    try {
+        return res.status(200).json({ success:true, message:"Usuário autenticado", user: req.user});
+    } catch (error) {
+        return res.status(500)
+.json({ error: "Erro interno no servidor"})        
+    }
+}
+
+
+
+
 module.exports = {
     authenticate,
+    getUserId
 }

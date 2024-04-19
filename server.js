@@ -6,8 +6,10 @@ const routes = require('./src/routes');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-// Define o diretório onde os arquivos estáticos da SPA estão localizados
+// Define o caminho do diretório onde os arquivos estáticos estão localizados
 const publicPath = path.join(__dirname, 'public');
+// Define o caminho do diretório dos uploads
+const uploadsPath = path.join(__dirname, 'uploads');
 
 //middleware para analisar o corpo das requisições Json
 app.use(express.json()); 
@@ -17,6 +19,8 @@ app.use(cookieParser());
 
 // Configura o Express para servir os arquivos estáticos da SPA
 app.use(express.static(publicPath));
+// Configura o Express para servir a pasta uploads
+app.use('/assets', express.static(uploadsPath));
 
 //Pode mudar depois, mas a princípio deixei assim para usar as rotas com a rota /nutritrack na frente
 app.use('/api', routes)
