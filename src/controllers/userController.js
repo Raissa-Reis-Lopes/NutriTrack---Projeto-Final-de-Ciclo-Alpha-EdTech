@@ -21,7 +21,7 @@ const getUserById = async(req, res) => {
 
 const createUser = async(req, res) => {
     try {
-        const { username , email , password, avatar_img } = req.body;  
+        const { username , email , password } = req.body;
 
         if(!username){
             throw new Error('O nome é obrigatório');
@@ -35,7 +35,7 @@ const createUser = async(req, res) => {
             throw new Error('A senha é obrigatório');
         }
 
-        const user = await userServices.createUser(username , email , password, avatar_img);
+        const user = await userServices.createUser(username , email , password);
         return res.status(200).json({ success: true, message: "Usuário cadastrado com sucesso!", data: user });
     } catch (error) {
         return res.status(500).json({ error: error.message})
@@ -45,7 +45,7 @@ const createUser = async(req, res) => {
 const updateUser = async(req, res) => {
     try {
         const { id } = req.params;
-        const {username , email , password, avatar_img  } = req.body;
+        const {username , email , password  } = req.body;
 
         if(!id){
             throw new Error("O id do usuário é obrigatório")
@@ -68,7 +68,7 @@ const updateUser = async(req, res) => {
             throw new Error('O usuário não existe');
         }
 
-        const result = await userServices.updateUser(id, username , email , password, avatar_img);
+        const result = await userServices.updateUser(id, username , email , password);
 
         return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso', data: result});
         

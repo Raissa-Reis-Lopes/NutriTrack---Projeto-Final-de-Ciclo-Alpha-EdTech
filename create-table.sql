@@ -8,7 +8,7 @@ CREATE TABLE users (
     username VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
-    avatar_img TEXT,
+    avatar_img TEXT DEFAULT 'default-avatar.png',
     created_at DATE DEFAULT CURRENT_DATE
 );
 
