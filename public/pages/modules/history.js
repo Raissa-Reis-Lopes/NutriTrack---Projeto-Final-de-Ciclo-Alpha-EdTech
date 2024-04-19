@@ -25,12 +25,8 @@ export function History() {
             <h5>Meta de calorias:</h5>
         </div>
         <div class="period">
-            <select name="period" id="period">
-                <option value="this_week">Esta semana</option>
-                <option value="last_week">Semana passada</option>
-                <option value="today">hoje</option>
-                <option value="yesterday">Ontem</option>
-            </select>
+            <label for="period">Periódo:</label>
+            <input type="date" id="period" name="period" />
         </div>
         <div class="chart"></div>
     </main>
@@ -57,7 +53,6 @@ export function registerBtns() {
         register.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
         });
     }
@@ -65,7 +60,6 @@ export function registerBtns() {
     if (btnProfile) {
         btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/profile');
-            history.pushState({}, '', '/profile');
             window.dispatchEvent(customEvent);
         });
     }

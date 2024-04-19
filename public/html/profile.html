@@ -14,7 +14,6 @@
                     <img src="../img/logo.svg" alt="NutriTrack" />
                 </a>
             </div>
-            <img src="../img/camera.png" alt="Imagem do usuario" />
         </div>
         <nav class="header_nav">
             <a href="/home">Home</a>
@@ -22,62 +21,54 @@
             <a href="/chalenge">Desafios</a>
         </nav>
     </header>
-    <div class="profile_changes">
-        <div class="account">
-            <div class="form_profile">
-                <h3>Conta</h3>
-                <img src="../img/edit.svg" alt="editor">
-            </div>
-            <div id="form1">
-                <p><span>Email</span><span>email@example.com</span></p>
-                <p><span>Senha</span><span>********</span></p>
-            </div>
-            <form id="form2" class="form_input_profile">
-                <section>
-                    <label for="email">E-mail</label>
-                    <input type="email" name="email" id="email">
-                    <div id ="erroEmailRegister" class="erro"></div>
-                    <label for="actualPassword">Senha Atual</label>
-                    <input type="password" name="actualPassword" id="actualPassword">
-                    <label for="newPassword">Nova Senha</label>
-                    <input type="password" name="newPassword" id="newPassword">
-                    <label for="confirmNewPassword">Confirmar Nova Senha</label>
-                    <input type="password" name="confirmNewPassword" id="confirmNewPassword">
-                    <div id ="erroPasswordRegister" class="erro"></div>
-                    
-                    <button class="btn_stroke">Salvar alterações</button>
-                </section>
-            </form>
+    <div class="profile_form">
+        <div class="profile_picture">
+            <img src="../img/camera.png" alt="Imagem do usuario" />
         </div>
-        <div class="account">
-            <div class="form_profile">
-                <h3>Informações Pessoais</h3>
-                <img src="../img/edit.svg" alt="editor">
+        <div class="profile_info">
+            <div class="info_item" id='name'>
+                <span>Nome: </span>
+                <input type="text" value="user_name" readonly />
             </div>
-            <div id="form3">
-                <p><span>Nome</span><span>Usuario1</span></p>
-                <p><span>Data de Nascimento</span><span>01/01/1990</span></p>
-                <p><span>Peso</span><span>65.0 KG</span></p>
-                <p><span>Altura</span><span>180 CM</span></p>
+            <div class="info_item" id='email'>
+                <span>Email: </span>
+                <input type="email" value="email@example" readonly />
             </div>
-            <form id="form4" class="form_input_profile">
-                <section>
-                    <label for="name">Nome</label>
-                    <input type="text" name="name" id="name">
-                    <div id ="erroNameRegister" class="erro"></div>
-                    <label for="birthDate">Data de Nascimento</label>
-                    <input type="date" name="birthDate" id="birthDate">
-                    <div id ="erroBirthRegister" class="erro"></div>
-                    <label for="weight">Peso</label>
-                    <input type="number" name="weight" id="weight">
-                    <div id ="erroWeightRegister" class="erro"></div>
-                    <label for="height">Altura</label>
-                    <input type="number" name="height" id="height">
-                    <div id ="erroHeightRegister" class="erro"></div>
-                    
-                    <button class="btn_stroke">Salvar alterações</button>
-                </section>
-            </form>
+            <div class="info_item" id='password'>
+                <span>Senha: </span>
+                <input type="password" value="********" readonly />
+            </div>
+            <div class="info_item" id='peso'>
+                <span>Peso: </span>
+                <input type="text" value=" KG" readonly />
+            </div>
+            <div class="info_item" id='altura'>
+                <span>Altura: </span>
+                <input type="text" value=" CM" readonly />
+            </div>
+            <div class="info_item" id='age'>
+                <span>Idade: </span>
+                <input type="number" value="DD/MM/AAAA" readonly />
+            </div>
+            <div class="info_item" id='gender'>
+                <span>Sexo Biológico: </span>
+                <input type="text" value="masculino" readonly />
+            </div>
+            <div class="info_item" id='birth'>
+                <span>Nascimento: </span>
+                <input type="date" value="DD/MM/AAAA" readonly />
+            </div>
+            <div class="info_item" id='activity'>
+                <span>Nivel de Atividade: </span>
+                <input type="text" value="Ativo" readonly />
+            </div>
+            <div class="info_item" id='plan'>
+                <span>Plano: </span>
+                <input type="text" value="plano 1" readonly />
+            </div>
+            <div>
+                <img src="../img/editar.png" alt="Editar" class="edit_btn" onclick="toggleAllEdits()" />
+            </div>
         </div>
     </div>
     <div>
