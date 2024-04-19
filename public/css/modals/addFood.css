@@ -1,0 +1,63 @@
+.quantity_nutri span{
+  font-size: 1rem;
+}
+.quantity_nutri{
+  padding: 40px 0;
+}
+.calories span{
+  color: #17F3E6;
+}
+.carb span{
+  color: #FF0DE5;
+}
+.proteins span{
+  color: #E96001;
+}
+.fat span{
+  color: #FFF500;
+}
+
+.grams_input, .grams_select{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px
+}
+
+.container_grams span{
+  font-size: 0.75rem;
+  max-width: 20ch;
+}
+
+.grams_input input{
+  border: 2px solid var(--cor-p5);
+  max-width: 150px;
+  padding: 10px 15px;
+}
+.grams_select select{
+  border: 2px solid var(--cor-p5);
+  max-width: 300px;
+  padding: 10px 15px;
+}
+
+.btns_addFood{
+  padding-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  gap: 40px;
+}
+
+.btns_addFood button{
+  font-size: 1rem;
+  padding: 5px 10px;
+}
+
+#btn_cancel{
+  border: 3px solid rgb(206, 12, 12);
+  color: rgb(206, 12, 12);
+}
+#btn_cancel:hover{
+  border: 3px solid rgb(134, 30, 30);
+  color: rgb(134, 30, 30);
+}

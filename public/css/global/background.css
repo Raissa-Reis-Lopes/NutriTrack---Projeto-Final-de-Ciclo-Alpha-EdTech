@@ -49,4 +49,5 @@
     background: url(../../img/decoracao/fundoDireito.svg) no-repeat right bottom;
     width: 300px;
     background-size: cover;
+    z-index: 1;
 }
