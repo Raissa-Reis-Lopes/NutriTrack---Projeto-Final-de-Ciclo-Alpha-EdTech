@@ -95,13 +95,13 @@ async function updateConfigHistory(user_id, food_plan_id, activity_level, weight
     }
 }
 
-async function insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender){
+async function insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date){
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO config_history(user_id, food_plan_id, activity_level, weight, height, birth_date, gender) VALUES($1, $2, $3, $4, $5, $6, $7)'
+    const query = 'INSERT INTO config_history(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8)'
     try {
-        await pool.query(query,[user_id, food_plan_id, activity_level, weight, height, birth_date, gender]);
+        await pool.query(query,[user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date]);
         console.log('Nova configuração salva com sucesso!')        
-        return { user_id, food_plan_id, activity_level, weight, height, birth_date, gender }
+        return { user_id, food_plan_id, activity_level, weight, height, birth_date, gender, created_at }
     } catch (error) {
         console.log('Falha ao inserir os dados da configuração do usuário')
     }

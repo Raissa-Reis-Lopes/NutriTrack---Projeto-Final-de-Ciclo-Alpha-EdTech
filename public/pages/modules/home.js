@@ -123,6 +123,5 @@ export function Home() {
         </footer>
     `;
     document.getElementById("root").appendChild(div);
-    initialBtns();
     return div
 }

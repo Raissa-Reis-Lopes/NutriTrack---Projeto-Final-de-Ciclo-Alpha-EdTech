@@ -1,6 +1,6 @@
 import createCustomEvent from "./event.js";
-import { nameValid, emailValid, passwordValid, escapeHtml } from "./validation.js"
-
+import { heightValid, weightValid, emailValid, passwordValid, escapeHtml } from "./validation.js";
+import { showMessage } from "./message.js";
 export function Register() {
     const div = document.createElement("div");
 
@@ -11,7 +11,10 @@ export function Register() {
     </div>
     </header>
     <main class="welcome"> 
-        <form id="form1" class="form_input">
+    <div id="message" class="message-container">
+    <div id="message-content" class="message-content hidden"></div>
+    </div>
+        <form id="form1" method="post" class="form_input">
         <h1>Para começar, precisamos te conhecer um pouco melhor!</h1>
             <label for="name">Nome</label>
             <input type="text" name="name" id="name">
@@ -27,6 +30,7 @@ export function Register() {
             
             <label for="terms">Li e concordo com a <span id="open-modal-privacy">política de privacidade</span> e <span id="open-modal-terms">termos de uso</span></label>
             <input type="checkbox" name="terms" id="terms">
+            <div id ="erroTerms" class="erro"></div>
         
             <section>
                 <div id="fade-privacy" class="hide"></div>
@@ -64,16 +68,22 @@ export function Register() {
                 </div>
             </section>
         </section>
+        <div class="btns_index">
+            <button id="btn_back" class="btn_stroke">Voltar</button>
+            <button id="btn_next" class="btn_colorLinear">Próximo</button>
+        </div>
         </form>
-        <form id="form2" class="calculator_input" style="display:none;">
+        <form id="form2" method="post" class="calculator_input" style="display:none;">
         <h1>Agora, vamos calcular seu gasto energético diário!</h1>
             <div class="form">
                 <label for="weight">Peso</label>
-                <input type="number" name="weight" id="weight" placeholder="CM" required />
+                <input type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="CM" required />
+                <div id ="erroWeight" class="erro"></div>
             </div>
             <div class="form">
                 <label for="height">Altura</label>
-                <input type="number" name="height" id="height" placeholder="KG" required />
+                <input type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="KG" required />
+                <div id ="erroHeight" class="erro"></div>
             </div>
             <div class="form">
                 <label for="date">Data de nascimento</label>
@@ -98,12 +108,15 @@ export function Register() {
                     <option valur="very_active">Muito Ativo</option>
                 </select>
             </div>
+            <div class="btns_index">
+                <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
+            </div>
         </form>
-        <form id="form3" style="display:none;">
+        <form id="form3" method="post" style="display:none;">
         <h1>Escolha seu plano alimentar!</h1>
             <div class="container_center">
                 <div class="plan">
-                    <div>
+                    <div id="plan1">
                         <h1>Perder peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -118,7 +131,7 @@ export function Register() {
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div id="plan2">
                         <h1>Manter o peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -133,7 +146,7 @@ export function Register() {
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div id="plan3">
                         <h1>Ganhar peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -150,12 +163,12 @@ export function Register() {
                     </div>
                 </div>
             </div>
+            <div class="btns_index">
+                <button id="btn_next_3" class="btn_colorLinear">Próximo</button>
+            </div>
         </form>
 
-        <div class="btns_index">
-            <button id="btn_back" class="btn_stroke">Voltar</button>
-            <button id="btn_next" class="btn_colorLinear">Próximo</button>
-        </div>
+       
 
     </main>
     <footer>
@@ -166,48 +179,261 @@ export function Register() {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
     registerBtns();
+    limitBirthDate();
     return div
 }
 
+function limitBirthDate(){
+      //Limitando a data de nascimento no calendário para não poder selecionar dias acima do dia atual
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1;
+      let dd = today.getDate();
+      
+      if (mm < 10) {
+          mm = '0' + mm;
+      }
+      
+      if (dd < 10) {
+          dd = '0' + dd;
+      }
+      
+      const maxDate = yyyy + '-' + mm + '-' + dd;
+      
+      document.getElementById('birth_date').setAttribute('max', maxDate);
+}
+
 export function registerBtns() {
+
     let currentForm = 1;
+
+    // const foodPlan = document.getElementById("food_plan").value;  
+   
 
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
+    const btnNext2 = document.getElementById("btn_next_2");
+    const btnNext3 = document.getElementById("btn_next_3");
   
     let messageName = ''; // Inicialização das variáveis
     let messageEmail = ''; // Inicialização das variáveis
     let messagePassword = ''; // Inicialização das variáveis
+    let messageTerms = '';    // Inicialização das variáveis 
+    let messageWeight = ''; // Inicialização das variáveis
+    let messageHeight = '';    // Inicialização das variáveis 
 
     btnBack.addEventListener("click", () => {
-      if(currentForm === 1) {
             const customEvent = createCustomEvent('/');
             history.pushState({}, '', '/');
             window.dispatchEvent(customEvent);
-        } else if (currentForm > 1) {
-            currentForm--;
-            showForm(currentForm);
-        }
     });
 
-    btnNext.addEventListener("click", () => {
-        if(currentForm < 3) {
+    //Para o primeiro forms do cadastro
+        btnNext.addEventListener("click", async (event)=>{
+        event.preventDefault()
+       
+        const erroName = document.getElementById("erroNameRegister");
+        const erroEmail = document.getElementById("erroEmailRegister");
+        const erroPassword = document.getElementById("erroPasswordRegister");
+        const erroTerms = document.getElementById("erroTerms")
+        erroName.innerText = ''; // Limpa mensagens antigas de erro
+        erroEmail.innerText = ''; // Limpa mensagens antigas de erro
+        erroPassword.innerText = ''; // Limpa mensagens antigas de erro
+        erroTerms.innerText = '';
+        const message = document.getElementById ("message-content"); //Para testar o "pop-up"
+
+
+        const username = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm_password").value;
+        const terms = document.getElementById("terms").checked;
+
+        if(!username){
+            messageName = escapeHtml("Nome inválido!"); 
+            erroName.appendChild(document.createTextNode(messageName));
+            return;
+        }
+    
+    
+        if (!emailValid(email)) {
+            messageEmail = escapeHtml("Por favor, insira um email válido."); 
+            erroEmail.appendChild(document.createTextNode(messageEmail));
+            return;
+        }
+            
+        if (!passwordValid(password) || !passwordValid(confirmPassword) ) {
+            messagePassword = escapeHtml("Por favor, insira uma senha válida (Ela deve ter no mín 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)."); 
+            erroPassword.appendChild(document.createTextNode(messagePassword));
+            return;
+        }
+    
+        if (password !== confirmPassword){
+            messagePassword = escapeHtml("Por favor, as senhas precisam ser iguais"); 
+            erroPassword.appendChild(document.createTextNode(messagePassword));
+            return;
+        }
+
+        if(!terms){
+            messageTerms = escapeHtml("É necessário ler e concordar com os termos de uso e privacidade"); 
+            erroTerms.appendChild(document.createTextNode(messageTerms));
+            return;
+        }
+
+        
+        const userData = {
+            username,
+            email,
+            password
+        };
+      
+            try {
+              
+                const response = await fetch("/api/users", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(userData),
+                });
+
+             
+        
+                if (!response.ok) {
+                    throw new Error("Erro ao realizar o registro");
+                }
+
+                
+        
+                try {
+                   
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });        
+                    // alert('Cadastro de usuário realizado com sucesso!');
+
+                    
+                    showMessage("success", "Cadastro de usuário realizado com sucesso!");
+                } catch (error) {
+                    console.error('Erro ao fazer login:', error);
+                }
+
+                            
+                const userInfoResponse = await fetch("/api/login/", {
+                    method: "GET",
+                });
+
+                if (userInfoResponse.ok) {
+                    const userData = await userInfoResponse.json();
+                    // console.log(userData.user); // Acessa o usuário a partir dos dados retornados
+                    // console.log(new Date());
+                    // const year = date.getFullYear(); // Obtém o ano (YYYY)
+                    // const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtém o mês (MM) e adiciona zero à esquerda se necessário
+                    // const day = String(date.getDate()).padStart(2, '0'); // Obtém o dia (DD) e adiciona zero à esquerda se necessário
+
+                    // const formattedDate = `${year}-${month}-${day}`;
+
+                    // console.log(formattedDate); // Saída: "2024-04-18"
+                } else {
+                    console.log('Não foi possível obter informações do usuário');
+                }
+
+                currentForm++;
+                showForm(currentForm);
+
+            }
+            catch (error) {
+                console.error("Erro ao realizar o registro:", error);
+                alert("Erro ao realizar o registro. Tente novamente");
+            }
+        })
+    
+
+        btnNext2.addEventListener('click', async(event) =>{
+            event.preventDefault();
+
+            const erroWeight = document.getElementById("erroWeight");
+            const erroHeight = document.getElementById("erroHeight");
+            erroWeight.innerText = ''; // Limpa mensagens antigas de erro
+            erroHeight.innerText = ''; // Limpa mensagens antigas de erro
+            const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
+    
+
+            const weight = document.getElementById("weight").value;
+            const height = document.getElementById("height").value;
+            const birthDate = document.getElementById("birth_date").value;
+            const gender = document.getElementById("gender").value;
+            const activityLevel = document.getElementById("activity").value;
+
+
+            if(!weightValid(weight)){
+                messageWeight = escapeHtml("Por favor, insira um peso válido de até 500kg."); 
+                erroWeight.appendChild(document.createTextNode(messageWeight));
+                return;
+            }
+
+            if(!heightValid(height)){
+                messageHeight = escapeHtml("Por favor, insira a sua altura em centímetros."); 
+                erroHeight.appendChild(document.createTextNode(messageHeight));
+                return;
+            }
+
+            if(!birthDate){
+                showMessage('fail',"A data de nascimento é obrigatória");
+                return;
+            }
+
+            if(!gender){
+                showMessage("fail","Selecione o sexo biológico");
+                return;
+            }
+
+            if(!activityLevel){
+                showMessage("fail","Selecione o nível de atividade semanal");
+                return;
+            }
+
+
+            console.log( weight)
+            console.log( height)
+            console.log( birthDate)
+            console.log( gender)
+            console.log( activityLevel)
+
             currentForm++;
             showForm(currentForm);
-        } else if(currentForm === 3) {
-            submitForm();
-            const customEvent = createCustomEvent('/login');
-            history.pushState({}, '', '/login');
-            window.dispatchEvent(customEvent);
-        }
-    });
+
+            btnNext3.addEventListener('click', async(event)=>{
+                event.preventDefault();
+
+                // //Pegar o plano selecionado
+
+                // const configData = {
+                //     user_id, 
+                //     food_plan_id: foodPlan, 
+                //     activity_level: activityLevel, 
+                //     weight, 
+                //     height, 
+                //     birth_date: birthDate, 
+                //     gender, 
+                //     date
+                // }
+                
+            }) 
+        })
+
+
+
 }
 
 function showForm(formNumber) {
     document.getElementById("form1").style.display = "none";
     document.getElementById("form2").style.display = "none";
     document.getElementById("form3").style.display = "none";
-
     document.getElementById(`form${formNumber}`).style.display = "block";
 }
 
@@ -217,91 +443,5 @@ function nextStep(step) {
     } else if (step === 2) {
         showForm(3);
     }
-}
-
-async function submitForm() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm_password").value;
-    const weight = document.getElementById("weight").value;
-    const height = document.getElementById("height").value;
-    const birthDate = document.getElementById("birth_date").value;
-    const gender = document.getElementById("gender").value;
-    const activityLevel = document.getElementById("activity").value;
-    const foodPlan = document.getElementById("food_plan").value;
-    const terms = document.getElementById("terms").checked;
-  
-    const erroName = document.getElementById("erroNameRegister");
-    const erroEmail = document.getElementById("erroEmailRegister");
-    const erroPassword = document.getElementById("erroPasswordRegister");
-    const erroConfirmPass = document.getElementById("erroConfirmPassRegister");
-  
-    erroName.innerText = ''; // Limpa mensagens antigas de erro
-    erroEmail.innerText = ''; // Limpa mensagens antigas de erro
-    erroPassword.innerText = ''; // Limpa mensagens antigas de erro
-    erroConfirmPass.innerText = ''; // Limpa mensagens antigas de erro
-
-    if (!nameValid(name)) {
-        messageName = escapeHtml("Por favor, insira um name válido."); 
-        erroName.appendChild(document.createTextNode(messageName));
-        return;
-    }
-
-    if (!emailValid(email)) {
-        messageEmail = escapeHtml("Por favor, insira um email válido."); 
-        erroEmail.appendChild(document.createTextNode(messageEmail));
-        return;
-    }
-        
-    if (!passwordValid(password) || !!passwordValid(confirmPassword) ) {
-        messagePassword = escapeHtml("Por favor, insira uma senha válida (mínimo 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial)."); 
-        erroPassword.appendChild(document.createTextNode(messagePassword));
-        return;
-    }
-
-    if (password !== confirmPassword){
-        messagePassword = escapeHtml("Por favor, as senhas precisam ser iguais"); 
-        erroPassword.appendChild(document.createTextNode(messagePassword));
-        return;
-    }
-
-    const userData = {
-        name,
-        email,
-        password,
-        weight,
-        height,
-        birth_date: birthDate,
-        gender,
-        activity_level: activityLevel,
-        food_plan: foodPlan,
-    };
-
-    try {
-        const response = await fetch("/api/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao realizar o registro");
-        }
-
-        alert('Cadastro de usuário realizado com sucesso!');
-    }
-    catch (error) {
-        console.error("Erro ao realizar o registro:", error);
-        alert("Erro ao realizar o registro. Tente novamente");
-    }
-  
-    // Limpar os valores dos inputs
-    document.getElementById("name").value= "";
-    document.getElementById("email").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("confirm_password").value = "";
 }
 

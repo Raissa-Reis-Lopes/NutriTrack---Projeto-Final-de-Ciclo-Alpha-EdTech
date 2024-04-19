@@ -15,7 +15,7 @@ const getLatestConfigHistoryByUserId = async(req, res) => {
 
 const createOrUpdateConfigHistory = async(req,res) => {
     try {
-        const { user_id, food_plan_id, activity_level, weight, height, birth_date, gender} = req.body;
+        const { user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date} = req.body;
 
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
@@ -45,7 +45,11 @@ const createOrUpdateConfigHistory = async(req,res) => {
             throw new Error('O gênero é obrigatório')
         }
 
-        const config = await configHistoryServices.createOrUpdateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender);
+        if(!date){
+            throw new Error('A data é obrigatória')
+        }
+
+        const config = await configHistoryServices.createOrUpdateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date);
         return res.status(200).json({ success: true, message: "Configuração salva com sucesso!", data: config });
     } catch (error) {
         return res.status(500).json({ error: error.message})
