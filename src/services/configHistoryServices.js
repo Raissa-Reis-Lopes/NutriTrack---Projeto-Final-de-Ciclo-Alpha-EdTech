@@ -44,7 +44,7 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
             throw new Error('Usuário não existe');
         }
 
-        if(food_plan_id !== "1" && food_plan_id !== "2" && food_plan_id !== "3"){
+        if(food_plan_id !== 1 && food_plan_id !== 2 && food_plan_id !== 3){
             throw new Error('Plano alimentar inválido, escolha um plano existente (1 para perda de peso; 2 para manter o peso ou 3 para ganho de peso)')
         }
 
@@ -65,14 +65,22 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
             throw new Error('Escolha um nível de atividade válido: "sedentary", "lightlyActive", "moderatelyActive", "veryActive", "extraActive"');
         }
 
-        const currentDate = new Date().toLocaleDateString('pt-BR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }).split('/').reverse().join('-');
+        // const currentDate = new Date().toLocaleDateString({
+        //     year: 'numeric',
+        //     month: '2-digit',
+        //     day: '2-digit'
+        // }).split('/').reverse().join('-');
 
+        
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês é baseado em zero, então adicionamos 1 e padStart para garantir dois dígitos
+        const day = String(today.getDate()).padStart(2, '0'); // padStart para garantir dois dígitos
+        
+        const currentDate = `${year}-${month}-${day}`;
+        
         const existingConfig = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, currentDate);
-    
+       
         if (existingConfig) {
             // Se existir uma configuração para o usuário na data atual, atualize-a
             const config = await configHistoryRepository.updateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, currentDate);

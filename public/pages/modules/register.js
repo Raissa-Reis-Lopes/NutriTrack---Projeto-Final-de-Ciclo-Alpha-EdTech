@@ -1,6 +1,8 @@
 import createCustomEvent from "./event.js";
 import { heightValid, weightValid, emailValid, passwordValid, escapeHtml } from "./validation.js";
 import { showMessage } from "./message.js";
+
+
 export function Register() {
     const div = document.createElement("div");
 
@@ -77,12 +79,12 @@ export function Register() {
         <h1>Agora, vamos calcular seu gasto energético diário!</h1>
             <div class="form">
                 <label for="weight">Peso</label>
-                <input type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="CM" required />
+                <input type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
                 <div id ="erroWeight" class="erro"></div>
             </div>
             <div class="form">
                 <label for="height">Altura</label>
-                <input type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="KG" required />
+                <input type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
                 <div id ="erroHeight" class="erro"></div>
             </div>
             <div class="form">
@@ -102,10 +104,10 @@ export function Register() {
                 <select name="activity" id="activity">
                     <option value="">Selecione</option>
                     <option value="sedentary">Sedentário</option>
-                    <option value="light">Leve</option>
-                    <option value="moderate">Moderado</option>
-                    <option value="active">Ativo</option>
-                    <option valur="very_active">Muito Ativo</option>
+                    <option value="lightlyActive">Leve</option>
+                    <option value="moderatelyActive">Moderado</option>
+                    <option value="veryActive">Ativo</option>
+                    <option value="extraActive">Muito Ativo</option>
                 </select>
             </div>
             <div class="btns_index">
@@ -116,7 +118,7 @@ export function Register() {
         <h1>Escolha seu plano alimentar!</h1>
             <div class="container_center">
                 <div class="plan">
-                    <div id="plan1">
+                    <div id="plan1" class="chosenPlan">
                         <h1>Perder peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -131,7 +133,7 @@ export function Register() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan2">
+                    <div id="plan2" class="chosenPlan">
                         <h1>Manter o peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -146,7 +148,7 @@ export function Register() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan3">
+                    <div id="plan3" class="chosenPlan">
                         <h1>Ganhar peso</h1>
                         <div class="flip-card">
                             <div class="flip-card-inner">
@@ -180,9 +182,11 @@ export function Register() {
     document.getElementById("root").appendChild(div);
     registerBtns();
     limitBirthDate();
+    addEventListenerToPlans();
     return div
 }
 
+//Para limitar a data de nascimento (não pode selecionar uma data que ainda não chegou)
 function limitBirthDate(){
       //Limitando a data de nascimento no calendário para não poder selecionar dias acima do dia atual
       const today = new Date();
@@ -203,7 +207,46 @@ function limitBirthDate(){
       document.getElementById('birth_date').setAttribute('max', maxDate);
 }
 
+// Armazenar o ID do plano selecionado em uma variável global
+let selectedPlanId = null;
+
+// Função para mudar a borda do plano selecionado
+function selectPlan(planId) {
+    // Resetar a borda de todos os planos
+    const plans = document.querySelectorAll('.chosenPlan');
+    plans.forEach(plan => {
+        plan.classList.remove('selected');
+    });
+
+    // Mudar a borda do plano selecionado
+    const selectedPlan = document.getElementById(planId);
+    selectedPlan.classList.add('selected');
+
+    switch (planId) {
+        case "plan1":
+            selectedPlanId = 1;
+            break;
+        case "plan2":
+            selectedPlanId = 2;
+            break;
+        case "plan3":
+            selectedPlanId = 3;
+            break;
+        default:
+            break;
+    }
+}
+
+function addEventListenerToPlans(){
+    // Adicionar eventos de clique aos planos
+document.getElementById('plan1').addEventListener('click', () => selectPlan('plan1'));
+document.getElementById('plan2').addEventListener('click', () => selectPlan('plan2'));
+document.getElementById('plan3').addEventListener('click', () => selectPlan('plan3'));
+}
+
 export function registerBtns() {
+
+    
 
     let currentForm = 1;
 
@@ -262,14 +305,14 @@ export function registerBtns() {
             return;
         }
             
-        if (!passwordValid(password) || !passwordValid(confirmPassword) ) {
+        if (!passwordValid(password)) {
             messagePassword = escapeHtml("Por favor, insira uma senha válida (Ela deve ter no mín 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)."); 
             erroPassword.appendChild(document.createTextNode(messagePassword));
             return;
         }
     
         if (password !== confirmPassword){
-            messagePassword = escapeHtml("Por favor, as senhas precisam ser iguais"); 
+            messagePassword = escapeHtml("As senhas precisam ser iguais"); 
             erroPassword.appendChild(document.createTextNode(messagePassword));
             return;
         }
@@ -329,15 +372,7 @@ export function registerBtns() {
 
                 if (userInfoResponse.ok) {
                     const userData = await userInfoResponse.json();
-                    // console.log(userData.user); // Acessa o usuário a partir dos dados retornados
-                    // console.log(new Date());
-                    // const year = date.getFullYear(); // Obtém o ano (YYYY)
-                    // const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtém o mês (MM) e adiciona zero à esquerda se necessário
-                    // const day = String(date.getDate()).padStart(2, '0'); // Obtém o dia (DD) e adiciona zero à esquerda se necessário
-
-                    // const formattedDate = `${year}-${month}-${day}`;
-
-                    // console.log(formattedDate); // Saída: "2024-04-18"
+                    // console.log(userData.user);
                 } else {
                     console.log('Não foi possível obter informações do usuário');
                 }
@@ -348,13 +383,15 @@ export function registerBtns() {
             }
             catch (error) {
                 console.error("Erro ao realizar o registro:", error);
-                alert("Erro ao realizar o registro. Tente novamente");
+                showMessage("fail", "Erro ao realizar o registro. Tente novamente")
             }
         })
     
 
         btnNext2.addEventListener('click', async(event) =>{
             event.preventDefault();
+
+            
 
             const erroWeight = document.getElementById("erroWeight");
             const erroHeight = document.getElementById("erroHeight");
@@ -371,14 +408,12 @@ export function registerBtns() {
 
 
             if(!weightValid(weight)){
-                messageWeight = escapeHtml("Por favor, insira um peso válido de até 500kg."); 
-                erroWeight.appendChild(document.createTextNode(messageWeight));
+                showMessage('fail',"Insira um peso válido");
                 return;
             }
 
             if(!heightValid(height)){
-                messageHeight = escapeHtml("Por favor, insira a sua altura em centímetros."); 
-                erroHeight.appendChild(document.createTextNode(messageHeight));
+                showMessage('fail',"Insira uma altura válida, em centímetros");
                 return;
             }
 
@@ -397,37 +432,75 @@ export function registerBtns() {
                 return;
             }
 
-
-            console.log( weight)
-            console.log( height)
-            console.log( birthDate)
-            console.log( gender)
-            console.log( activityLevel)
-
             currentForm++;
             showForm(currentForm);
 
             btnNext3.addEventListener('click', async(event)=>{
                 event.preventDefault();
 
-                // //Pegar o plano selecionado
+                const getUserId = await fetch("/api/login/", {
+                    method: "GET",
+                });
 
-                // const configData = {
-                //     user_id, 
-                //     food_plan_id: foodPlan, 
-                //     activity_level: activityLevel, 
-                //     weight, 
-                //     height, 
-                //     birth_date: birthDate, 
-                //     gender, 
-                //     date
-                // }
-                
+                if(getUserId){
+                    const userData = await getUserId.json();
+                    const userId = userData.user;
+
+
+                    const date = new Date().toLocaleDateString({
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }).split('/').reverse().join('-');
+                    
+    
+                    console.log(userId);
+                    // Armazenar o ID do plano selecionado
+                    console.log(selectedPlanId)
+                    console.log( weight)
+                    console.log( height)
+                    console.log( birthDate)
+                    console.log( gender)
+                    console.log( activityLevel)
+                    console.log(date);
+    
+    
+                    const configData = {
+                        user_id: userId, 
+                        food_plan_id: selectedPlanId, 
+                        activity_level: activityLevel, 
+                        weight, 
+                        height, 
+                        birth_date: birthDate, 
+                        gender, 
+                        date
+                    }
+
+
+                    try {
+                        const response = await fetch('/api/config', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(configData),
+                        }); 
+
+                        if (!response.ok) {
+                            showMessage("fail", "Erro ao finalizar o cadastro")
+                            throw new Error("Erro ao finalizar o cadastro");
+                        }                               
+                        const customEvent = createCustomEvent('/home');
+                        history.pushState({}, '', '/home');
+                        window.dispatchEvent(customEvent); 
+                    } catch (error) {
+                        console.error('Erro ao se cadastrar:', error);
+                    }
+                } else {
+                    console.log('Não foi possível obter informações do usuário');
+                }
             }) 
         })
-
-
-
 }
 
 function showForm(formNumber) {
