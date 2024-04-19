@@ -139,19 +139,16 @@ export function navRoutes(){
 
     navProfile.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/profile');
-        history.pushState({}, '', '/profile');
         window.dispatchEvent(customEvent); 
     })
 
     navHistory.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/history');
-        history.pushState({}, '', '/history');
         window.dispatchEvent(customEvent); 
     })
 
     btnExit.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/');
-        history.pushState({}, '', '/');
         window.dispatchEvent(customEvent); 
         // falta limpar os cookies
     })

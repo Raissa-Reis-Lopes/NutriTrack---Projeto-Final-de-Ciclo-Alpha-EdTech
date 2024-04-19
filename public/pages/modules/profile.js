@@ -105,7 +105,6 @@ export function registerBtns() {
         btnHome.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
         });
     }
@@ -113,7 +112,6 @@ export function registerBtns() {
     if (btnHistory) {
         btnHistory.addEventListener("click", () => {
             const customEvent = createCustomEvent('/history');
-            history.pushState({}, '', '/history');
             window.dispatchEvent(customEvent);
         });
     }

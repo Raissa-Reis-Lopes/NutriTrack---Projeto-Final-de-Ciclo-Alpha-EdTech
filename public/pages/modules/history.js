@@ -57,7 +57,6 @@ export function registerBtns() {
         register.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
         });
     }
@@ -65,7 +64,6 @@ export function registerBtns() {
     if (btnProfile) {
         btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/profile');
-            history.pushState({}, '', '/profile');
             window.dispatchEvent(customEvent);
         });
     }
