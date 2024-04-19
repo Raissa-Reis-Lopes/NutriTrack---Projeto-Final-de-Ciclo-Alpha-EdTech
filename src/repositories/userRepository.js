@@ -2,13 +2,13 @@
 
 const { connectToDatabase } = require('../db/postgresql');
 
-async function insertUser(username , email , password, avatar_img){
+async function insertUser(username , email , password){
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO users(username , email , password, avatar_img) VALUES($1, $2, $3, $4)';
+    const query = 'INSERT INTO users(username , email , password) VALUES($1, $2, $3)';
     try {
-        await pool.query(query,[username , email , password, avatar_img]);
+        await pool.query(query,[username , email , password]);
         console.log("Novo usuário criado com sucesso");
-        return { username , email , password, avatar_img };
+        return { username , email , password };
     } catch (error) {
         console.log('Falha ao inserir os dados do novo usuário', error);
         throw error;
@@ -39,13 +39,13 @@ async function getUserById(id) {
     } 
 }
 
-async function updateUser(id, username , email , password, avatar_img){
+async function updateUser(id, username , email , password){
     const pool = await connectToDatabase();
-    const query = 'UPDATE users SET username=$2 , email=$3 , password=$4 , avatar_img=$5 WHERE id=$1';
+    const query = 'UPDATE users SET username=$2 , email=$3 , password=$4 WHERE id=$1';
     try {
-        await pool.query(query,[id, username , email , password, avatar_img]);
+        await pool.query(query,[id, username , email , password]);
         console.log('Usuário atualizado com sucesso!');
-        return { id, username , email , password, avatar_img };
+        return { id, username , email , password };
     } catch (error) {
         console.log('Erro ao atualizar os dados do usuário', error);
         throw error;
