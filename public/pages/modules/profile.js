@@ -13,9 +13,8 @@ export function Profile() {
             </div>
         </div>
         <nav class="header_nav">
-            <a href="/home">Home</a>
-            <a href="/historic">Histórico</a>
-            <a href="/chalenge">Desafios</a>
+        <div id="navHome">Home</div>
+        <div id="navHistory">Histórico</div>
         </nav>
     </header>
     <div class="profile_form">
@@ -69,7 +68,7 @@ export function Profile() {
         </div>
     </div>
     <div>
-        <button class="btn_stroke">DESCONECTAR</button>
+        <button id="profile_exit" class="btn_stroke">DESCONECTAR</button>
         <button class="btn_stroke">APAGAR CONTA</button>
     </div>
     <footer>
@@ -124,4 +123,27 @@ async function toggleAllEdits() {
             alert("Erro ao realizar o registro. Tente novamente");
         }
     }
+}
+
+export function navProfile(){
+    const navHome = document.getElementById("navHome");
+    const navHistory = document.getElementById("navHistory");
+    const btnExit = document.getElementById("btnExit");
+
+
+    navHome.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/home');
+        window.dispatchEvent(customEvent); 
+    })
+
+    navHistory.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/history');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnExit.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+        // falta limpar os cookies
+    })
 }
