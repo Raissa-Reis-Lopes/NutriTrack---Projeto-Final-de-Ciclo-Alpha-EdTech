@@ -1,6 +1,6 @@
 import createCustomEvent from "./event.js";
 import { emailValid, passwordValid, escapeHtml } from "./validation.js"
-import { showMessage } from "./message.js";
+import { showMessage } from "../utils/message.js";
 
 
 export function Login() {

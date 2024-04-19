@@ -1,6 +1,7 @@
 import createCustomEvent from "./event.js";
 import { heightValid, weightValid, emailValid, passwordValid, escapeHtml } from "./validation.js";
-import { showMessage } from "./message.js";
+import { showMessage } from "../utils/message.js";
+import { limitDate } from "../utils/limitDates.js";
 
 
 export function Register() {
@@ -181,31 +182,32 @@ export function Register() {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
     registerBtns();
-    limitBirthDate();
+    limitDate('birth_date');
     addEventListenerToPlans();
     return div
 }
 
+
 //Para limitar a data de nascimento (não pode selecionar uma data que ainda não chegou)
-function limitBirthDate(){
-      //Limitando a data de nascimento no calendário para não poder selecionar dias acima do dia atual
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      let mm = today.getMonth() + 1;
-      let dd = today.getDate();
+// function limitBirthDate(){
+//       //Limitando a data de nascimento no calendário para não poder selecionar dias acima do dia atual
+//       const today = new Date();
+//       const yyyy = today.getFullYear();
+//       let mm = today.getMonth() + 1;
+//       let dd = today.getDate();
       
-      if (mm < 10) {
-          mm = '0' + mm;
-      }
+//       if (mm < 10) {
+//           mm = '0' + mm;
+//       }
       
-      if (dd < 10) {
-          dd = '0' + dd;
-      }
+//       if (dd < 10) {
+//           dd = '0' + dd;
+//       }
       
-      const maxDate = yyyy + '-' + mm + '-' + dd;
+//       const maxDate = yyyy + '-' + mm + '-' + dd;
       
-      document.getElementById('birth_date').setAttribute('max', maxDate);
-}
+//       document.getElementById('birth_date').setAttribute('max', maxDate);
+// }
 
 // Armazenar o ID do plano selecionado em uma variável global
 let selectedPlanId = null;
@@ -357,10 +359,8 @@ export function registerBtns() {
                         },
                         body: JSON.stringify({ email, password }),
                     });        
-                    // alert('Cadastro de usuário realizado com sucesso!');
-
                     
-                    showMessage("success", "Cadastro de usuário realizado com sucesso!");
+                    showMessage("success", "Parabéns, você deu o primeiro passo para mudar a sua vida!");
                 } catch (error) {
                     console.error('Erro ao fazer login:', error);
                 }
@@ -452,18 +452,6 @@ export function registerBtns() {
                         month: '2-digit',
                         day: '2-digit'
                     }).split('/').reverse().join('-');
-                    
-    
-                    console.log(userId);
-                    // Armazenar o ID do plano selecionado
-                    console.log(selectedPlanId)
-                    console.log( weight)
-                    console.log( height)
-                    console.log( birthDate)
-                    console.log( gender)
-                    console.log( activityLevel)
-                    console.log(date);
-    
     
                     const configData = {
                         user_id: userId, 
