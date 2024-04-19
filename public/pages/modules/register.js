@@ -269,7 +269,6 @@ export function registerBtns() {
 
     btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/');
-            history.pushState({}, '', '/');
             window.dispatchEvent(customEvent);
     });
 
@@ -479,7 +478,6 @@ export function registerBtns() {
                             throw new Error("Erro ao finalizar o cadastro");
                         }                               
                         const customEvent = createCustomEvent('/home');
-                        history.pushState({}, '', '/home');
                         window.dispatchEvent(customEvent); 
                     } catch (error) {
                         console.error('Erro ao se cadastrar:', error);
