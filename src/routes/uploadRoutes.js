@@ -6,5 +6,6 @@ const permissionVerify = require('../middlewares/permissionVerify');
 router.use(permissionVerify);
 
 router.post('/:user_id', uploadController.upload.single('avatar'), uploadController.uploadAvatar);
+router.delete('/:user_id', uploadController.removeAvatar);
 
 module.exports = router;
