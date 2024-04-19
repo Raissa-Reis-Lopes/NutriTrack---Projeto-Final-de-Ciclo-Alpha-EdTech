@@ -60,7 +60,6 @@ export function loginBtns(){
         register.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/register');
-            history.pushState({}, '', '/register');
             window.dispatchEvent(customEvent); 
         });
     }
@@ -68,7 +67,6 @@ export function loginBtns(){
     if (btnBack) {
         btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/');
-            history.pushState({}, '', '/');
             window.dispatchEvent(customEvent);
         });
     }

@@ -34,14 +34,14 @@ const getUserById = async(id) =>{
 
 
 
-const createUser = async(username , email , password, avatar_img) => {
+const createUser = async(username , email , password) => {
     try {
 
         validatePassword(password);
 
         const hashedPassword = await hashPassword(password);
 
-        const result = await userRepository.insertUser(username , email , hashedPassword, avatar_img);
+        const result = await userRepository.insertUser(username , email , hashedPassword);
         return result;
     } catch (error) {
         console.log(error);
@@ -49,13 +49,13 @@ const createUser = async(username , email , password, avatar_img) => {
     }
 }
 
-const updateUser = async(id, username , email , password, avatar_img) => {
+const updateUser = async(id, username , email , password) => {
     try {
 
         validatePassword(password);
 
         const hashedPassword = await hashPassword(password);
-       const result = await userRepository.updateUser(id, username , email , hashedPassword, avatar_img);
+       const result = await userRepository.updateUser(id, username , email , hashedPassword);
        return result;
 
     } catch (error) {

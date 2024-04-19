@@ -6,7 +6,8 @@ const foodPlanRoutes = require('./foodPlanRoutes');
 const foodRoutes = require('./foodRoutes');
 const configHistoryRoutes = require('./configHistoryRoutes');
 const calculateRoutes = require('./calculateRoutes');
-const foodAddedRoutes = require('./foodAddedRoutes')
+const foodAddedRoutes = require('./foodAddedRoutes');
+const uploadRoutes = require('./uploadRoutes');
 
 //Aqui serão criadas as rotas da aplicação
 
@@ -17,6 +18,7 @@ router.use('/food', foodRoutes);             //checked on postman
 router.use('/config', configHistoryRoutes);  //checked on postman
 router.use('/calculate', calculateRoutes);   //checked on postman
 router.use('/foodAdded', foodAddedRoutes);
+router.use('/upload', uploadRoutes);
 
 
 module.exports = router;
