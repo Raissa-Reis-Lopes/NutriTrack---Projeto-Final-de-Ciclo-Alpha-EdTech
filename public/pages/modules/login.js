@@ -1,5 +1,4 @@
 import createCustomEvent from "./event.js";
-import { emailValid, passwordValid, escapeHtml } from "./validation.js"
 import { showMessage } from "../utils/message.js";
 
 
@@ -55,10 +54,7 @@ export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
-    // const message = document.getElementById("message")
-   
-    let messageEmail = ''; // Inicialização das variáveis
-    let messagePassword = ''; // Inicialização das variáveis
+    const message = document.getElementById("message")
 
     if(register){
         register.addEventListener ("click",function(e){
@@ -96,9 +92,32 @@ export function loginBtns(){
                 throw new Error('Erro ao fazer login, usuário não localizado');
             }
 
+            const userInfoResponse = await fetch("/api/login/", {
+                method: "GET",
+            });
+
+            if (!userInfoResponse.ok) {
+                throw new Error('Erro ao localizar o id do usuário');
+            }
+
+            const userData = await userInfoResponse.json();
+            const userId = userData.user;
+
+            const checkConfig = await fetch(`/api/config/${userId}`, {
+                method: "GET",
+            });
+
+            if(!checkConfig.ok){
+                showMessage("success","Para proseeguir, precisamos de apenas algumas informações!")
+                const customEvent = createCustomEvent('/config');
+                window.dispatchEvent(customEvent); 
+                return;
+            } 
+            
             const customEvent = createCustomEvent('/home');
-            history.pushState({}, '', '/home');
             window.dispatchEvent(customEvent); 
+            
+
 
         } catch (error) {
             console.error('Erro ao fazer login:', error);
