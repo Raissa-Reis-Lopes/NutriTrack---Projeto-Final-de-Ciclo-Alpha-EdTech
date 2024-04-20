@@ -101,6 +101,8 @@ export function loginBtns(){
             const userData = await userInfoResponse.json();
             const userId = userData.user;
 
+
+
             const checkConfig = await fetch(`/api/config/${userId}`, {
                 method: "GET",
             });
@@ -110,40 +112,16 @@ export function loginBtns(){
                 const customEvent = createCustomEvent('/config');
                 window.dispatchEvent(customEvent); 
                 return;
-            } 
+            } else {
+                console.log(userId)
+                console.log(checkConfig)
+                const customEvent = createCustomEvent('/home');
+                window.dispatchEvent(customEvent); 
+            }
             
-            const customEvent = createCustomEvent('/home');
-            window.dispatchEvent(customEvent); 
-            
-
-
+        
         } catch (error) {
             console.error('Erro ao fazer login:', error);
         }
     });
 }
-
-
-
-
-// Só deixando anotado, pois vamos precisar muito isso, para recuperar os dados do usuário e para passar a data para o formato usado nos cálculos:
-
-//      // Busca informações do usuário após o login
-//      const userInfoResponse = await fetch("/api/login/", {
-//         method: "GET",
-//     });
-
-//     if (userInfoResponse.ok) {
-//         const userData = await userInfoResponse.json();
-//         console.log(userData.user); // Acessa o usuário a partir dos dados retornados
-//         console.log(new Date());
-//         const year = date.getFullYear(); // Obtém o ano (YYYY)
-//         const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtém o mês (MM) e adiciona zero à esquerda se necessário
-//         const day = String(date.getDate()).padStart(2, '0'); // Obtém o dia (DD) e adiciona zero à esquerda se necessário
-
-//         const formattedDate = `${year}-${month}-${day}`;
-
-//         console.log(formattedDate); // Saída: "2024-04-18"
-//     } else {
-//         console.log('Não foi possível obter informações do usuário');
-//     }
