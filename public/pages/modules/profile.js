@@ -229,6 +229,11 @@ function handleInputChange(event) {
         default:
             break;
     }
+
+    if(isValid){
+        const btnSave = document.getElementById("btn-save-changes");
+        btnSave.addEventListener("click", saveChanges);
+    }
 }
 
 function disableEdit(event) {
@@ -244,6 +249,17 @@ function disableEdit(event) {
     }
 
     input.removeEventListener('blur', disableEdit);
+}
+
+
+async function saveChanges(){
+    try {
+        
+    } catch (error) {
+        
+    }
+
+
 }
 
 export function navProfile(){
