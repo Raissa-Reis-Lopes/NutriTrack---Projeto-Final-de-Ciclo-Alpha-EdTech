@@ -113,8 +113,6 @@ export function loginBtns(){
                 window.dispatchEvent(customEvent); 
                 return;
             } else {
-                console.log(userId)
-                console.log(checkConfig)
                 const customEvent = createCustomEvent('/home');
                 window.dispatchEvent(customEvent); 
             }
