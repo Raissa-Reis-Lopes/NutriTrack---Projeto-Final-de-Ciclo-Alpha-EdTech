@@ -12,73 +12,66 @@ export function Profile() {
                     <img src="../img/logo.svg" alt="NutriTrack" />
                 </a>
             </div>
-            <img src="../img/camera.png" alt="Imagem do usuario" id="profile_img"/>
         </div>
         <nav class="header_nav">
-            <a href="/home" id="btn_home">Home</a>
-            <a href="/history" id="btn_history">Histórico</a>
-            <a href="/chalenge">Desafios</a>
+        <div id="navHome">Home</div>
+        <div id="navHistory">Histórico</div>
         </nav>
     </header>
-    <div class="profile_changes">
-        <div class="account">
-            <div class="form_profile">
-                <h3>Conta</h3>
-                <img src="../img/edit.svg" alt="editor">
-            </div>
-            <div id="form1">
-                <p><span>Email</span><span>email@example.com</span></p>
-                <p><span>Senha</span><span>********</span></p>
-            </div>
-            <form id="form2" class="form_input_profile">
-                <section>
-                    <label for="email">E-mail</label>
-                    <input type="email" name="email" id="email">
-                    <div id ="erroEmailRegister" class="erro"></div>
-                    <label for="actualPassword">Senha Atual</label>
-                    <input type="password" name="actualPassword" id="actualPassword">
-                    <label for="newPassword">Nova Senha</label>
-                    <input type="password" name="newPassword" id="newPassword">
-                    <label for="confirmNewPassword">Confirmar Nova Senha</label>
-                    <input type="password" name="confirmNewPassword" id="confirmNewPassword">
-                    <div id ="erroPasswordRegister" class="erro"></div>
-                    <button class="btn_stroke">Salvar alterações</button>
-                </section>
-            </form>
+    <div class="profile_form">
+        <div class="profile_picture">
+            <img src="../img/camera.png" alt="Imagem do usuario" />
         </div>
-        <div class="account">
-            <div class="form_profile">
-                <h3>Informações Pessoais</h3>
-                <img src="../img/edit.svg" alt="editor">
+        <div class="profile_info">
+            <div class="info_item" id="name">
+                <span>Nome: </span>
+                <input type="text" value="user_name" readonly />
             </div>
-            <div id="form3">
-                <p><span>Nome</span><span>Usuario1</span></p>
-                <p><span>Data de Nascimento</span><span>01/01/1990</span></p>
-                <p><span>Peso</span><span>65.0 KG</span></p>
-                <p><span>Altura</span><span>180 CM</span></p>
+            <div class="info_item" id="email">
+                <span>Email: </span>
+                <input type="email" value="email@example" readonly />
             </div>
-            <form id="form4" class="form_input_profile">
-                <section>
-                    <label for="name">Nome</label>
-                    <input type="text" name="name" id="name">
-                    <div id ="erroNameRegister" class="erro"></div>
-                    <label for="birthDate">Data de Nascimento</label>
-                    <input type="date" name="birthDate" id="birthDate">
-                    <div id ="erroBirthRegister" class="erro"></div>
-                    <label for="weight">Peso</label>
-                    <input type="number" name="weight" id="weight">
-                    <div id ="erroWeightRegister" class="erro"></div>
-                    <label for="height">Altura</label>
-                    <input type="number" name="height" id="height">
-                    <div id ="erroHeightRegister" class="erro"></div>
-                    
-                    <button id="save" class="btn_stroke">Salvar alterações</button>
-                </section>
-            </form>
+            <div class="info_item" id="password">
+                <span>Senha: </span>
+                <input type="password" value="********" readonly />
+            </div>
+            <div class="info_item" id="peso">
+                <span>Peso: </span>
+                <input type="number" value="KG" readonly />
+            </div>
+            <div class="info_item" id="altura">
+                <span>Altura: </span>
+                <input type="number" value="CM" readonly />
+            </div>
+            <!--  
+            <div class="info_item" id="age">
+                <span>Idade: </span>
+                <input type="number" value="DD/MM/AAAA" readonly />
+            </div>
+            -->
+            <div class="info_item" id="gender">
+                <span>Sexo Biológico: </span>
+                <input type="text" value="masculino" readonly />
+            </div>
+            <div class="info_item" id="birth">
+                <span>Nascimento: </span>
+                <input type="date" value="DD/MM/AAAA" readonly />
+            </div>
+            <div class="info_item" id="activity">
+                <span>Nivel de Atividade: </span>
+                <input type="text" value="Ativo" readonly />
+            </div>
+            <div class="info_item" id="plan">
+                <span>Plano: </span>
+                <input type="text" value="plano 1" readonly />
+            </div>
+            <div>
+                <img src="../img/editar.png" alt="Editar" class="edit_btn" onclick="toggleAllEdits()" />
+            </div>
         </div>
     </div>
     <div>
-        <button class="btn_stroke">DESCONECTAR</button>
+        <button id="profile_exit" class="btn_stroke">DESCONECTAR</button>
         <button class="btn_stroke">APAGAR CONTA</button>
     </div>
     <footer>
@@ -144,86 +137,112 @@ export async function fillProfileData(){
             }
 }
 
-export function registerBtns() {
-    const btnHome = document.getElementById("btn_home");
-    const btnHistory = document.getElementById("btn_history");
-    const btnAccount = document.getElementById("btn_account");
 
-    if(btnHome){
-        btnHome.addEventListener ("click",function(e){
-            e.preventDefault();
-            const customEvent = createCustomEvent('/home');
-            window.dispatchEvent(customEvent); 
-        });
-    }
+//FUnção para resgatar os dados dos usuários e preencher os campos dos fomulários para mostrar ao usuário
+export async function fillProfileData(){
 
-    if (btnHistory) {
-        btnHistory.addEventListener("click", () => {
-            const customEvent = createCustomEvent('/history');
-            window.dispatchEvent(customEvent);
-        });
-    }
+    try {
+        const userInfo = await fetch("/api/login/", {
+            method: "GET",
+          });
 
-    if (btnAccount) {
-        btnAccount.addEventListener ("click", function (){
-            const editForms = document.querySelectorAll(".form_profile img");
-            const forms = document.querySelectorAll(".form_input_profile");
-            const formDisplay = document.querySelectorAll(".account > div:nth-child(2)");
-            const btns = document.getElementById("save");
+          if(!userInfo){
+            throw new Error("Falha ao tentar localizar o id do usuário")
+          }
 
-            forms.forEach(function(form) {
-                form.style.display = "none";
+          const userData = await userInfo.json();
+          const userId = userData.user;
+
+           // Obter dados do usuário com base no ID para o form 1
+           const userMainInfo = await fetch(`/api/users/${userId}`,{
+            method: "GET"
+           });
+
+           if(!userMainInfo){
+            throw new Error("Falha ao buscar as informações do usuário")
+           }
+
+           const user = await userMainInfo.json();
+        
+           // Preencher os campos do formulário com os dados do usuário
+           document.getElementById("name").value = user.name;
+           document.getElementById("email").value = user.email;
+           document.getElementById("password").value = user.password;
+
+           const userConfigInfo = await fetch(`/api/config${userId}`,{
+            method: 'GET',
             });
+            document.getElementById("weight").value = user.weight;
+            document.getElementById("height").value = user.height;
+            document.getElementById("birthDate").value = user.birth_date;
+            document.getElementById("gender").value = user.gender;
+            document.getElementById("activityLevel").value = user.activity_level;
+            document.getElementById("plan").value = user.food_plan;
 
-            editForms.forEach(function(img, index) {
-                img.onclick = function() {
-                    formDisplay[index].style.display = "none";
-                    forms[index].style.display = "block";
-                };
-            });
+            } catch (error) {
+                console.log(`Falha ao buscar os dados do usuário pelo id: `, error)
+            }
+}
 
-            btns.forEach(function(btn, index) {
-                btn.onclick = async function() {
-                    forms[index].style.display = "none";
-                    formDisplay[index].style.display = "block";
+async function toggleAllEdits() {
+    const inputs = document.querySelectorAll(".info_item input")
 
-                    const name = document.getElementById("name").value;
-                    const email = document.getElementById("email").value;
-                    const password = document.getElementById("password").value;
-                    const weight = document.getElementById("weight").value;
-                    const height = document.getElementById("height").value;
-                    const birthDate = document.getElementById("birth_date").value;
+    const userData = {};
 
-                    const userData = {
-                        name,
-                        email,
-                        password,
-                        weight,
-                        height,
-                        birth_date: birthDate,
-                    };
+    for (const input of inputs) {
+        input.readOnly = !input.readOnly;
 
-                    try {
-                        const response = await fetch("/api/register", {
-                            method: "UPDATE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(userData),
-                        });
-                
-                        if (!response.ok) {
-                            throw new Error("Erro ao realizar o registro");
-                        }
-                
-                        alert('Cadastro de usuário realizado com sucesso!');
-                    }
-                    catch (error) {
-                        console.error("Erro ao realizar o registro:", error);
-                        alert("Erro ao realizar o registro. Tente novamente");
-                    }
-                }
-            })
-        })
+        const btn = input.parentElement.querySelector('.edit_btn');
+
+        if (input.readOnly) {
+            userData[input.id] = input.value;
+            console.log(userData);
+        }
     }
+
+    if (inputs[0].readOnly) {
+        try {
+            const response = await fetch("/api/register", {
+                method: "UPDATE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+    
+            if (!response.ok) {
+                throw new Error("Erro ao realizar o registro");
+            }
+    
+            alert('Cadastro de usuário realizado com sucesso!');
+        }
+        catch (error) {
+            console.error("Erro ao realizar o registro:", error);
+            alert("Erro ao realizar o registro. Tente novamente");
+        }
+    }
+}
+
+export function navProfile(){
+    const navHome = document.getElementById("navHome");
+    const navHistory = document.getElementById("navHistory");
+    const btnExit = document.getElementById("btnExit");
+
+
+    navHome.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/home');
+        window.dispatchEvent(customEvent); 
+    })
+
+    navHistory.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/history');
+        window.dispatchEvent(customEvent); 
+    })
+
+    btnExit.addEventListener ("click",()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+        // falta limpar os cookies
+    })
+    
 }
