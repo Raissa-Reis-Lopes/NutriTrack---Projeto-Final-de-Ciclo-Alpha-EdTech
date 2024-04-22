@@ -140,10 +140,6 @@ export async function fillProfileData(){
            }
 
            const user = await userMainInfo.json();
-        
-           // Preencher os campos do formulário com os dados do usuário
-           document.getElementById("input-name").value = user.username;
-           document.getElementById("input-email").value = user.email;
 
            const userConfigInfo = await fetch(`/api/config/${userId}`,{
             method: 'GET',
@@ -160,6 +156,10 @@ export async function fillProfileData(){
             const formattedBirthDate = birthDate.toISOString().split('T')[0];
             
 
+            
+           // Preencher os campos do formulário com os dados do usuário e de configuração
+           document.getElementById("input-name").value = user.username;
+           document.getElementById("input-email").value = user.email;
             document.getElementById("input-weight").value = userConfig.weight;
             document.getElementById("input-height").value = userConfig.height;
             document.getElementById("input-birth").value = formattedBirthDate;
@@ -186,7 +186,7 @@ function enableEdit(event) {
 
     // Verifica o tipo de elemento
     if (input.tagName === 'SELECT') {
-        input.disabled = true;
+        input.disabled = false;
         input.addEventListener('change', handleInputChange);
     } else if (input.tagName === 'INPUT') {
         input.removeAttribute('readonly');
@@ -240,7 +240,7 @@ function handleInputChange(event) {
         case 'input-height':
             isValid = heightValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Peso inválido");
+                showMessage("fail","Altura inválida");
             }
             break;       
         default:
@@ -250,7 +250,6 @@ function handleInputChange(event) {
     if(isValid){
         const btnSave = document.getElementById("btn-save-changes");
         btnSave.addEventListener("click", saveChanges);
-        console.log("Chegou aqui")
     }
 }
 
@@ -259,7 +258,7 @@ function disableEdit(event) {
 
     // Verifica o tipo de elemento
     if (input.tagName === 'SELECT') {
-        input.disabled = false;
+        input.disabled = true;
         input.removeEventListener('change', handleInputChange);
     } else if (input.tagName === 'INPUT') {
         input.setAttribute('readonly', 'true');
@@ -272,8 +271,7 @@ function disableEdit(event) {
 
 async function saveChanges(){
 
-    console.log("Botão de salvar funcionando")
-    //Para o user (username, email, password)
+    //Para o user (username, email, currentPassword, newPassword)
     const username = document.getElementById("input-name").value;
     const email = document.getElementById("input-email").value;
     const password = document.getElementById("input-password").value;
@@ -293,38 +291,34 @@ async function saveChanges(){
         day: '2-digit'
     }).split('/').reverse().join('-');
 
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(newPassword);
-    console.log(weight);
-    console.log(height);
-    console.log(birthDate);
-    console.log(gender);
-    console.log(activityLevel);
-    console.log(selectedPlanId);
-    console.log(date);
-
     if(!username){
-        showMessage('fail',"Nome inválido!");
+        showMessage('fail',"O nome de usuário não pode ficar vazio!");
         return;
     }
-
 
     if (!emailValid(email)) {
         showMessage('fail',"Formato de email inválido!");
         return;
     }
-        
-    if (!passwordValid(password)) {
-        showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)");
-        return;
-    }
 
-    if (newPassword !== confirmPassword){
-        showMessage('fail',"As senhas precisam ser iguais");
-        return;
+    //Essa validação das novas senhas só vai acontecer SE o usuário tiver optado por colocar uma nova senha ali, senão, essa validação será ignorada:
+    if(newPassword || confirmPassword){
+        if(!password){
+            showMessage('fail',"Informe a sua senha atual");
+            return;
+        }
+
+        if (!passwordValid(newPassword) || !passwordValid(confirmPassword)) {
+            showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)");
+            return;
+        }
+    
+        if (newPassword !== confirmPassword){
+            showMessage('fail',"A nova senha informada não confere com a confirmação");
+            return;
+        }
     }
+        
 
     if(!weightValid(weight)){
         showMessage('fail',"Insira um peso válido");
@@ -351,36 +345,49 @@ async function saveChanges(){
         return;
     }
 
+    try {
+        const getUserId = await fetch("/api/login/", {
+            method: "GET",
+        });
 
-    const getUserId = await fetch("/api/login/", {
-        method: "GET",
-    });
-
-    if(getUserId){
+        if(getUserId.ok){
         const userIdResponse = await getUserId.json();
         const userId = userIdResponse.user;
+
+          //Aqui eu vou ter que construi 2 tipos diferentes de userData para fazer o fetch, um que tem a senha e outro que não tem
+          let userData;
+
+          if(password && newPassword && confirmPassword){
+              userData = {
+                  username,
+                  email,
+                  newPassword,
+                  currentPassword: password
+              };
+          } else {
+              userData = {
+                  username,
+                  email
+              };
+          }
+
+          //Para fucnionar o id do plano tem que ser enviado como número inteiro
+          const selectedPlanId = parseInt(document.getElementById("select-plan").value, 10);
+
+  
+          const configData = {
+              user_id: userId, 
+              food_plan_id: selectedPlanId, 
+              activity_level: activityLevel, 
+              weight, 
+              height, 
+              birth_date: birthDate, 
+              gender, 
+              date
+          }
         
-        const userData = {
-            username,
-            email,
-            password
-        };
-
-        const configData = {
-            user_id: userId, 
-            food_plan_id: selectedPlanId, 
-            activity_level: activityLevel, 
-            weight, 
-            height, 
-            birth_date: birthDate, 
-            gender, 
-            date
-        }
-
-
-        try {
             const userUpdateResponse = await fetch(`/api/users/${userId}`, {
-                method: "UPDATE",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -389,9 +396,7 @@ async function saveChanges(){
     
             if (!userUpdateResponse.ok) {
                 showMessage('fail',"Falha ao atualizar os dados do usuário");
-                throw new Error("Erro ao atualizar o registro do usuário");
-            } else{
-                console.log("User atualizado com sucesso")
+                throw new Error("Erro ao atualizar os dados do usuário");
             } 
 
             const configUpdateResponse = await fetch('/api/config', {
@@ -405,15 +410,20 @@ async function saveChanges(){
             if (!configUpdateResponse.ok) {
                 showMessage('fail',"Falha ao atualizar os dados do usuário");
                 throw new Error("Erro ao atualizar o registro do usuário");         
-            } else{
-                console.log("Config do usuário atualizada com sucesso")
             } 
 
-            
+            // Mostrar mensagem de sucesso se passar por todas as etapas acima
+            showMessage('success', "Dados atualizados com sucesso");
+
+        } else{
+            throw new Error("Falha ao obter ID do usuário");
+        }
         } catch (error) {
+            console.log("Falha ao completar a atualização dos dados", error.message)
             throw new Error("Erro ao atualizar o registro");
         }    
-    }
+    
+   
 }
 
 export function navProfile(){
