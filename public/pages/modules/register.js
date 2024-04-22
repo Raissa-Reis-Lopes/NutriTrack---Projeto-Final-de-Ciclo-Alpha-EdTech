@@ -2,6 +2,7 @@ import createCustomEvent from "./event.js";
 import { heightValid, weightValid, emailValid, passwordValid, escapeHtml } from "./validation.js";
 import { showMessage } from "../utils/message.js";
 import { limitDate } from "../utils/limitDates.js";
+import { toggleModalPrivacy, toggleModalTerms } from "../../scripts/modalTerms.js";
 
 
 export function Register() {
@@ -504,3 +505,5 @@ function nextStep(step) {
     }
 }
 
+toggleModalPrivacy();
+toggleModalTerms();
