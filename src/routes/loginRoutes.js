@@ -6,6 +6,8 @@ const permissionVerify = require('../middlewares/permissionVerify.js')
 router.post('/', loginController.authenticate);
 // router.get('/getData', permissionVerify, loginController.getUserData); // Nova rota GET
 
+router.post('/logout', loginController.logout);
+
 router.get('/', permissionVerify, loginController.getUserId);
 
 

@@ -32,10 +32,22 @@ const getUserId = async (req, res) => {
     }
 }
 
+const logout = (req, res) => {
+    try {
+        // Deleta o cookie 'session_id'
+        res.clearCookie('session_id', { path: '/' });
+        return res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Falha ao realizar logout, erro no servidor' });
+    }
+};
+
 
 
 
 module.exports = {
     authenticate,
-    getUserId
+    getUserId,
+    logout
 }

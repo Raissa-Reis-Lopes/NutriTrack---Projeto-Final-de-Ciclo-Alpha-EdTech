@@ -45,7 +45,7 @@ const createUser = async(req, res) => {
 const updateUser = async(req, res) => {
     try {
         const { id } = req.params;
-        const {username , email , password  } = req.body;
+        const {username , email , newPassword, currentPassword  } = req.body;
 
         if(!id){
             throw new Error("O id do usuário é obrigatório")
@@ -59,16 +59,18 @@ const updateUser = async(req, res) => {
             throw new Error('O email é obrigatório');
         }
 
-        if(!password){
-            throw new Error('A senha é obrigatório');
+        if (newPassword && currentPassword) {
+            // Validar senha atual
+            await userServices.validateCurrentPassword(id, currentPassword);
         }
 
-        const user = await userServices.getUserById(id);
-        if(!user){
-            throw new Error('O usuário não existe');
-        }
+        let result;
 
-        const result = await userServices.updateUser(id, username , email , password);
+        if (newPassword) {
+            result = await userServices.updateUser(id, username, email, newPassword);
+        } else {
+            result = await userServices.updateUserWithoutPassword(id, username, email);
+        }
 
         return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso', data: result});
         

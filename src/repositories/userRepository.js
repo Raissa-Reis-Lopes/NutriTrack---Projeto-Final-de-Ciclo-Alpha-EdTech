@@ -52,6 +52,19 @@ async function updateUser(id, username , email , password){
     } 
 }
 
+const updateUserWithoutPassword = async (id, username, email) => {
+    const pool = await connectToDatabase();
+    const query = `UPDATE users SET username = $2, email = $3
+    WHERE id = $1`;
+    try {
+        const { rows } = await pool.query(query,[id, username, email]);
+        return rows[0];
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 async function deleteUser(id){
     const pool = await connectToDatabase();
     const query = 'DELETE FROM users WHERE id=$1';
@@ -69,6 +82,7 @@ module.exports ={
     getUserById,
     insertUser,
     updateUser,
+    updateUserWithoutPassword,
     deleteUser
 }
 

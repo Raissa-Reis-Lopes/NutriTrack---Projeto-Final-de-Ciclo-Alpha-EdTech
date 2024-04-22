@@ -30,6 +30,8 @@ const authenticateUser = async(email, password) => {
 }
 
 
+
+
 module.exports = {
     getUser,
     authenticateUser,
