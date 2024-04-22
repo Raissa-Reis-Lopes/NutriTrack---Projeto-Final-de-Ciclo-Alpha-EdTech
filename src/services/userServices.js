@@ -2,6 +2,7 @@
 
 const userRepository = require('../repositories/userRepository');
 const { hashPassword } = require('../utils/hashPassword');
+const { comparePassword } = require('../utils/comparePassword');
 
 
 const validatePassword = (password) => {
@@ -64,6 +65,16 @@ const updateUser = async(id, username , email , password) => {
     }
 }
 
+const updateUserWithoutPassword = async (id, username, email) => {
+    try {
+        const updatedUser = await userRepository.updateUserWithoutPassword(id, username, email); 
+        return updatedUser;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const deleteUser = async(id) => {
     try {
         await userRepository.deleteUser(id);
@@ -74,6 +85,26 @@ const deleteUser = async(id) => {
     }
 }
 
+const validateCurrentPassword = async(userId, password) => {
+    try {
+        const user = await userRepository.getUserById(userId);
+
+        if (!user) {
+            throw new Error('Usuário não encontrado');
+        }
+
+        const isMatch = await comparePassword(password, user.password);
+
+        if (!isMatch) {
+            throw new Error('A senha atual fornecida está incorreta');
+        }
+        return { success: true }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 
 
 module.exports = {
@@ -81,5 +112,7 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    updateUserWithoutPassword,
+    deleteUser,
+    validateCurrentPassword,
 }

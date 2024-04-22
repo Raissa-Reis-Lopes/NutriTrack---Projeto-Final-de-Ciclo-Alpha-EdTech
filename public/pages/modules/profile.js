@@ -42,8 +42,16 @@ export function Profile() {
                 <input id="input-email" type="email" value="" placeholder="email@example.com" readonly />
             </div>
             <div class="info_item" id="password">
-                <span>Senha: </span>
+                <span>Senha Atual: </span>
                 <input id="input-password" type="password" value="" placeholder="*******" readonly />
+            </div>
+            <div class="info_item" id="new-password">
+                <span>Nova Senha: </span>
+                <input id="input-new-password" type="password" value="" placeholder="Nova Senha" readonly />
+            </div>
+            <div class="info_item" id="repeat-password">
+                <span>Repetir Senha: </span>
+                <input id="input-repeat-password" type="password" value="" placeholder="Repetir Senha" readonly />
             </div>
             <div class="info_item" id="weight">
                 <span>Peso (KG): </span>
@@ -82,11 +90,6 @@ export function Profile() {
                     <option value="3">Ganhar massa</option>
                 </select>
             </div>
-            <!--  
-            <div>
-                <button id="save-changes" class="btn_stroke">Salvar Alterações</button>
-            </div>
-            -->
         </div>
     </div>
     <div>
@@ -201,11 +204,25 @@ function handleInputChange(event) {
 
     let isValid = true;
 
+    const newPassword = document.getElementById("input-new-password").value;
+    const repeatPassword = document.getElementById("input-repeat-password").value;
+
     switch (inputId) {
-        case 'input-password':
+        case 'input-new-password':
             isValid = passwordValid(inputValue);
             if (!isValid) {
                 showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.");
+            }
+            break;
+        case 'input-repeat-password':
+            isValid = passwordValid(inputValue) && (newPassword === repeatPassword);
+
+            if(!isValid){
+                if(newPassword !== repeatPassword){
+                    showMessage("fail","A nova senha não confere com a confirmação");
+                } else {
+                    showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.");
+                }
             }
             break;
         case 'input-email':
@@ -233,6 +250,7 @@ function handleInputChange(event) {
     if(isValid){
         const btnSave = document.getElementById("btn-save-changes");
         btnSave.addEventListener("click", saveChanges);
+        console.log("Chegou aqui")
     }
 }
 
@@ -253,13 +271,149 @@ function disableEdit(event) {
 
 
 async function saveChanges(){
-    try {
-        
-    } catch (error) {
-        
+
+    console.log("Botão de salvar funcionando")
+    //Para o user (username, email, password)
+    const username = document.getElementById("input-name").value;
+    const email = document.getElementById("input-email").value;
+    const password = document.getElementById("input-password").value;
+    const newPassword = document.getElementById("input-new-password").value;
+    const confirmPassword = document.getElementById("input-repeat-password").value;
+    
+    //Para o configHistory (user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date)
+    const weight = document.getElementById("input-weight").value;
+    const height = document.getElementById("input-height").value;
+    const birthDate = document.getElementById("input-birth").value ;
+    const gender = document.getElementById("select-gender").value ;
+    const activityLevel = document.getElementById("select-activity").value;
+    const selectedPlanId = document.getElementById("select-plan").value;
+    const date = new Date().toLocaleDateString({
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').reverse().join('-');
+
+    console.log(username);
+    console.log(email);
+    console.log(password);
+    console.log(newPassword);
+    console.log(weight);
+    console.log(height);
+    console.log(birthDate);
+    console.log(gender);
+    console.log(activityLevel);
+    console.log(selectedPlanId);
+    console.log(date);
+
+    if(!username){
+        showMessage('fail',"Nome inválido!");
+        return;
     }
 
 
+    if (!emailValid(email)) {
+        showMessage('fail',"Formato de email inválido!");
+        return;
+    }
+        
+    if (!passwordValid(password)) {
+        showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)");
+        return;
+    }
+
+    if (newPassword !== confirmPassword){
+        showMessage('fail',"As senhas precisam ser iguais");
+        return;
+    }
+
+    if(!weightValid(weight)){
+        showMessage('fail',"Insira um peso válido");
+        return;
+    }
+
+    if(!heightValid(height)){
+        showMessage('fail',"Insira uma altura válida, em centímetros");
+        return;
+    }
+
+    if(!birthDate){
+        showMessage('fail',"A data de nascimento é obrigatória");
+        return;
+    }
+
+    if(!gender){
+        showMessage("fail","Selecione o sexo biológico");
+        return;
+    }
+
+    if(!activityLevel){
+        showMessage("fail","Selecione o nível de atividade semanal");
+        return;
+    }
+
+
+    const getUserId = await fetch("/api/login/", {
+        method: "GET",
+    });
+
+    if(getUserId){
+        const userIdResponse = await getUserId.json();
+        const userId = userIdResponse.user;
+        
+        const userData = {
+            username,
+            email,
+            password
+        };
+
+        const configData = {
+            user_id: userId, 
+            food_plan_id: selectedPlanId, 
+            activity_level: activityLevel, 
+            weight, 
+            height, 
+            birth_date: birthDate, 
+            gender, 
+            date
+        }
+
+
+        try {
+            const userUpdateResponse = await fetch(`/api/users/${userId}`, {
+                method: "UPDATE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+    
+            if (!userUpdateResponse.ok) {
+                showMessage('fail',"Falha ao atualizar os dados do usuário");
+                throw new Error("Erro ao atualizar o registro do usuário");
+            } else{
+                console.log("User atualizado com sucesso")
+            } 
+
+            const configUpdateResponse = await fetch('/api/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(configData),
+            }); 
+
+            if (!configUpdateResponse.ok) {
+                showMessage('fail',"Falha ao atualizar os dados do usuário");
+                throw new Error("Erro ao atualizar o registro do usuário");         
+            } else{
+                console.log("Config do usuário atualizada com sucesso")
+            } 
+
+            
+        } catch (error) {
+            throw new Error("Erro ao atualizar o registro");
+        }    
+    }
 }
 
 export function navProfile(){
@@ -283,9 +437,9 @@ export function navProfile(){
    
 }
 
-export function btnProfile(){
+export function deleteAccount(){
     //Falta fazer a lógica para deletar a conta
     const btnDelete = document.getElementById('btn-delete');
-    const btnSaveChanges = document.getElementById("btn-save-changes");
+
 
 }
