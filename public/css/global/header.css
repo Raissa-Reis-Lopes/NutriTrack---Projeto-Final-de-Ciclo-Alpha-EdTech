@@ -14,14 +14,18 @@ header{
     padding-right: 10%;
 }
 
-.header_nav a{
+.header_nav > * {
+    cursor: pointer;
+}
+
+.header_nav div{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
 }
-.header_nav a::after{
+.header_nav div::after{
     content: "";
     height: 2px;
     width: 105%;
@@ -30,11 +34,11 @@ header{
 
 }
 
-.header_nav a:hover{
+.header_nav div:hover{
     color: var(--cor-p3);
 }
 
-.header_nav a:hover::after{
+.header_nav div:hover::after{
     background-color: var(--cor-p3);
 }
 

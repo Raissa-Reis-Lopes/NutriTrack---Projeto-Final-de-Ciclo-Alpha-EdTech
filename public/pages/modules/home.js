@@ -1,6 +1,7 @@
 import createCustomEvent from "./event.js";
 import {AddFood, SearchFood} from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
+import { logout } from "../utils/logout.js"
 
 
 export function Home() {
@@ -147,11 +148,7 @@ export function navRoutes(){
         window.dispatchEvent(customEvent); 
     })
 
-    btnExit.addEventListener ("click",()=>{
-        const customEvent = createCustomEvent('/');
-        window.dispatchEvent(customEvent); 
-        // falta limpar os cookies
-    })
+    btnExit.addEventListener ("click", logout)
 }
 
 export function homeBtns() {
@@ -165,9 +162,9 @@ export function homeBtns() {
     btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
     btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
 
-    document.querySelector('.modal_img img').addEventListener('click', () => {
-        document.querySelector('.modal').remove();
-    });
+    // document.querySelector('.modal_img img').addEventListener('click', () => {
+    //     document.querySelector('.modal').remove();
+    // });
 }
 
 // Função para abrir o modal de pesquisa de comida
@@ -176,8 +173,6 @@ function openModalWithMeal(meal) {
     const datafoodContainer = modal.getElementById("datafood");
 
     // fazer o fetch aqui
-
-    
 
     document.body.appendChild(modal); // Adiciona o modal ao body
 }
