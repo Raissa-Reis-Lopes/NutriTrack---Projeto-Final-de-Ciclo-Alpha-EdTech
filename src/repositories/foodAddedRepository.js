@@ -57,11 +57,12 @@ async function getFoodsAddedByUserByDate(user_id, date){
 
 
 //Não estava funcionando, coloquei o RETURNING * para ver o retorno
-async function insertFoodAdded(user_id, food_id, food_quantity, meal) {
+async function insertFoodAdded(user_id, food_id, food_quantity, meal, date) {
     const pool = await connectToDatabase();
-    const query = 'INSERT INTO food_added(user_id, food_id, food_quantity, meal) VALUES($1, $2, $3, $4) RETURNING *';
+    const query = 'INSERT INTO food_added(user_id, food_id, food_quantity, meal, created_at) VALUES($1, $2, $3, $4, $5) RETURNING *';
     try {
-        const result = await pool.query(query, [user_id, food_id, food_quantity, meal]);
+        const result = await pool.query(query, [user_id, food_id, food_quantity, meal, date]);
+        console.log(`Data sendo enviada para new food_added: ${date}`);
         console.log(`Alimento de id ${food_id} inserido com sucesso na refeição ${meal}`);
         return result.rows[0];  // Retorna o registro inserido
     } catch (error) {
@@ -70,13 +71,13 @@ async function insertFoodAdded(user_id, food_id, food_quantity, meal) {
     }
 }
 
-async function updateFoodAdded(id, user_id, food_id, food_quantity, meal){
+async function updateFoodAdded(user_id,food_id, date, food_quantity, meal){
     const pool = await connectToDatabase();
-    const query = 'UPDATE food_added SET food_id=$3, food_quantity=$4, meal=$5 WHERE id=$1 AND user_id=$2 ';
+    const query = 'UPDATE food_added SET food_id=$2, food_quantity=$4, meal=$5 WHERE user_id=$1 AND created_at =$3 ';
     try {
-        await pool.query(query,[id, user_id, food_id, food_quantity, meal]);
+        await pool.query(query,[user_id, food_id, date, food_quantity, meal]);
         console.log('Atualização de food_added realizada com sucesso!')
-        return { user_id, food_id, food_quantity, meal }
+        return { user_id, food_id,  date, food_quantity, meal }
     } catch (error) {
         console.log('Falha ao atualizar o food_added');
         throw error;
