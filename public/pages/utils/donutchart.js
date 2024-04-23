@@ -1,4 +1,4 @@
-export function generateDonutChart(title, totalValue, consumedValue, chartId,color) {
+export function generateDonutChart(title, totalValue, consumedValue, chartId, color, backgroundColor) {
   const canvas = document.createElement("canvas");
   canvas.width = 300;
   canvas.height = 300;
@@ -14,11 +14,11 @@ export function generateDonutChart(title, totalValue, consumedValue, chartId,col
         data: [consumedValue, totalValue - consumedValue],
         backgroundColor: [
           color,
-          '#b5d7b0'
+          backgroundColor
         ],
         borderColor: [
           color,
-          '#b5d7b0'
+          backgroundColor
         ],
         borderWidth: 1
       }]
