@@ -172,7 +172,6 @@ export function Profile() {
             <span>all rights reserved</span>
             <span id="open-modal-terms">termos de uso</span>
             <span id="open-modal-privacy">política de privacidade</span>
-            <span id="open-modal-sac">Precisa de ajuda?</span>
         </div>
     </footer>
   `;
@@ -588,27 +587,3 @@ export function deleteAccount(){
 
 
 }
-
-// const deleteAccount = document.getElementById("deleteAccount");
-
-// deleteAccount.addEventListener("click", async function () {
-//     try {
-//         const response = await fetch("/api/register", {
-//             method: "DELETE",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(userData),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error("Erro ao realizar o registro");
-//         }
-
-//         alert('Cadastro de usuário realizado com sucesso!');
-//     }
-//     catch (error) {
-//         console.error("Erro ao realizar o registro:", error);
-//         alert("Erro ao realizar o registro. Tente novamente");
-//     }
-// })

@@ -100,9 +100,13 @@ const getFoodsAddedByUserId = async(id)=> {
     }
 }
 
-const newFoodAdded = async(user_id, food_id, food_quantity, meal)=> {
+const newFoodAdded = async(user_id, food_id, food_quantity, meal, date)=> {
     try {
-        const result = await foodAddedRepository.insertFoodAdded(user_id, food_id, food_quantity, meal);
+        if(!user_id){
+            throw new Error('Usuário não existe');
+        }
+        
+        const result = await foodAddedRepository.insertFoodAdded(user_id, food_id, food_quantity, meal, date);
         return result;
     } catch (error) {
         console.log(error);
@@ -110,9 +114,9 @@ const newFoodAdded = async(user_id, food_id, food_quantity, meal)=> {
     }
 }
 
-const updateFoodAdded = async(id, user_id, food_id, food_quantity, meal) => {
+const updateFoodAdded = async(user_id, food_id, date, food_quantity, meal) => {
     try {
-        const result = await foodAddedRepository.updateFoodAdded(id, user_id, food_id, food_quantity, meal);
+        const result = await foodAddedRepository.updateFoodAdded(user_id, food_id, date, food_quantity, meal );
         return result;
     } catch (error) {
         console.log(error);

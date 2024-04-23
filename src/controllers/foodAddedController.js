@@ -44,7 +44,7 @@ const calculateDailyNutritionWithDetails = async(req, res) => {
 const newFoodAdded = async(req, res) =>{
     try {
         
-        const { user_id, food_id, food_quantity, meal } = req.body;
+        const { user_id, food_id, food_quantity, meal, date } = req.body;
 
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
@@ -62,7 +62,11 @@ const newFoodAdded = async(req, res) =>{
             throw new Error("Informe em qual refeição este aliemnto foi adicionado")
         }
 
-        const foodsAdded = await foodAddedServices.newFoodAdded(user_id, food_id, food_quantity, meal);
+        if(!date){
+            throw new Error('A data é obrigatória')
+        }
+
+        const foodsAdded = await foodAddedServices.newFoodAdded(user_id, food_id, food_quantity, meal, date);
         return res.status(200).json({ success: true, message:"Alimento adicionado com sucesso na refeição", data: foodsAdded });
     } catch (error) {
         return res.status(500).json({error: error.message});
@@ -75,9 +79,7 @@ const newFoodAdded = async(req, res) =>{
 const updateFoodAdded = async(req, res) => {
     
     try {
-        
-    const { id } = req.params;
-    const { user_id, food_id, food_quantity, meal } = req.body;
+    const { user_id, food_id, date, food_quantity, meal } = req.body;
 
     if(!user_id){
         throw new Error('O id do usuário é obrigatório');
@@ -95,7 +97,11 @@ const updateFoodAdded = async(req, res) => {
         throw new Error("Informe em qual refeição este aliemnto foi adicionado")
     }
 
-    const result = await foodAddedServices.updateFoodAdded(id, user_id, food_id, food_quantity, meal);
+    if(!date){
+        throw new Error('A data é obrigatória')
+    }
+
+    const result = await foodAddedServices.updateFoodAdded(user_id, food_id, date, food_quantity, meal);
     return res.status(200).json({ success: true, message:'Alimento atualizado com sucesso', data: result});
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -105,11 +111,6 @@ const updateFoodAdded = async(req, res) => {
 const deleteFoodAdded = async(req, res) => {
     const { id } = req.params;
     try {
-        // const foodAdded = await foodAddedServices.getFoodAddedById(id);
-        
-        // if(!foodAdded){
-        //     throw new Error('Registro de alimento adicionado não encontrado');
-        // }
         await foodAddedServices.deleteFoodAdded(id);
         return res.status(200).json({ success: true, message: 'Registro deletado com sucesso!'})
 
