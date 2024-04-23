@@ -522,13 +522,6 @@ export function navProfile(){
    
 }
 
-export function deleteAccount(){
-    //Falta fazer a lógica para deletar a conta
-    const btnDelete = document.getElementById('btn-delete');
-
-
-}
-
 toggleModalPrivacy();
 toggleModalTerms();
 toggleModalSac();
