@@ -1,12 +1,13 @@
 import createCustomEvent from "./event.js";
 import {AddFood, SearchFood} from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
-import { logout } from "../utils/logout.js"
+import { logout } from "../utils/logout.js";
+import { generateDonutChart } from '../utils/donutchart.js';
+import { showMessage } from "../utils/message.js";
 
 
 export function Home() {
     const div = document.createElement("div");
-
     div.innerHTML=`  
         <header>
             <div class="logo" id="logo">
@@ -20,6 +21,9 @@ export function Home() {
                 <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
             </nav>
         </header>
+        <div id="message" class="message-container">
+        <div id="message-content" class="message-content hidden"></div>
+        </div>
         <div class="container_home">
             <main class="main_home">
                 <div class="welcome_message">
@@ -32,33 +36,33 @@ export function Home() {
                     </div>
                 </div>
                 <div class="goal">
-                    <p>Objetivo <span>1800</span> calorias</p>
+                    <p>Objetivo <span class="total-calories"></span> calorias</p>
                 </div>
             </main>
             <section class="section_home">
                 <div class="calories_eat">
-                    <p>Você ainda pode ingerir <span>1800</span> calorias!</p>
+                    <p>Você ainda pode ingerir <span class="total-calories"></span> calorias!</p>
                     <div id="calories_bar"></div>
                     <p><span>0</span> calorias ingeridas</p>
                 </div>
 
                 <div id="date">
-                    <input type="date" name="date" id="date">
+                    <input type="date" name="date" id="input-date">
                 </div>
             </section>
             <section class="section_home">
                 <div>
-                    <div class="chart"></div>
+                    <div class="chart" id="protein-chart"></div>
                     <span class="span_black">Proteinas</span>
                     <span>0/300g</span>
                 </div>
                 <div>
-                    <div class="chart"></div>
+                    <div class="chart" id="carbo-chart"></div>
                     <span class="span_black">Carboidratos</span>
                     <span>0/300g</span>
                 </div>
                 <div>
-                    <div class="chart"></div>
+                    <div class="chart" id="lipid-chart"></div>
                     <span class="span_black">Gorduras</span>
                     <span>0/300g</span>
                 </div>
@@ -128,9 +132,66 @@ export function Home() {
     document.getElementById("root").appendChild(div);
     navRoutes();
     homeBtns();
-    
+    limitDate('input-date')
+    generateDonutChart('Proteína', 300, 10, 'protein-chart',"yellow");
+    generateDonutChart('Carboidratos', 300, 20, 'carbo-chart',"pink");
+    generateDonutChart('Gorduras', 300, 5, 'lipid-chart',"red");
+    getUserDailyGoal();
+
     return div
 }
+
+
+export async function getUserDailyGoal(){
+    const currentDay = document.getElementById('input-date');
+
+    currentDay.addEventListener("change", async function(){
+        console.log(currentDay.value);
+
+        try { 
+            const getUserId = await fetch("/api/login/", {
+                method: "GET",
+            });
+    
+            if(getUserId.ok){
+            const userIdResponse = await getUserId.json();
+            const userId = userIdResponse.user;
+
+            const userAndDate = {
+                user_id: userId,
+                date: currentDay.value
+            }
+
+            const getDailyGoal = await fetch('/api/calculate',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userAndDate),
+            })
+
+            if (!getDailyGoal.ok) {
+                throw new Error("Erro ao localizar o objetivo diário de consumo do usuário");         
+            } 
+
+                const userDailyGoal = await getDailyGoal.json();
+                console.log(userDailyGoal); 
+                console.log(userDailyGoal.data.total_calories)
+                const totalCaloriesElements = document.querySelectorAll('.total-calories');  // Correção aqui
+                totalCaloriesElements.forEach(element => {
+                    element.innerText = userDailyGoal.data.total_calories;
+                });
+    
+            }
+        }catch(error) {
+            showMessage("fail","Não há dados cadastrados para a data selecionada");
+
+        }
+    })
+}
+
+
+
 
 export function navRoutes(){
     const navProfile = document.getElementById("navProfile");

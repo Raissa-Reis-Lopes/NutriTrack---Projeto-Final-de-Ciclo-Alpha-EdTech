@@ -2,7 +2,7 @@ import { showMessage } from "../utils/message.js";
 import createCustomEvent from "./event.js";
 import { limitDate } from"../utils/limitDates.js"
 import { logout } from "../utils/logout.js";
-import {  emailValid, passwordValid, heightValid, weightValid } from "./validation.js";
+import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml } from "./validation.js";
 
 export function Profile() {
     const div = document.createElement("div");
@@ -158,14 +158,14 @@ export async function fillProfileData(){
 
             
            // Preencher os campos do formulário com os dados do usuário e de configuração
-           document.getElementById("input-name").value = user.username;
-           document.getElementById("input-email").value = user.email;
-            document.getElementById("input-weight").value = userConfig.weight;
-            document.getElementById("input-height").value = userConfig.height;
-            document.getElementById("input-birth").value = formattedBirthDate;
-            document.getElementById("select-gender").value = userConfig.gender;
-            document.getElementById("select-activity").value = userConfig.activity_level;
-            document.getElementById("select-plan").value = userConfig.food_plan_id;
+           document.getElementById("input-name").value = escapeHtml(user.username);
+           document.getElementById("input-email").value = escapeHtml(user.email);
+            document.getElementById("input-weight").value = escapeHtml(userConfig.weight);
+            document.getElementById("input-height").value = escapeHtml(userConfig.height);
+            document.getElementById("input-birth").value = escapeHtml(formattedBirthDate);
+            document.getElementById("select-gender").value = escapeHtml(userConfig.gender);
+            document.getElementById("select-activity").value = escapeHtml(userConfig.activity_level);
+            document.getElementById("select-plan").value = escapeHtml(userConfig.food_plan_id);
 
             } catch (error) {
                 console.error(`Falha ao buscar os dados do usuário pelo id: `, error)
