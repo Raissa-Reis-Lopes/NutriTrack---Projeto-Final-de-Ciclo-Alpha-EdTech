@@ -177,3 +177,7 @@
 #modal-account.hide {
     top: 0;
 }
+
+#body2 {
+    display: none;
+}
