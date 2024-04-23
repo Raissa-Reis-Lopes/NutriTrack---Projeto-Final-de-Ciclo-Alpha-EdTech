@@ -1,8 +1,7 @@
 import createCustomEvent from "./event.js";
 import {  emailValid, passwordValid } from "./validation.js";
 import { showMessage } from "../utils/message.js";
-import { limitDate } from "../utils/limitDates.js";
-import { toggleModalPrivacy, toggleModalTerms } from "../../scripts/modalTerms.js";
+
 
 
 export function Register() {
@@ -201,5 +200,3 @@ export function registerBtns() {
             }
         })
 }
-toggleModalPrivacy();
-toggleModalTerms();
