@@ -17,9 +17,6 @@ const createOrUpdateConfigHistory = async(req,res) => {
     try {
         const { user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date} = req.body;
 
-        console.log("Tipo de date:", typeof date);
-        console.log("Valor de date:", date);
-
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
         }
