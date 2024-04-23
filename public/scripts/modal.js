@@ -18,11 +18,14 @@ const toggleModalTerms= () => {
     fadeTerms.classList.toggle("hide");
 }
 
-// Para cada variável cria um EventListener de click e chama a função
-[openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
-    el.addEventListener("click", () => toggleModalPrivacy());
-});
+document.addEventListener("DOMContentLoaded", function() {
+    // Para cada variável cria um EventListener de click e chama a função
+    [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
+        el.addEventListener("click", () => toggleModalPrivacy());
+    });
+    
+    [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
+        el.addEventListener("click", () => toggleModalTerms());
+    });
 
-[openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
-    el.addEventListener("click", () => toggleModalTerms());
-});
+})

@@ -38,10 +38,53 @@ export function History() {
         </div>
     </footer>
   `;
-
-  document.getElementById("root").innerHTML = '';
+  
+    document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-  registerBtns();
+    registerBtns();
+  
+    const openModalPrivacy = document.getElementById("open-modal-privacy");
+    const openModalTerms = document.getElementById("open-modal-terms");
+    const closeModalPrivacy = document.getElementById("close-modal-privacy");
+    const closeModalTerms = document.getElementById("close-modal-terms");
+    const modalPrivacy = document.querySelector("#modal-privacy");
+    const modalTerms = document.querySelector("#modal-terms");
+    const fadePrivacy = document.querySelector("#fade-privacy");
+    const fadeTerms = document.querySelector("#fade-terms");
+    const openModalSac = document.getElementById("open-modal-sac");
+    const closeModalSac = document.getElementById("close-modal-sac");
+    const modalSac = document.querySelector("#modal-sac");
+    const fadeSac = document.querySelector("#fade-sac");
+    
+    // adiciona ou remove a classe "hide"
+    function toggleModalPrivacy () {
+        modalPrivacy.classList.toggle("hide");
+        fadePrivacy.classList.toggle("hide");
+    }
+    
+    function toggleModalTerms() {
+        modalTerms.classList.toggle("hide");
+        fadeTerms.classList.toggle("hide");
+    }
+
+    function toggleModalSac() {
+        modalSac.classList.toggle("hide");
+        fadeSac.classList.toggle("hide");
+    }
+    
+    // Para cada variável cria um EventListener de click e chama a função
+    [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
+        el.addEventListener("click", () => toggleModalPrivacy());
+    });
+    
+    [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
+        el.addEventListener("click", () => toggleModalTerms());
+    });
+
+    [openModalSac, closeModalSac, fadeSac].forEach((el) => {
+        el.addEventListener("click", () => toggleModalSac());
+    });
+
     return div
 }
 
