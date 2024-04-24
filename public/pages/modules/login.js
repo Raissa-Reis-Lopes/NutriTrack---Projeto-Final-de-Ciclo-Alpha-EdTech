@@ -74,6 +74,7 @@ export function loginBtns(){
     btnEnter.addEventListener("click", async () => {
             // Desativar o botão
              btnEnter.disabled = true;
+             console.log("Clicou no botão de login")
 
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -110,9 +111,15 @@ export function loginBtns(){
             });
 
             if(!checkConfig.ok){
-                showMessage("success","Para proseeguir, precisamos de apenas algumas informações!")
-                const customEvent = createCustomEvent('/config');
-                window.dispatchEvent(customEvent); 
+                btnEnter.disabled = true;
+                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!")
+
+                setTimeout(() => {                   
+                    const customEvent = createCustomEvent('/config');
+                    window.dispatchEvent(customEvent); 
+                    btnEnter.disabled = false;
+                }, 4000);
+
                 return;
             } else {
                 const customEvent = createCustomEvent('/home');
@@ -122,9 +129,6 @@ export function loginBtns(){
         
         } catch (error) {
             console.error('Erro ao fazer login:', error);
-        }  finally {
-            // Ativar o botão novamente após a conclusão do fetch
-            btnEnter.disabled = false;
-        }
+        }  
     });
 }
