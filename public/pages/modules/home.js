@@ -235,7 +235,7 @@ function openAddFoodModal(userId,item, meal) {
       console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       modalSearchFood.remove();
-      // updateMealSection();
+      updateMealSection(userId);
     } catch (error) {
       console.error("Erro ao salvar alimento:", error);
     }
@@ -248,31 +248,35 @@ function openAddFoodModal(userId,item, meal) {
   document.body.appendChild(modal); // Adiciona o modal ao body
 }
 
-// function updateMealSection() {
-//   // const dateInput = document.getElementById('date').value;
-//   // ?date=${dateInput}
+function updateMealSection(userId) {
+  // const dateInput = document.getElementById('date').value;
+  // ?date=${dateInput}
 
-//   fetch(`/api/foodAdded/byUserId/${idUser}`, {
-//     method: "GET",
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error("Erro ao obter alimentos adicionados");
-//       }
-//       return response.json();
-//     })
-//     .then((addedFoods) => {
-//       addedFoods.forEach((food) => {
-//         const mealSection = document.querySelector(`.meal_add_${food.meal}`);
-//         const newFoodElement = document.createElement("div");
-//         newFoodElement.textContent = `${food.name} - ${food.food_quantity}g`;
-//         mealSection.appendChild(newFoodElement);
-//       });
-//     })
-//     .catch((error) => {
-//       console.error("Erro ao carregar alimentos do banco de dados:", error);
-//     });
-// }
+  fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao obter alimentos adicionados");
+      }
+      return response.json();
+      
+    })
+    .then((addedFoods) => {
+      addedFoods.forEach((food) => {
+        const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+        const newFoodElement = document.createElement("div");
+        newFoodElement.textContent = `${food.name} - ${food.food_quantity}g`;
+        console.log("teste");
+        console.log(food);
+        console.log(addedFoods);
+        mealSection.appendChild(newFoodElement);
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar alimentos do banco de dados:", error);
+    });
+}
 
 // async function loadAddedFoods() {
 //   // const dateInput = document.getElementById('date').value;
