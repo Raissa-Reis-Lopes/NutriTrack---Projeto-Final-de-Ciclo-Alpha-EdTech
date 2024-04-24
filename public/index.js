@@ -13,7 +13,7 @@ window.addEventListener('onstatechange', (event) => {
     document.getElementById("root").appendChild(page);
 });
 
-const initalPath = '/';
+const initalPath =  window.location.pathname;
 const initialPage = router.getPage(initalPath);
 document.getElementById("root").appendChild(initialPage);
 
