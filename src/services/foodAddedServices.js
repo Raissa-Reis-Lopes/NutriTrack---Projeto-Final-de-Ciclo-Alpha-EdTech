@@ -9,7 +9,15 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserByDate(user_id, date);
 
         if (!foodsAdded || foodsAdded.length === 0) {
-            return ('Nenhum alimento encontrado para esta data.');
+            return {
+                totalNutrition: {
+                    calories: 0,
+                    protein: 0,
+                    carbohydrate: 0,
+                    lipid: 0
+                },
+                details: [] // Aqui você pode retornar os detalhes como um array vazio ou null, dependendo da sua implementação
+            };
         }
 
         let totalNutrition = {
@@ -100,9 +108,13 @@ const getFoodsAddedByUserId = async(id)=> {
     }
 }
 
-const newFoodAdded = async(user_id, food_id, food_quantity, meal)=> {
+const newFoodAdded = async(user_id, food_id, food_quantity, meal, date)=> {
     try {
-        const result = await foodAddedRepository.insertFoodAdded(user_id, food_id, food_quantity, meal);
+        if(!user_id){
+            throw new Error('Usuário não existe');
+        }
+        
+        const result = await foodAddedRepository.insertFoodAdded(user_id, food_id, food_quantity, meal, date);
         return result;
     } catch (error) {
         console.log(error);
@@ -110,9 +122,9 @@ const newFoodAdded = async(user_id, food_id, food_quantity, meal)=> {
     }
 }
 
-const updateFoodAdded = async(id, user_id, food_id, food_quantity, meal) => {
+const updateFoodAdded = async(user_id, food_id, date, food_quantity, meal) => {
     try {
-        const result = await foodAddedRepository.updateFoodAdded(id, user_id, food_id, food_quantity, meal);
+        const result = await foodAddedRepository.updateFoodAdded(user_id, food_id, date, food_quantity, meal );
         return result;
     } catch (error) {
         console.log(error);

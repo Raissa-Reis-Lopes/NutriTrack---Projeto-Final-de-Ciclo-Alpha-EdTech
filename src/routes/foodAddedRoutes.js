@@ -10,8 +10,13 @@ router.get('/byUserId/:id', foodAddedController.getFoodsAddedByUserId);
 //Com query /dailyConsumedWithDetail?user_id= &date=
 router.get('/dailyConsumedWithDetail', foodAddedController.calculateDailyNutritionWithDetails);
 router.get('/:id', foodAddedController.getFoodAddedById);
+
+
+
 router.post('/', foodAddedController.newFoodAdded);
-router.put('/:id', foodAddedController.updateFoodAdded);
+router.put('/', foodAddedController.updateFoodAdded);
 router.delete('/:id', foodAddedController.deleteFoodAdded);
 
 module.exports = router;
+
+
