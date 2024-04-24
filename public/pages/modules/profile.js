@@ -30,7 +30,7 @@ export function Profile() {
             <input type="file" id="input-image" accept="image/*" style="display:none;" />
             <label for="input-image">
             <div class="image-profile">
-                <img src="" alt="Imagem do usuario" />
+                <img id="img-user" src="" alt="Imagem do usuario" />
             </div>
             </label>
         </div>
@@ -190,7 +190,6 @@ export function Profile() {
 
 
     const inputImage = div.querySelector("#input-image");
-    const imgProfile = div.querySelector(".img_profile img");
 
     inputImage.addEventListener("change", uploadImage);
   
@@ -280,15 +279,16 @@ async function getUserId(){
 
 export async function uploadImage(){
         const inputImage = document.querySelector("#input-image");
-        const imgProfile = document.querySelector(".img_profile img");
+        const imgProfile = document.querySelector("#img-user"); 
+        
         const userId = await getUserId();
         const formData = new FormData();
         formData.append('avatar', inputImage.files[0]);
+        
         if (inputImage.files.length === 0) {
             console.log('Por favor, selecione uma imagem.');
             return;
         }
-        console.log(formData.get('avatar'));
 
         try {
             const response = await fetch(`/api/upload/${userId}`, {
@@ -298,34 +298,27 @@ export async function uploadImage(){
 
             const data = await response.json();
             console.log(data)
-            console.log(data.new_avatar);
+            console.log(data.success)
 
             if (data.success) {
-                imgProfile.src = `/assets/${data.new_avatar}`;
-                showMessage('Imagem atualizada com sucesso!', 'success');
+                imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
+                showMessage('success','Imagem atualizada com sucesso!', );
             } else {
-                console.log("Falha ao atualizar a imagem")
+                console.log("Falha ao atualizar a imagem");
             }
+          
         } catch (error) {
-            console.log(error)
+            throw new Error("Falha ao carregar a imagem do usuário")
         }
 }
+
 
 
 //Função para resgatar os dados dos usuários e preencher os campos dos fomulários para mostrar ao usuário
 export async function fillProfileData(){
 
     try {
-        const userInfo = await fetch("/api/login/", {
-            method: "GET",
-          });
-
-          if(!userInfo){
-            throw new Error("Falha ao tentar localizar o id do usuário")
-          }
-
-          const userData = await userInfo.json();
-          const userId = userData.user;
+        const userId = await getUserId();
 
            // Obter dados do usuário com base no ID para o form 1
            const userMainInfo = await fetch(`/api/users/${userId}`,{
@@ -337,6 +330,12 @@ export async function fillProfileData(){
            }
 
            const user = await userMainInfo.json();
+
+           const userAvatar = user.avatar_img;
+
+           const imgProfile = document.querySelector("#img-user");
+           imgProfile.src = `/assets/${userAvatar}`;
+           
 
            const userConfigInfo = await fetch(`/api/config/${userId}`,{
             method: 'GET',

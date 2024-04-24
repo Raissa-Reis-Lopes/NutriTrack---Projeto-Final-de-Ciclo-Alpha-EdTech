@@ -19,7 +19,8 @@ app.use(cookieParser());
 
 // Configura o Express para servir os arquivos estáticos da SPA
 app.use(express.static(publicPath));
-// Configura o Express para servir a pasta uploads
+
+// Configura o Express para servir a pasta uploads 
 app.use('/assets', express.static(uploadsPath));
 
 //Pode mudar depois, mas a princípio deixei assim para usar as rotas com a rota /nutritrack na frente

@@ -67,10 +67,6 @@ const uploadAvatar = async (req, res) => {
         const { user_id } = req.params;
         const new_avatar = req.file.filename;
 
-        console.log('New avatar:', new_avatar);
-        console.log('User ID:', user_id);
-        console.log('File:', req.file);
-
         // Busca e apaga a imagem atual do avatar
         const actual_avatar = await uploadServices.getActualAvatar(user_id);
 
@@ -83,7 +79,7 @@ const uploadAvatar = async (req, res) => {
         // Insere a nova imagem para o avatar
         await uploadServices.changeAvatar(user_id, new_avatar);
     
-        return res.status(200).json({ succes: true, message: 'Imagem enviada com sucesso', new_avatar });
+        return res.status(200).json({ success: true, message: 'Imagem enviada com sucesso', new_avatar });
     } catch (error) {
         console.error('Erro ao realizar upload do avatar:', error);
         return res.status(500).json({ message: 'Erro ao realizar upload do avatar', error: error.message });
@@ -106,7 +102,7 @@ const removeAvatar = async (req, res) => {
             await uploadServices.changeAvatar(user_id, default_avatar);
         }
 
-        return res.status(200).json({ succes: true, message: 'Imagem removida com sucesso', new_avatar: default_avatar });
+        return res.status(200).json({ success: true, message: 'Imagem removida com sucesso', new_avatar: default_avatar });
     } catch (error) {
         return res.status(500).json({ message: 'Erro ao remover o avatar atual', error });
     }

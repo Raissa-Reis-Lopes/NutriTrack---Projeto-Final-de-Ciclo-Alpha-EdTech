@@ -4,12 +4,32 @@
     padding: 20px;
 }
 
-.profile_pricture img {
+.profile_picture{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.image-profile{
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.image-profile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* .profile_picture img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     margin-bottom: 20px;
-}
+    
+} */
 
 .info_item {
     display: flex;
@@ -45,15 +65,3 @@
     justify-content: space-between;
 }
 
-.img_profile {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.img_profile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
