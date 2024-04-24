@@ -137,11 +137,10 @@ export function Profile() {
             <div id="fade-sac" class="hide"></div>
             <div id="modal-sac" class="hide">
                 <div class="modal-header">
-                    <h2>política de privacidade</h2>
+                    <h2>Bem vindo a central de atendimento</h2>
                     <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-sac"> 
                 </div>
                 <div class="modal-body">
-                    <h3>Bem vindo a central de atendimento!</h3>
                     <h4>Como podemos ajudá-lo?</h4>
                     <img src="../img/whatsapp.png" alt="whatsapp" />
                     <p>WhatsApp: (11) 91234-5678</p>
@@ -155,11 +154,10 @@ export function Profile() {
             <div id="fade-account" class="hide"></div>
             <div id="modal-account" class="hide">
                 <div class="modal-header">
-                    <h2>política de privacidade</h2>
+                    <h1>ATENÇÂO</h1>
                     <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-account"> 
                 </div>
                 <div id="body1" class="modal-body">
-                    <h1>ATENÇÂO!</h1>
                     <h3>Tem certeza que deseja apagar sua conta?</h3>
                     <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua  for apagada, não poderemos recuperar suas informações.</p>
                     <button id= cancelDelete class="btn_stroke">Cancelar</button>
@@ -194,7 +192,7 @@ export function Profile() {
     const modalTerms = document.querySelector("#modal-terms");
     const fadePrivacy = document.querySelector("#fade-privacy");
     const fadeTerms = document.querySelector("#fade-terms");
-    const openModalAccount = document.getElementById("open-modal-account");
+    const openModalAccount = document.getElementById("btn-delete");
     const closeModalAccount = document.getElementById("close-modal-account");
     const modalAccount = document.querySelector("#modal-account");
     const fadeAccount = document.querySelector("#fade-account");
@@ -246,7 +244,7 @@ export function Profile() {
     exclude.addEventListener("click", function() {
         document.getElementById("body1").style.display = "none";
         document.getElementById("body2").style.display = "block";
-    })
+    });
 
     return div
 }
