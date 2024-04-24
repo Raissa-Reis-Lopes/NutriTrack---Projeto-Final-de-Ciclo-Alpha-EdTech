@@ -2,6 +2,7 @@
 @import "./global/header.css";
 @import "./global/background.css";
 @import "./global/footer.css";
+@import "./global/modal.css";
 
 @import "./utilities/btns.css";
 @import "./utilities/animation.css";
