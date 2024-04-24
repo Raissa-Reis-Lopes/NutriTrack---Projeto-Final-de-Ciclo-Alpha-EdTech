@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-import {AddFood, SearchFood} from "./modals.js";
+import { AddFood, SearchFood } from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
@@ -12,6 +12,7 @@ let lipidChartInstance = null;
 export function Home() {
     const div = document.createElement("div");
     div.innerHTML=`  
+
         <header>
             <div class="logo" id="logo">
                 <a href="/home">
@@ -52,7 +53,9 @@ export function Home() {
         </div>
 
                 <div id="date">
+
                     <input type="date" name="date" id="input-date">
+
                 </div>
             </section>
             <section class="section_home">
@@ -90,21 +93,7 @@ export function Home() {
                     <div class="section_food_decoration"></div>
                     <button id="btn_add_breakfast" class="btn_stroke btn_add">Adicionar</button>
                 </div>
-                <div class="meal_add">
-                    <div class="food_card">
-                        <span>Porção de 100g</span>
-                        <div>
-                            <img src="" alt="">
-                        </div>
-                        <span>250 kcal</span>
-                        <div class="food_edit">
-                            <img src="./img/edit.svg" alt="edit">
-                            <img src="./img/trash.svg" alt="delete">
-                        </div>
-                        
-                    </div>
-                
-                </div>
+                <div class="meal_add" id="meal_add_breakfast"></div>
 
             </section>
             <section class="section_food">
@@ -113,7 +102,7 @@ export function Home() {
                     <div class="section_food_decoration"></div>
                     <button id="btn_add_lunch" class="btn_stroke btn_add">Adicionar</button>
                 </div>
-                <div class="meal_add"></div>
+                <div class="meal_add" id="meal_add_lunch"></div>
 
             </section>
             <section class="section_food">
@@ -122,7 +111,7 @@ export function Home() {
                     <div class="section_food_decoration"></div>
                     <button id="btn_add_dinner" class="btn_stroke btn_add">Adicionar</button>
                 </div>
-                <div class="meal_add"></div>
+                <div class="meal_add" id="meal_add_dinner"></div>
 
             </section>
             <section class="section_food">
@@ -131,7 +120,7 @@ export function Home() {
                     <div class="section_food_decoration"></div>
                     <button id="btn_add_snack" class="btn_stroke btn_add">Adicionar</button>
                 </div>
-                <div class="meal_add"></div>
+                <div class="meal_add" id="meal_add_snack"></div>
 
             </section>
         </div>
@@ -146,9 +135,11 @@ export function Home() {
             </div>
         </footer>
     `;
+
     document.getElementById("root").appendChild(div);
     navRoutes();
     homeBtns();
+// loadAddedFoods();
     limitDate('input-date');
 
     
@@ -344,71 +335,198 @@ function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstanc
 }
 
 
-export function navRoutes(){
-    const navProfile = document.getElementById("navProfile");
-    const navHistory = document.getElementById("navHistory");
-    const btnExit = document.getElementById("btnExit");
 
 
-    navProfile.addEventListener ("click",()=>{
-        const customEvent = createCustomEvent('/profile');
-        window.dispatchEvent(customEvent); 
-    })
+export function navRoutes() {
+  const navProfile = document.getElementById("navProfile");
+  const navHistory = document.getElementById("navHistory");
+  const btnExit = document.getElementById("btnExit");
 
-    navHistory.addEventListener ("click",()=>{
-        const customEvent = createCustomEvent('/history');
-        window.dispatchEvent(customEvent); 
-    })
+  navProfile.addEventListener("click", () => {
+    const customEvent = createCustomEvent("/profile");
+    window.dispatchEvent(customEvent);
+  });
 
-    btnExit.addEventListener ("click", logout)
+  navHistory.addEventListener("click", () => {
+    const customEvent = createCustomEvent("/history");
+    window.dispatchEvent(customEvent);
+  });
+
+  btnExit.addEventListener("click", logout);
 }
 
 export function homeBtns() {
-    const btnBreakfast = document.getElementById("btn_add_breakfast");
-    const btnLunch = document.getElementById("btn_add_lunch");
-    const btnDinner = document.getElementById("btn_add_dinner");
-    const btnSnack = document.getElementById("btn_add_snack");
+  const btnBreakfast = document.getElementById("btn_add_breakfast");
+  const btnLunch = document.getElementById("btn_add_lunch");
+  const btnDinner = document.getElementById("btn_add_dinner");
+  const btnSnack = document.getElementById("btn_add_snack");
 
-    btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
-    btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
-    btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
-    btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
-
-    // document.querySelector('.modal_img img').addEventListener('click', () => {
-    //     document.querySelector('.modal').remove();
-    // });
+  btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
+  btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
+  btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
+  btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
 }
 
-// Função para abrir o modal de pesquisa de comida
-function openModalWithMeal(meal) {
-    const modal = SearchFood();
-    const datafoodContainer = modal.getElementById("datafood");
+async function openModalWithMeal(meal) {
+  const modal = SearchFood(); // Cria o modal de pesquisa de comida
+  const modalSearchFood = modal.querySelector("#modalSearchFood");
+  const datafoodContainer = document.createElement("div");
+  let userId;
 
-    // fazer o fetch aqui
-
-    document.body.appendChild(modal); // Adiciona o modal ao body
-}
-
-// Função para abrir o modal de adicionar comida
-function openAddFoodModal(item, meal) {
-    const modal = AddFood(); // Chama a função que cria o modal de adicionar comida
-    // Define os valores no modal com base nos dados do item clicado
-    modal.querySelector("#nameFood").textContent = item.name;
-    modal.querySelector("#quantity_calories").textContent = item.calories;
-    modal.querySelector("#quantity_carb").textContent = item.carbs;
-    modal.querySelector("#quantity_proteins").textContent = item.proteins;
-    modal.querySelector("#quantity_fat").textContent = item.fat;
-    // Define a opção do select com base no meal
-    modal.querySelector("#meal").value = meal;
-
-    const btnSave = modal.querySelector(".btns_addFood button:last-child");
-    btnSave.addEventListener("click", () => {
-        const gramsInput = modal.querySelector("#grams").value;
-        const mealSelect = modal.querySelector("#meal").value;
-        console.log("Quantidade em gramas:", gramsInput);
-        console.log("Refeição selecionada:", mealSelect);
-        modal.remove(); // Fecha o modal após clicar em "Salvar"
+  try {
+    const responseFood = await fetch("/api/food", {
+      method: "GET",
     });
 
-    document.body.appendChild(modal); // Adiciona o modal ao body
+    if (!responseFood.ok) {
+      throw new Error("Falha ao tentar localizar os alimentos");
+    }
+
+    const foodList = await responseFood.json(); // Trata a resposta JSON
+    userId = await getUserId();
+    console.log(userId);
+
+    // Adiciona os alimentos à lista no modal
+    foodList.forEach((foodItem) => {
+      const foodElement = document.createElement("div");
+      foodElement.textContent = foodItem.name;
+      foodElement.addEventListener("click", () =>
+        openAddFoodModal(userId,foodItem, meal),
+      ); // Abre o modal de adicionar comida ao clicar no alimento
+      datafoodContainer.appendChild(foodElement);
+    });
+  } catch (error) {
+    console.log("Erro ao buscar alimentos:", error);
+  }
+  modal.querySelector(".modal_img img").addEventListener("click", () => {
+    document.querySelector(".modal").remove();
+  });
+  document.body.appendChild(modal); // Adiciona o modal ao body
+  modalSearchFood.appendChild(datafoodContainer);
 }
+
+function openAddFoodModal(userId,item, meal) {
+  console.log(userId);
+  const modal = AddFood(); // Cria o modal de adicionar comida
+  const modalSearchFood = SearchFood(); // Cria o modal de adicionar comida
+  // Define os valores no modal com base nos dados do item clicado
+  modal.querySelector("#nameFood").textContent = item.name;
+  // modal.querySelector("#quantity_calories").textContent = item.calories;
+  // modal.querySelector("#quantity_carb").textContent = item.carbs;
+  // modal.querySelector("#quantity_proteins").textContent = item.proteins;
+  // modal.querySelector("#quantity_fat").textContent = item.fat;
+  // Define a opção do select com base no meal
+  modal.querySelector("#meal").value = meal;
+
+  const btnSave = modal.querySelector(".btns_addFood button:last-child");
+  btnSave.addEventListener("click", async () => {
+    const gramsInput = modal.querySelector("#grams").value;
+    const mealSelect = modal.querySelector("#meal").value;
+    const dateCalendar = document.getElementById('input-date').value;
+    console.log(dateCalendar);
+    const foodId = item.id;
+    console.log(userId);
+
+    try {
+      const response = await fetch("/api/foodAdded/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+      },
+
+        body: JSON.stringify({
+          user_id: userId,
+          food_id: foodId,
+          food_quantity: gramsInput,
+          meal: mealSelect,
+          // date: dateCalendar,
+        }),
+      });
+      console.log(response);
+    
+
+      if (!response.ok) {
+        throw new Error("Erro ao salvar alimento");
+      }
+
+      console.log("Alimento salvo com sucesso!");
+      modal.remove(); // Fecha o modal após salvar
+      modalSearchFood.remove();
+      updateMealSection(userId);
+    } catch (error) {
+      console.error("Erro ao salvar alimento:", error);
+    }
+  });
+
+  modal.querySelector(".modal_img img").addEventListener("click", () => {
+    document.querySelector(".modal").remove();
+  });
+
+  document.body.appendChild(modal); // Adiciona o modal ao body
+}
+
+function updateMealSection(userId) {
+  // const dateInput = document.getElementById('date').value;
+  // ?date=${dateInput}
+
+  fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao obter alimentos adicionados");
+      }
+      return response.json();
+      
+    })
+    .then((addedFoods) => {
+      addedFoods.forEach((food) => {
+        const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+        const newFoodElement = document.createElement("div");
+        newFoodElement.textContent = `${food.name} - ${food.food_quantity}g`;
+        console.log("teste");
+        console.log(food);
+        console.log(addedFoods);
+        mealSection.appendChild(newFoodElement);
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar alimentos do banco de dados:", error);
+    });
+}
+
+// async function loadAddedFoods() {
+//   // const dateInput = document.getElementById('date').value;
+
+//   try {
+//     const response = await fetch(`/api/foodAdded`, {
+//       method: "GET",
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Erro ao obter alimentos adicionados");
+//     }
+
+//     const addedFoods = await response.json();
+
+//     if (addedFoods.length === 0) {
+//       const noFoodsMessage = document.createElement("div");
+//       noFoodsMessage.textContent = "Nenhum alimento adicionado nesta data.";
+//       const mealSection = document.querySelector(".meal_add");
+//       mealSection.appendChild(noFoodsMessage);
+//     } else {
+//       addedFoods.forEach((food) => {
+//         const mealSection = document.querySelector(`.meal_add_${food.meal}`);
+//         const newFoodElement = document.createElement("div");
+//         newFoodElement.textContent = `${food.name} - ${food.grams}g`;
+//         mealSection.appendChild(newFoodElement);
+//       });
+//     }
+
+//     console.log("Alimentos carregados do banco de dados com sucesso!");
+//   } catch (error) {
+//     console.error("Erro ao carregar alimentos do banco de dados:", error);
+//   }
+// }
+
+
