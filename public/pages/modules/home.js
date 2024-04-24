@@ -223,7 +223,6 @@ async function getUsername(userId){
 }
 
 async function loadUserDataForDate(date) {
-    console.log("Mudou a data", date);
     clearScreenValues(); // Limpa os valores da tela
     try { 
          const userId = await getUserId();

@@ -29,7 +29,9 @@ export function Profile() {
         <div class="profile_picture">
             <input type="file" id="input-image" accept="image/*" style="display:none;" />
             <label for="input-image">
-                <img src="../img/camera.png" alt="Imagem do usuario" />
+            <div class="image-profile">
+                <img src="" alt="Imagem do usuario" />
+            </div>
             </label>
         </div>
         <div class="profile_info">
@@ -182,6 +184,15 @@ export function Profile() {
     navProfile();
     limitDate("input-birth");
     //   registerBtns();
+
+
+
+
+
+    const inputImage = div.querySelector("#input-image");
+    const imgProfile = div.querySelector(".img_profile img");
+
+    inputImage.addEventListener("change", uploadImage);
   
     const openModalPrivacy = document.getElementById("open-modal-privacy");
     const openModalTerms = document.getElementById("open-modal-terms");
@@ -249,6 +260,58 @@ export function Profile() {
 }
 
 
+async function getUserId(){
+    try {
+        const getUserId = await fetch("/api/login/", {
+            method: "GET",
+        });
+
+        if(!getUserId.ok){
+            throw new Error("Falha ao localizar o id do usuáiro")
+        }
+        const userIdResponse = await getUserId.json();
+        const userId = userIdResponse.user;
+        return userId;
+
+    } catch (error) {
+        
+    }
+}
+
+export async function uploadImage(){
+        const inputImage = document.querySelector("#input-image");
+        const imgProfile = document.querySelector(".img_profile img");
+        const userId = await getUserId();
+        const formData = new FormData();
+        formData.append('avatar', inputImage.files[0]);
+        if (inputImage.files.length === 0) {
+            console.log('Por favor, selecione uma imagem.');
+            return;
+        }
+        console.log(formData.get('avatar'));
+
+        try {
+            const response = await fetch(`/api/upload/${userId}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            console.log(data)
+            console.log(data.new_avatar);
+
+            if (data.success) {
+                imgProfile.src = `/assets/${data.new_avatar}`;
+                showMessage('Imagem atualizada com sucesso!', 'success');
+            } else {
+                console.log("Falha ao atualizar a imagem")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+}
+
+
 //Função para resgatar os dados dos usuários e preencher os campos dos fomulários para mostrar ao usuário
 export async function fillProfileData(){
 
@@ -297,9 +360,9 @@ export async function fillProfileData(){
             document.getElementById("input-weight").value = escapeHtml(userConfig.weight);
             document.getElementById("input-height").value = escapeHtml(userConfig.height);
             document.getElementById("input-birth").value = escapeHtml(formattedBirthDate);
-            document.getElementById("select-gender").value = escapeHtml(userConfig.gender);
-            document.getElementById("select-activity").value = escapeHtml(userConfig.activity_level);
-            document.getElementById("select-plan").value = escapeHtml(userConfig.food_plan_id);
+            document.getElementById("select-gender").value = userConfig.gender;
+            document.getElementById("select-activity").value = userConfig.activity_level;
+            document.getElementById("select-plan").value = userConfig.food_plan_id;
 
             } catch (error) {
                 console.error(`Falha ao buscar os dados do usuário pelo id: `, error)
