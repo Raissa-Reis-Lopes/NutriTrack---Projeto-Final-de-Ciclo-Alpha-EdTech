@@ -156,14 +156,14 @@ export function Profile() {
         <section>
             <div id="fade-account" class="hide"></div>
             <div id="modal-account" class="hide">
-                <div class="modal-header">
+                <div class="modal-header" id="modal-header-delete">
                     <h2>política de privacidade</h2>
                     <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-account"> 
                 </div>
                 <div id="body1" class="modal-body">
-                    <h1>ATENÇÂO!</h1>
+                    <h1>ATENÇÃO!</h1>
                     <h3>Tem certeza que deseja apagar sua conta?</h3>
-                    <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua  for apagada, não poderemos recuperar suas informações.</p>
+                    <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua conta for apagada, não poderemos recuperar suas informações.</p>
                     <button id= cancelDelete class="btn_stroke">Cancelar</button>
                     <button id="deleteAccount" class="btn_stroke">Confirmar</button>
                 </div>
@@ -177,6 +177,7 @@ export function Profile() {
             <span>all rights reserved</span>
             <span id="open-modal-terms">termos de uso</span>
             <span id="open-modal-privacy">política de privacidade</span>
+            <span id="open-modal-sac">Posso Ajudar?</span>
         </div>
     </footer>
   `;
@@ -186,16 +187,23 @@ export function Profile() {
     fillProfileData();
     navProfile();
     limitDate("input-birth");
+    createModalEvents();
     //   registerBtns();
 
-
-
-
-
+    //Adicionar um ouvinte de evento no input do Image para fazer o upload da foto
     const inputImage = div.querySelector("#input-image");
-
     inputImage.addEventListener("change", uploadImage);
-  
+
+    //Adicionar um ouvinte de evento para deletar a conta do usuário
+    const btnDelete = document.getElementById('deleteAccount');
+    btnDelete.addEventListener('click', deleteAccount)
+
+    return div
+}
+
+
+
+function createModalEvents(){
     const openModalPrivacy = document.getElementById("open-modal-privacy");
     const openModalTerms = document.getElementById("open-modal-terms");
     const closeModalPrivacy = document.getElementById("close-modal-privacy");
@@ -204,7 +212,7 @@ export function Profile() {
     const modalTerms = document.querySelector("#modal-terms");
     const fadePrivacy = document.querySelector("#fade-privacy");
     const fadeTerms = document.querySelector("#fade-terms");
-    const openModalAccount = document.getElementById("open-modal-account");
+    const openModalAccount = document.getElementById("btn-delete");
     const closeModalAccount = document.getElementById("close-modal-account");
     const modalAccount = document.querySelector("#modal-account");
     const fadeAccount = document.querySelector("#fade-account");
@@ -212,7 +220,6 @@ export function Profile() {
     const closeModalSac = document.getElementById("close-modal-sac");
     const modalSac = document.querySelector("#modal-sac");
     const fadeSac = document.querySelector("#fade-sac");
-    const exclude = document.getElementById("deleteAccount");
     const cancel = document.getElementById("cancelDelete");
     
     // adiciona ou remove a classe "hide"
@@ -252,13 +259,6 @@ export function Profile() {
     [openModalSac, closeModalSac, fadeSac].forEach((el) => {
         el.addEventListener("click", () => toggleModalSac());
     });
-
-    exclude.addEventListener("click", function() {
-        document.getElementById("body1").style.display = "none";
-        document.getElementById("body2").style.display = "block";
-    })
-
-    return div
 }
 
 
@@ -627,12 +627,19 @@ export function navProfile(){
     const navHome = document.getElementById("navHome");
     const navHistory = document.getElementById("navHistory");
     const btnExit = document.getElementById("btnExit");
+    const logo = document.getElementById("logo");
  
 
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/home');
+        window.dispatchEvent(customEvent); 
+        window.location.reload();
+    })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
+        window.location.reload();
     })
 
     navHistory.addEventListener ("click",()=>{
@@ -644,9 +651,36 @@ export function navProfile(){
    
 }
 
-export function deleteAccount(){
-    //Falta fazer a lógica para deletar a conta
-    const btnDelete = document.getElementById('btn-delete');
+export async function deleteAccount(){  
+    console.log("Chegou aqui na função delete!");
+    try {
+        const userId = await getUserId();
+        
+        const deleteResponse = await fetch(`/api/users/${userId}`,{
+            method: 'DELETE'
+        })
 
+        if (!deleteResponse.ok) {
+            throw new Error('Falha ao excluir o usuário');
+        }
+    
+        document.getElementById("modal-header-delete").style.display = "none";
+        document.getElementById("body1").style.display = "none";
+        document.getElementById("body2").style.display = "block";
+        
+        const responseData = await deleteResponse.json();       
+        console.log('Usuário excluído com sucesso:', responseData);
+
+
+        // Espera 2 segundos antes de redirecionar para a página inicial
+        setTimeout(() => {
+            const customEvent = createCustomEvent('/');
+            window.dispatchEvent(customEvent);
+        }, 2000);
+
+
+    } catch (error) {
+        console.log("Falha ao deletar o usuário",error.message)
+    }
 
 }
