@@ -178,6 +178,7 @@ function clearScreenValues() {
     document.getElementById('consumed-protein').innerText = 0;
     document.getElementById('consumed-carbo').innerText = 0;
     document.getElementById('consumed-lipid').innerText = 0;
+    document.getElementById("remaining-calories").innerText ="Você ainda pode ingerir 0 calorias!" ;
 
     // Limpa a barra de progresso
     const progressBar = document.getElementById('calories-progress');
