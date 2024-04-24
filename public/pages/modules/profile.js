@@ -165,6 +165,9 @@ export function Profile() {
                     <button id= cancelDelete class="btn_stroke">Cancelar</button>
                     <button id="deleteAccount" class="btn_stroke">Confirmar</button>
                 </div>
+                <div id="body2" class="modal-body">
+                    <h1>Conta excluída com sucesso!</h1>
+                </div>
             </div>
         </section>
     <footer>
