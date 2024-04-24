@@ -9,7 +9,15 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserByDate(user_id, date);
 
         if (!foodsAdded || foodsAdded.length === 0) {
-            return ('Nenhum alimento encontrado para esta data.');
+            return {
+                totalNutrition: {
+                    calories: 0,
+                    protein: 0,
+                    carbohydrate: 0,
+                    lipid: 0
+                },
+                details: [] // Aqui você pode retornar os detalhes como um array vazio ou null, dependendo da sua implementação
+            };
         }
 
         let totalNutrition = {
