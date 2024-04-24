@@ -72,6 +72,8 @@ export function loginBtns(){
     }
 
     btnEnter.addEventListener("click", async () => {
+            // Desativar o botão
+             btnEnter.disabled = true;
 
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -120,6 +122,9 @@ export function loginBtns(){
         
         } catch (error) {
             console.error('Erro ao fazer login:', error);
+        }  finally {
+            // Ativar o botão novamente após a conclusão do fetch
+            btnEnter.disabled = false;
         }
     });
 }

@@ -5,7 +5,7 @@ export function generateDonutChart(title, totalValue, consumedValue, chartId, co
   
   const ctx = canvas.getContext('2d');
 
-  new Chart(ctx, {
+  const chartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: ['Consumido', 'Restante'],
@@ -37,7 +37,26 @@ export function generateDonutChart(title, totalValue, consumedValue, chartId, co
       }
     }
   });
+
+  console.log(`Esse é o totalValue na função do donut ${totalValue}`)
+  console.log(`Esse é o consumedValue na função do donut ${consumedValue}`)
+
+  // Retornar a instância do gráfico para armazenamento
+  return { chartInstance, canvas };
+
+  //   // Armazenar a instância do gráfico para atualizações futuras
+  //   if (title === 'Proteína') proteinChartInstance = chartInstance;
+  //   if (title === 'Carboidrato') carboChartInstance = chartInstance;
+  //   if (title === 'Gordura') lipidChartInstance = chartInstance;
   
-  const chartContainer = document.getElementById(chartId);
-  chartContainer.appendChild(canvas);
+  // const chartContainer = document.getElementById(chartId);
+  // chartContainer.appendChild(canvas);
+}
+
+export function updateCharts(chart, title, totalValue, consumedValue, color, backgroundColor) {
+  chart.data.datasets[0].data = [consumedValue, totalValue - consumedValue];
+  chart.data.datasets[0].backgroundColor = [color, backgroundColor];
+  chart.data.datasets[0].borderColor = [color, backgroundColor];
+  chart.options.plugins.title.text = title;
+  chart.update();
 }

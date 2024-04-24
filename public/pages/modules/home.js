@@ -2,9 +2,12 @@ import createCustomEvent from "./event.js";
 import {AddFood, SearchFood} from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
-import { generateDonutChart } from '../utils/donutchart.js';
+import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
 
+let proteinChartInstance = null;
+let carboChartInstance = null;
+let lipidChartInstance = null;
 
 export function Home() {
     const div = document.createElement("div");
@@ -41,7 +44,7 @@ export function Home() {
             </main>
             <section class="section_home">
             <div class="calories_eat">
-            <p><span id="remaining-calories"></span> calorias!</p>
+            <p><span id="remaining-calories"></span></p>
             <div class="calories_bar">
                 <div class="calories_progress" id="calories-progress"></div>
             </div>
@@ -54,7 +57,7 @@ export function Home() {
             </section>
             <section class="section_home">
             <div class="chart-container">
-                <span class="span_green ">Proteínas</span>
+                <span class="span_green ">Proteínas (g)</span>
                 <div>
                     <div class="chart" id="protein-chart"></div>
                     </div>
@@ -63,7 +66,7 @@ export function Home() {
                     </div>
             </div> 
             <div class="chart-container">
-                <span class="span_green ">Carboidratos</span>
+                <span class="span_green ">Carboidratos (g)</span>
                 <div>
                     <div class="chart" id="carbo-chart"></div>
                     </div>
@@ -72,7 +75,7 @@ export function Home() {
                     </div>
             </div>             
             <div class="chart-container">
-                <span class="span_green ">Gorduras</span>
+                <span class="span_green ">Gorduras (g)</span>
                 <div>
                     <div class="chart" id="lipid-chart"></div>
                     </div>
@@ -148,14 +151,16 @@ export function Home() {
     homeBtns();
     limitDate('input-date');
 
+    
     const currentDate = new Date(); // Obtém a data atual
+    currentDate.setMinutes(currentDate.getMinutes() - currentDate.getTimezoneOffset()); // Ajusta para UTC
     const currentDateString = currentDate.toISOString().split('T')[0]; // Formata a data para o formato do input date
     const inputDate = document.getElementById('input-date');
     inputDate.value = currentDateString; // Define a data atual no input
 
     loadUserDataForDate(currentDateString); // Carrega os dados do dia atual
 
-    inputDate.addEventListener('change', function() {
+    inputDate.addEventListener("change", function() {
         const selectedDate = inputDate.value;
         loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
     });
@@ -163,29 +168,72 @@ export function Home() {
     return div
 }
 
-async function loadUserDataForDate(date) {
-    try { 
+function clearScreenValues() {
+    // Limpa os valores do usuário
+    document.getElementById('total-calories').innerText = 0;
+    document.getElementById('total-protein').innerText = 0;
+    document.getElementById('total-carbo').innerText = 0;
+    document.getElementById('total-lipid').innerText = 0;
+    document.getElementById('consumed-calories').innerText = 0;
+    document.getElementById('consumed-protein').innerText = 0;
+    document.getElementById('consumed-carbo').innerText = 0;
+    document.getElementById('consumed-lipid').innerText = 0;
+
+    // Limpa a barra de progresso
+    const progressBar = document.getElementById('calories-progress');
+    progressBar.style.width = '0%';
+}
+
+async function getUserId(){
+    try {
         const getUserId = await fetch("/api/login/", {
             method: "GET",
         });
+
+        if(!getUserId.ok){
+            throw new Error("Falha ao localizar o id do usuáiro")
+        }
+        const userIdResponse = await getUserId.json();
+        const userId = userIdResponse.user;
+        return userId;
+
+    } catch (error) {
         
-        if(getUserId.ok){
-            const userIdResponse = await getUserId.json();
-            const userId = userIdResponse.user;
+    }
+}
 
-            const getUsername = await fetch(`/api/users/${userId}`,{
-                method: "GET",
-            });
+async function getUsername(userId){
+    try {
+        const getUsername = await fetch(`/api/users/${userId}`,{
+            method: "GET",
+        });
 
-            if(!getUsername.ok){
-                throw new Error("Erro ao localizar o usuário pelo id"); 
-            }
+        if(!getUsername.ok){
+            throw new Error("Erro ao localizar o nome do usuário pelo id"); 
+        }
 
-            const userData = await getUsername.json();
-            console.log(userData);
+        const userData = await getUsername.json();
 
-            const username = document.getElementById('username');
-            username.innerText = userData.username;
+        const username = userData.username;
+
+        return username;
+    } catch (error) {
+        
+    }
+}
+
+async function loadUserDataForDate(date) {
+    console.log("Mudou a data", date);
+    clearScreenValues(); // Limpa os valores da tela
+    try { 
+         const userId = await getUserId();
+
+        if(userId){
+
+            const username = await getUsername(userId);
+
+            const usernameElement = document.getElementById('username');
+            usernameElement.innerText = username;
 
             const userAndDate = {
                 user_id: userId,
@@ -226,54 +274,14 @@ async function loadUserDataForDate(date) {
                 method: "GET",
             });
 
-            if(!getDailyConsumed.ok){
-                throw new Error("Erro ao localizar os alimentos adicionados pelo usuário"); 
-            }
+            const userDailyConsumed = await getDailyConsumed.json();     
+               
+            const totalNutrition = userDailyConsumed.data.totalNutrition;
 
-            const userDailyConsumed = await getDailyConsumed.json();
-
-            if (!userDailyConsumed.data.totalNutrition) {
-                const consumedProtein = document.getElementById("consumed-protein");
-                const consumedCarbo = document.getElementById("consumed-carbo");
-                const consumedLipid = document.getElementById("consumed-lipid");
-                const consumedCalories = document.getElementById('consumed-calories');
-                const remainingCalories = document.getElementById("remaining-calories");
-                const progressBar = document.getElementById('calories-progress');
-    
-                consumedProtein.innerText = '0';
-                consumedCarbo.innerText = '0';
-                consumedLipid.innerText = '0';
-                consumedCalories.innerText = '0';
-    
-                const userTotalCalories = userDailyGoal.data.total_calories;
-                const totalCalorie = document.getElementById('total-calories');
-                totalCalorie.innerText = userTotalCalories;
-    
-                let message = `Você ainda pode ingerir ${userTotalCalories} calorias!`;
-                remainingCalories.innerText = message;
-    
-                progressBar.style.backgroundColor = '#4caf50'; // Cor verde
-                progressBar.style.width = '0%';
-    
-                clearDonutCharts()
-
-                generateDonutChart('Proteína', userTotalProtein, dailyProteinConsumed, 'protein-chart',"#E96001","#F5B689");
-                generateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, 'carbo-chart',"#FF0DE5","#FF9CF5");
-                generateDonutChart('Gorduras',  userTotalLipid, dailyLipidConsumed, 'lipid-chart',"#1E1BFF","#A9A8F8");
-
-                return;
-            }
-
-            console.log(userDailyConsumed);
-            console.log(userDailyConsumed.data.totalNutrition);
-            console.log(userDailyConsumed.data.totalNutrition.protein);
-            
-
-            const dailyCaloriesConsumed = Math.ceil(userDailyConsumed.data.totalNutrition.calories);
-            const dailyProteinConsumed = Math.ceil(userDailyConsumed.data.totalNutrition.protein);
-            const dailyCarbohydrateConsumed = Math.ceil(userDailyConsumed.data.totalNutrition.carbohydrate);
-            const dailyLipidConsumed = Math.ceil(userDailyConsumed.data.totalNutrition.lipid);
-
+            const dailyCaloriesConsumed = Math.ceil(totalNutrition.calories) || 0;
+            const dailyProteinConsumed = Math.ceil(totalNutrition.protein)  || 0; 
+            const dailyCarbohydrateConsumed = Math.ceil(totalNutrition.carbohydrate)  || 0;
+            const dailyLipidConsumed = Math.ceil(totalNutrition.lipid)  || 0;
 
             const consumedProtein = document.getElementById("consumed-protein");
             consumedProtein.innerText = dailyProteinConsumed;
@@ -288,12 +296,8 @@ async function loadUserDataForDate(date) {
             consumedCalories.innerText = dailyCaloriesConsumed;
 
 
-            //Para fazer a barrinha de consumo de calorias:
-            // const consumedCaloriesValue = dailyCaloriesConsumed;
+            //Para fazer aquela barrinha de consumo de calorias:
             const remainingCaloriesValue = userTotalCalories - dailyCaloriesConsumed;
-
-            // const consumedCalories = document.getElementById('consumed-calories');
-            // consumedCalories.innerText = consumedCaloriesValue;
 
             const remainingCalories = document.getElementById("remaining-calories");
             let message = `Você ainda pode ingerir ${remainingCaloriesValue} calorias!`;
@@ -306,58 +310,39 @@ async function loadUserDataForDate(date) {
 
             // Verifica se ultrapassou a quantidade total diária permitida
             if (dailyCaloriesConsumed > totalCalories) {
-                progressBar.style.backgroundColor = '#f44336'; // Cor vermelha
-                consumedPercent = 100; // Define a barra para 100% caso ultrapasse
+                progressBar.style.backgroundColor = '#f44336'; 
+                consumedPercent = 100; 
                 const exceededCalories = dailyCaloriesConsumed - totalCalories;
                 message = `Você ultrapassou ${exceededCalories} calorias`;
             } else {
-                progressBar.style.backgroundColor = '#4caf50'; // Cor verde
+                progressBar.style.backgroundColor = '#4caf50'; 
             }
 
             progressBar.style.width = consumedPercent + '%';
-
-            // Atualiza a mensagem de calorias restantes ou excedentes
             remainingCalories.innerText = message;
 
-            // const consumedCaloriesValue = dailyCaloriesConsumed; // Já que você já arredondou para cima
-            // const remainingCaloriesValue = userTotalCalories - consumedCaloriesValue;
 
-            // // Atualizar a barra de progresso
-            // const progressBar = document.getElementById('calories-progress');
-            // const totalCalories = userTotalCalories;
-            // const consumedPercent = (consumedCaloriesValue / totalCalories) * 100;
-
-            // progressBar.style.width = consumedPercent + '%';
-
-
-
-            clearDonutCharts()
-
-
-            generateDonutChart('Proteína', userTotalProtein, dailyProteinConsumed, 'protein-chart',"#E96001","#F5B689");
-            generateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, 'carbo-chart',"#FF0DE5","#FF9CF5");
-            generateDonutChart('Gorduras',  userTotalLipid, dailyLipidConsumed, 'lipid-chart',"#1E1BFF","#A9A8F8");
-            //         // Atualizando os gráficos donut
-            //  updateDonutChart('Proteína', userTotalProtein, 'protein-chart');
-            //  updateDonutChart('Carboidratos', userTotalCarbo, 'carbo-chart');
-            //  updateDonutChart('Gorduras', userTotalLipid, 'lipid-chart');
- 
+            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', "#E96001", "#F5D8C4");
+            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', "#FF0DE5", "#FACFF6");
+            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', "#1E1BFF", "#D9D8F7");
 
         }
     } catch(error) {
-        showMessage("fail","Não há dados cadastrados para a data selecionada");
+        showMessage("fail","Não há alimentos cadastrados para a data selecionada");
     }
 }
 
-function clearDonutCharts() {
-    const proteinChart = document.getElementById('protein-chart');
-    const carboChart = document.getElementById('carbo-chart');
-    const lipidChart = document.getElementById('lipid-chart');
-
-    proteinChart.innerHTML = '';  // Remove o conteúdo interno do gráfico
-    carboChart.innerHTML = '';    // Remove o conteúdo interno do gráfico
-    lipidChart.innerHTML = '';     // Remove o conteúdo interno do gráfico
+function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstance, chartElementId, color, bgColor) {
+    if (!chartInstance) {
+        const { chartInstance: newChartInstance, canvas } = generateDonutChart(title, totalValue, consumedValue, chartElementId, color, bgColor);
+        document.getElementById(chartElementId).appendChild(canvas);
+        return newChartInstance; 
+    } else {
+        updateCharts(chartInstance, title, totalValue, consumedValue, color, bgColor);
+        return chartInstance;  
+    }
 }
+
 
 export function navRoutes(){
     const navProfile = document.getElementById("navProfile");
