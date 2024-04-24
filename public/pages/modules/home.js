@@ -30,9 +30,9 @@ export function Home() {
         <div class="container_home">
             <main class="main_home">
                 <div class="welcome_message">
-                    <div class="img_profile">
-                        <img src="" alt="">
-                    </div>
+                <div class="img_profile">
+                    <img id="img-user" src="" alt="Imagem do usuario" />
+                </div>
                     <div class="user_welcome">
                         <h1>Olá, <span id="username"></span></h1>
                         <p>Animado? Hoje é um novo dia de transformação!</p>
@@ -222,6 +222,26 @@ async function getUsername(userId){
     }
 }
 
+async function getUserAvatar(userId){
+    try {
+        const getUserAvatar = await fetch(`/api/users/${userId}`,{
+            method: "GET",
+        });
+
+        if(!getUserAvatar.ok){
+            throw new Error("Erro ao localizar a foto do usuário pelo id"); 
+        }
+
+        const userData = await getUserAvatar.json();
+
+        const avatar = userData.avatar_img;
+
+        return avatar;
+    } catch (error) {
+        
+    }
+}
+
 async function loadUserDataForDate(date) {
     clearScreenValues(); // Limpa os valores da tela
     try { 
@@ -233,6 +253,12 @@ async function loadUserDataForDate(date) {
 
             const usernameElement = document.getElementById('username');
             usernameElement.innerText = username;
+
+            const userAvatar = await getUserAvatar(userId);
+
+           // Pegar o local onde está a imagem do usuário na home
+            const imgHome = document.querySelector("#img-user");
+            imgHome.src = `/assets/${userAvatar}`;
 
             const userAndDate = {
                 user_id: userId,

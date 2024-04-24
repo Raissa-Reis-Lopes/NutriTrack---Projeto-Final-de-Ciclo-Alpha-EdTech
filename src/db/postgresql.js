@@ -14,7 +14,6 @@ async function connectToDatabase(){
 
     try{
         await pool.connect();
-        console.log('Conexão bem sucedida!');
         return pool;
     }catch(error){
         console.log('Erro de conexão:', error);

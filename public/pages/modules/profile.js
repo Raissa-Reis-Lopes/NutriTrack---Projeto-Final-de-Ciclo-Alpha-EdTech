@@ -300,9 +300,7 @@ export async function uploadImage(){
             });
 
             const data = await response.json();
-            console.log(data)
-            console.log(data.success)
-
+            
             if (data.success) {
                 imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
                 showMessage('success','Imagem atualizada com sucesso!', );
