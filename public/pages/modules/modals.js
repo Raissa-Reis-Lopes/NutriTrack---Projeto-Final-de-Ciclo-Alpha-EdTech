@@ -3,11 +3,12 @@ import createCustomEvent from "./event.js";
 export function SearchFood(){
     const divModal = document.createElement("div");
     divModal.innerHTML=`  
-    <div class="modal">
+    <div id="modalSearchFood" class="modal">
         <div class="modal_img">
             <img src="../img/go_back.svg" alt="Voltar">
         </div>
         <div class="container_modal">
+    
             <div id="showFoods" class="foodSearch">
                 Tudo
             </div>
