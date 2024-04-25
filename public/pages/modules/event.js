@@ -1,10 +1,10 @@
 function createCustomEvent(path) {
-    const event = new CustomEvent("onstatechange", {
+    const customEvent = new CustomEvent("onstatechange", {
       detail: {
         path: path,
       },
     });
-    return event;
+    return customEvent;
   }
   
   export default createCustomEvent;
