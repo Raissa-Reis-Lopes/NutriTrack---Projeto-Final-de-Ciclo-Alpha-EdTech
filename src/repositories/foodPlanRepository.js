@@ -18,9 +18,7 @@ async function getAllPlans(){
     } catch (error) {
         console.log('Falha ao pegar os dados dos planos alimentares');
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function getPlanById(id){
@@ -32,9 +30,7 @@ async function getPlanById(id){
     } catch (error) {
         console.log('Plano alimentar não encontrado!', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 

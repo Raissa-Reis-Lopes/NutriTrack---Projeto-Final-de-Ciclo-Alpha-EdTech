@@ -9,8 +9,6 @@ async function getFoods(){
     } catch (error) {
         console.log('Falha ao pegar os dados dos alimentos', error);
         throw error;
-    }finally{
-        pool.end();
     }
 }
 
@@ -23,8 +21,6 @@ async function getUserFoods(user_id){
     } catch (error) {
         console.log('Falha ao pegar os dados dos alimentos', error);
         throw error;
-    }finally{
-        pool.end();
     }
 }
 
@@ -37,9 +33,7 @@ async function getFoodById(id) {
     } catch (error) {
         console.log('Alimento não encontrado!', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function 
@@ -55,7 +49,7 @@ getFoodNameById(food_id) {
     }
 }
 
-
+//Depois mudar a lógica para deixar o usuário definir o tamanho da porção
 async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
     const pool = await connectToDatabase();
     const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES($1, $2, $3, $4, $5, $6)';
@@ -66,9 +60,7 @@ async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g,
     } catch (error) {
         console.log('Erro ao criar alimento do usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
@@ -81,9 +73,7 @@ async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protei
     } catch (error) {
         console.log('Erro ao atualizar alimento do usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function deleteUserFood(id){
@@ -95,9 +85,7 @@ async function deleteUserFood(id){
     } catch (error) {
         console.log('Erro ao deletar o alimento!', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 module.exports = {

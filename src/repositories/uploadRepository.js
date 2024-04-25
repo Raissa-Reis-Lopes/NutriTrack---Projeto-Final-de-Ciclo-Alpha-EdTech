@@ -8,9 +8,7 @@ async function changeAvatar (user_id, new_avatar) {
     } catch (error) {
         console.log('Erro ao atualizar o avatar do usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 async function getActualAvatar (user_id) {
@@ -22,9 +20,7 @@ async function getActualAvatar (user_id) {
     } catch (error) {
         console.log('Erro ao encontrar o avatar do usuário', error);
         throw error;
-    } finally{
-        pool.end();
-    }
+    } 
 }
 
 module.exports = {
