@@ -1,13 +1,14 @@
-import createCustomEvent from "./event.js";
+// import createCustomEvent from "./event.js";
 
 export function SearchFood(){
     const divModal = document.createElement("div");
     divModal.innerHTML=`  
-    <div class="modal">
+    <div id="modalSearchFood" class="modal">
         <div class="modal_img">
-            <img src="../img/go_back.svg" alt="Voltar">
+            <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
         </div>
         <div class="container_modal">
+    
             <div id="showFoods" class="foodSearch">
                 Tudo
             </div>
@@ -30,7 +31,7 @@ export function AddFood(){
     divModal.innerHTML=`  
     <div class="modal">
         <div class="modal_img">
-            <img src="../img/go_back.svg" alt="Voltar">
+            <img src="../img/go_back.svg" alt="Voltar" id="back_modal_addFood">
         </div>
         <div class="container_modal">
             <h2 id="nameFood" class="foodName">
@@ -72,8 +73,8 @@ export function AddFood(){
             </div>
         </div>
         <div class="btns_addFood">
-            <button id="btn_cancel" class="btn_stroke">Cancelar</button>
-            <button class="btn_stroke">Salvar</button>
+            <button id="btn_cancel_addFood" class="btn_stroke">Cancelar</button>
+            <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
         </div>
     </div>
     `;

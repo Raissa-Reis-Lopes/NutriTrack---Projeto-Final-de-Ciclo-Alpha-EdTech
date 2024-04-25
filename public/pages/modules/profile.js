@@ -29,7 +29,9 @@ export function Profile() {
         <div class="profile_picture">
             <input type="file" id="input-image" accept="image/*" style="display:none;" />
             <label for="input-image">
-                <img src="../img/camera.png" alt="Imagem do usuario" />
+            <div class="image-profile">
+                <img id="img-user" src="" alt="Imagem do usuario" />
+            </div>
             </label>
         </div>
         <div class="profile_info">
@@ -159,7 +161,7 @@ export function Profile() {
                 </div>
                 <div id="body1" class="modal-body">
                     <h3>Tem certeza que deseja apagar sua conta?</h3>
-                    <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua  for apagada, não poderemos recuperar suas informações.</p>
+                    <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua conta for apagada, não poderemos recuperar suas informações.</p>
                     <button id= cancelDelete class="btn_stroke">Cancelar</button>
                     <button id="deleteAccount" class="btn_stroke">Confirmar</button>
                 </div>
@@ -173,6 +175,7 @@ export function Profile() {
             <span>all rights reserved</span>
             <span id="open-modal-terms">termos de uso</span>
             <span id="open-modal-privacy">política de privacidade</span>
+            <span id="open-modal-sac">Posso Ajudar?</span>
         </div>
     </footer>
   `;
@@ -182,8 +185,23 @@ export function Profile() {
     fillProfileData();
     navProfile();
     limitDate("input-birth");
+    createModalEvents();
     //   registerBtns();
-  
+
+    //Adicionar um ouvinte de evento no input do Image para fazer o upload da foto
+    const inputImage = div.querySelector("#input-image");
+    inputImage.addEventListener("change", uploadImage);
+
+    //Adicionar um ouvinte de evento para deletar a conta do usuário
+    const btnDelete = document.getElementById('deleteAccount');
+    btnDelete.addEventListener('click', deleteAccount)
+
+    return div
+}
+
+
+
+function createModalEvents(){
     const openModalPrivacy = document.getElementById("open-modal-privacy");
     const openModalTerms = document.getElementById("open-modal-terms");
     const closeModalPrivacy = document.getElementById("close-modal-privacy");
@@ -200,7 +218,6 @@ export function Profile() {
     const closeModalSac = document.getElementById("close-modal-sac");
     const modalSac = document.querySelector("#modal-sac");
     const fadeSac = document.querySelector("#fade-sac");
-    const exclude = document.getElementById("deleteAccount");
     const cancel = document.getElementById("cancelDelete");
     
     // adiciona ou remove a classe "hide"
@@ -248,22 +265,67 @@ export function Profile() {
 
     return div
 }
+}
+
+
+async function getUserId(){
+    try {
+        const getUserId = await fetch("/api/login/", {
+            method: "GET",
+        });
+
+        if(!getUserId.ok){
+            throw new Error("Falha ao localizar o id do usuáiro")
+        }
+        const userIdResponse = await getUserId.json();
+        const userId = userIdResponse.user;
+        return userId;
+
+    } catch (error) {
+        
+    }
+}
+
+export async function uploadImage(){
+        const inputImage = document.querySelector("#input-image");
+        const imgProfile = document.querySelector("#img-user"); 
+        
+        const userId = await getUserId();
+        const formData = new FormData();
+        formData.append('avatar', inputImage.files[0]);
+        
+        if (inputImage.files.length === 0) {
+            console.log('Por favor, selecione uma imagem.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/upload/${userId}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
+                showMessage('success','Imagem atualizada com sucesso!', );
+            } else {
+                console.log("Falha ao atualizar a imagem");
+            }
+          
+        } catch (error) {
+            throw new Error("Falha ao carregar a imagem do usuário")
+        }
+}
+
 
 
 //Função para resgatar os dados dos usuários e preencher os campos dos fomulários para mostrar ao usuário
 export async function fillProfileData(){
 
     try {
-        const userInfo = await fetch("/api/login/", {
-            method: "GET",
-          });
-
-          if(!userInfo){
-            throw new Error("Falha ao tentar localizar o id do usuário")
-          }
-
-          const userData = await userInfo.json();
-          const userId = userData.user;
+        const userId = await getUserId();
 
            // Obter dados do usuário com base no ID para o form 1
            const userMainInfo = await fetch(`/api/users/${userId}`,{
@@ -275,6 +337,12 @@ export async function fillProfileData(){
            }
 
            const user = await userMainInfo.json();
+
+           const userAvatar = user.avatar_img;
+
+           const imgProfile = document.querySelector("#img-user");
+           imgProfile.src = `/assets/${userAvatar}`;
+           
 
            const userConfigInfo = await fetch(`/api/config/${userId}`,{
             method: 'GET',
@@ -298,9 +366,9 @@ export async function fillProfileData(){
             document.getElementById("input-weight").value = escapeHtml(userConfig.weight);
             document.getElementById("input-height").value = escapeHtml(userConfig.height);
             document.getElementById("input-birth").value = escapeHtml(formattedBirthDate);
-            document.getElementById("select-gender").value = escapeHtml(userConfig.gender);
-            document.getElementById("select-activity").value = escapeHtml(userConfig.activity_level);
-            document.getElementById("select-plan").value = escapeHtml(userConfig.food_plan_id);
+            document.getElementById("select-gender").value = userConfig.gender;
+            document.getElementById("select-activity").value = userConfig.activity_level;
+            document.getElementById("select-plan").value = userConfig.food_plan_id;
 
             } catch (error) {
                 console.error(`Falha ao buscar os dados do usuário pelo id: `, error)
@@ -565,12 +633,19 @@ export function navProfile(){
     const navHome = document.getElementById("navHome");
     const navHistory = document.getElementById("navHistory");
     const btnExit = document.getElementById("btnExit");
+    const logo = document.getElementById("logo");
  
 
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/home');
+        window.dispatchEvent(customEvent); 
+        window.location.reload();
+    })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
+        window.location.reload();
     })
 
     navHistory.addEventListener ("click",()=>{
@@ -582,9 +657,36 @@ export function navProfile(){
    
 }
 
-export function deleteAccount(){
-    //Falta fazer a lógica para deletar a conta
-    const btnDelete = document.getElementById('btn-delete');
+export async function deleteAccount(){  
+    console.log("Chegou aqui na função delete!");
+    try {
+        const userId = await getUserId();
+        
+        const deleteResponse = await fetch(`/api/users/${userId}`,{
+            method: 'DELETE'
+        })
 
+        if (!deleteResponse.ok) {
+            throw new Error('Falha ao excluir o usuário');
+        }
+    
+        document.getElementById("modal-header-delete").style.display = "none";
+        document.getElementById("body1").style.display = "none";
+        document.getElementById("body2").style.display = "block";
+        
+        const responseData = await deleteResponse.json();       
+        console.log('Usuário excluído com sucesso:', responseData);
+
+
+        // Espera 2 segundos antes de redirecionar para a página inicial
+        setTimeout(() => {
+            const customEvent = createCustomEvent('/');
+            window.dispatchEvent(customEvent);
+        }, 2000);
+
+
+    } catch (error) {
+        console.log("Falha ao deletar o usuário",error.message)
+    }
 
 }

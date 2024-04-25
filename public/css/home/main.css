@@ -9,11 +9,18 @@
   gap: 20px;
 }
 .img_profile{
-  width: 125px;
-  height: 125px;
+  max-width: 125px;
+  max-height: 125px;
   border-radius: 50%;
-  background-color: var(--cor-p0);
+  overflow: hidden;
 }
+
+.img_profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 .user_welcome{
   display: flex;

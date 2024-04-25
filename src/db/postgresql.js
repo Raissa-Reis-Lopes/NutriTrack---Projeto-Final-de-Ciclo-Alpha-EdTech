@@ -1,4 +1,5 @@
 require('dotenv').config();
+// console.log('Senha do banco de dados:', process.env.DB_PASSWORD);
 const { Pool } = require('pg');
 
 async function connectToDatabase(){
@@ -14,7 +15,6 @@ async function connectToDatabase(){
 
     try{
         await pool.connect();
-        console.log('Conexão bem sucedida!');
         return pool;
     }catch(error){
         console.log('Erro de conexão:', error);
