@@ -633,13 +633,11 @@ export function navProfile(){
     logo.addEventListener("click", ()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
-        window.location.reload();
     })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
-        window.location.reload();
     })
 
     navHistory.addEventListener ("click",()=>{

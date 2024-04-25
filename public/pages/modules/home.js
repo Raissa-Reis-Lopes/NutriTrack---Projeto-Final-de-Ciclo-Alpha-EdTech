@@ -376,10 +376,16 @@ export function navRoutes() {
 
   navProfile.addEventListener("click", () => {
     const customEvent = createCustomEvent("/profile");
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
     window.dispatchEvent(customEvent);
   });
 
   navHistory.addEventListener("click", () => {
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
     const customEvent = createCustomEvent("/history");
     window.dispatchEvent(customEvent);
   });
