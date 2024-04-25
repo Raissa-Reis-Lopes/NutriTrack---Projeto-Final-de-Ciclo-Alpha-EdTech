@@ -51,3 +51,16 @@
     background-size: cover;
     z-index: 1;
 }
+
+.back_general_no_shadow{
+    position: absolute;
+    display: block;
+    height: 100%;
+    right: 0px;
+    /* background-size: 470px; */
+    /* width: 400px; */
+    background: url(../../img/decoracao/fundoDireito.svg) no-repeat right bottom;
+    width: 300px;
+    background-size: cover;
+    z-index: 1;
+}

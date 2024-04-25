@@ -30,6 +30,7 @@ label{
 
 .connect{
     margin: 0 5px;
+    cursor: pointer;
 }
 
 .login_wrapper{
@@ -39,12 +40,13 @@ label{
 .container_login{
     max-width: 900px;
     display: flex;
-    padding: 40px 0;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: calc(100vh - 108px);
     max-height: 100vh;
+    padding-bottom: 80px;
+    margin-left: 10%;
   }
 
   .title_login::after{
@@ -53,7 +55,7 @@ label{
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p3);
+    background-color: var(--cor-p0);
   }
 
   .register::before{
@@ -62,5 +64,5 @@ label{
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p3);
+    background-color: var(--cor-p0);
   }

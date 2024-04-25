@@ -76,7 +76,7 @@ export function Register() {
         </div>
         </form>      
     </main>
-    <footer>
+    <footer class="footer footer_full">
         <span>all rights reserved</span>
     </footer>
     `;
