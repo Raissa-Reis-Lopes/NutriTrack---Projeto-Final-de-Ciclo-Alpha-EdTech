@@ -31,7 +31,37 @@
             <label for="period">Periódo:</label>
             <input type="date" id="period" name="period" />
         </div>
-        <div class="chart"></div>
+        <div class="chart">
+            <section class="section_home">
+                <div class="chart-container">
+                    <span class="span_green ">Proteínas (g)</span>
+                    <div>
+                        <div class="chart" id="protein-chart"></div>
+                        </div>
+                        <div class="chart-subtitle">
+                        <span id="consumed-protein"></span>/<span id="total-protein"></span>
+                        </div>
+                </div> 
+                <div class="chart-container">
+                    <span class="span_green ">Carboidratos (g)</span>
+                    <div>
+                        <div class="chart" id="carbo-chart"></div>
+                        </div>
+                        <div class="chart-subtitle">
+                        <span id="consumed-carbo"></span>/<span id="total-carbo"></span>
+                        </div>
+                </div>             
+                <div class="chart-container">
+                    <span class="span_green ">Gorduras (g)</span>
+                    <div>
+                        <div class="chart" id="lipid-chart"></div>
+                        </div>
+                    <div class="chart-subtitle">
+                    <span id="consumed-lipid"></span>/<span id="total-lipid"></span>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
     <footer>
         <div class="footer_history">
@@ -40,5 +70,11 @@
             <span id="open-modal-privacy">política de privacidade</span>
         </div>
     </footer>
+    <script src="../pages/utils/barchart.js"></script>
+    <script>
+        let proteinChartInstance = null;
+        let carboChartInstance = null;
+        let lipidChartInstance = null;
+    </script>
 </body>
 </html>
