@@ -139,10 +139,8 @@ export function Home() {
     document.getElementById("root").appendChild(div);
     navRoutes();
     homeBtns();
-// loadAddedFoods();
     limitDate('input-date');
-
-    
+   
     const currentDate = new Date(); // Obtém a data atual
     currentDate.setMinutes(currentDate.getMinutes() - currentDate.getTimezoneOffset()); // Ajusta para UTC
     const currentDateString = currentDate.toISOString().split('T')[0]; // Formata a data para o formato do input date
@@ -169,6 +167,13 @@ function clearScreenValues() {
     document.getElementById('consumed-protein').innerText = 0;
     document.getElementById('consumed-carbo').innerText = 0;
     document.getElementById('consumed-lipid').innerText = 0;
+
+    document.getElementById('meal_add_snack').innerText = "";
+    document.getElementById('meal_add_dinner').innerText = "";
+    document.getElementById('meal_add_lunch').innerText = "";
+    document.getElementById('meal_add_breakfast').innerText = "";
+
+
 
     // Limpa a barra de progresso
     const progressBar = document.getElementById('calories-progress');
@@ -321,6 +326,7 @@ async function loadUserDataForDate(date) {
     } catch(error) {
         showMessage("fail","Não há alimentos cadastrados para a data selecionada");
     }
+    loadAddedFoods();
 }
 
 function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstance, chartElementId, color, bgColor) {
@@ -365,9 +371,14 @@ export function homeBtns() {
   btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
   btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
   btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
+
+  
 }
 
+let selectedMealType = "";
+
 async function openModalWithMeal(meal) {
+  selectedMealType = meal;
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
   const modalSearchFood = modal.querySelector("#modalSearchFood");
   const datafoodContainer = document.createElement("div");
@@ -390,15 +401,16 @@ async function openModalWithMeal(meal) {
     foodList.forEach((foodItem) => {
       const foodElement = document.createElement("div");
       foodElement.textContent = foodItem.name;
-      foodElement.addEventListener("click", () =>
-        openAddFoodModal(userId,foodItem, meal),
-      ); // Abre o modal de adicionar comida ao clicar no alimento
+      foodElement.addEventListener("click", async () => {
+        await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
+        modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+      });
       datafoodContainer.appendChild(foodElement);
     });
   } catch (error) {
     console.log("Erro ao buscar alimentos:", error);
   }
-  modal.querySelector(".modal_img img").addEventListener("click", () => {
+  modal.querySelector("#back_modal_searchFood").addEventListener("click", () => {
     document.querySelector(".modal").remove();
   });
   document.body.appendChild(modal); // Adiciona o modal ao body
@@ -406,9 +418,8 @@ async function openModalWithMeal(meal) {
 }
 
 function openAddFoodModal(userId,item, meal) {
-  console.log(userId);
+  
   const modal = AddFood(); // Cria o modal de adicionar comida
-  const modalSearchFood = SearchFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
   modal.querySelector("#nameFood").textContent = item.name;
   // modal.querySelector("#quantity_calories").textContent = item.calories;
@@ -417,8 +428,12 @@ function openAddFoodModal(userId,item, meal) {
   // modal.querySelector("#quantity_fat").textContent = item.fat;
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = meal;
+  
 
-  const btnSave = modal.querySelector(".btns_addFood button:last-child");
+  const btnCancel = modal.querySelector("#btn_cancel_addFood");
+  btnCancel.addEventListener("click", ()=> modal.remove());
+
+  const btnSave = modal.querySelector("#btn_save_addFood");
   btnSave.addEventListener("click", async () => {
     const gramsInput = modal.querySelector("#grams").value;
     const mealSelect = modal.querySelector("#meal").value;
@@ -439,7 +454,7 @@ function openAddFoodModal(userId,item, meal) {
           food_id: foodId,
           food_quantity: gramsInput,
           meal: mealSelect,
-          // date: dateCalendar,
+          date: dateCalendar,
         }),
       });
       console.log(response);
@@ -451,82 +466,93 @@ function openAddFoodModal(userId,item, meal) {
 
       console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
-      modalSearchFood.remove();
-      updateMealSection(userId);
+      updateMealSection(userId,dateCalendar);
     } catch (error) {
       console.error("Erro ao salvar alimento:", error);
     }
   });
 
-  modal.querySelector(".modal_img img").addEventListener("click", () => {
-    document.querySelector(".modal").remove();
+  modal.querySelector("#back_modal_addFood").addEventListener("click", () => {
+    modal.remove();
+    openModalWithMeal(selectedMealType); 
+
   });
 
   document.body.appendChild(modal); // Adiciona o modal ao body
 }
 
-function updateMealSection(userId) {
-  // const dateInput = document.getElementById('date').value;
-  // ?date=${dateInput}
+async function updateMealSection(userId,dateCalendar) {
+ 
+  try {
+    clearMealSections();
+    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`, {
+      method: "GET",
+    });
 
-  fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}`, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erro ao obter alimentos adicionados");
-      }
-      return response.json();
-      
-    })
-    .then((addedFoods) => {
+    if (!response.ok) {
+      throw new Error("Erro ao obter alimentos adicionados");
+    }
+
+    const responseData = await response.json();
+    const addedFoods = responseData.data.foodDetails; 
+    console.log("Response from server:", addedFoods);
+
+    addedFoods.forEach((food) => {
+      const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+      const newFoodElement = document.createElement("div");
+      newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
+      mealSection.appendChild(newFoodElement);
+    });
+
+    console.log("Alimentos carregados do banco de dados com sucesso!");
+  } catch (error) {
+    console.error("Erro ao carregar alimentos do banco de dados:", error);
+  }
+}
+
+async function loadAddedFoods() {
+  const dateCalendar = document.getElementById('input-date').value;
+  console.log(dateCalendar, "carregando")
+  const userId = await getUserId();
+  console.log(userId, "carregando")
+
+
+  try {
+    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao obter alimentos adicionados");
+    }
+
+    const responseData = await response.json();
+    const addedFoods = responseData.data.foodDetails; 
+
+    if (addedFoods.length === 0) {
+      const noFoodsMessage = document.createElement("div");
+      noFoodsMessage.textContent = "Nenhum alimento adicionado nesta data.";
+      const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+      mealSection.appendChild(noFoodsMessage);
+    } else {
       addedFoods.forEach((food) => {
         const mealSection = document.querySelector(`#meal_add_${food.meal}`);
         const newFoodElement = document.createElement("div");
-        newFoodElement.textContent = `${food.name} - ${food.food_quantity}g`;
-        console.log("teste");
-        console.log(food);
-        console.log(addedFoods);
+        newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
         mealSection.appendChild(newFoodElement);
       });
-    })
-    .catch((error) => {
-      console.error("Erro ao carregar alimentos do banco de dados:", error);
-    });
+    }
+
+    console.log("Alimentos carregados do banco de dados com sucesso!");
+  } catch (error) {
+    console.error("Erro ao carregar alimentos do banco de dados:", error);
+  }
 }
 
-// async function loadAddedFoods() {
-//   // const dateInput = document.getElementById('date').value;
 
-//   try {
-//     const response = await fetch(`/api/foodAdded`, {
-//       method: "GET",
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("Erro ao obter alimentos adicionados");
-//     }
-
-//     const addedFoods = await response.json();
-
-//     if (addedFoods.length === 0) {
-//       const noFoodsMessage = document.createElement("div");
-//       noFoodsMessage.textContent = "Nenhum alimento adicionado nesta data.";
-//       const mealSection = document.querySelector(".meal_add");
-//       mealSection.appendChild(noFoodsMessage);
-//     } else {
-//       addedFoods.forEach((food) => {
-//         const mealSection = document.querySelector(`.meal_add_${food.meal}`);
-//         const newFoodElement = document.createElement("div");
-//         newFoodElement.textContent = `${food.name} - ${food.grams}g`;
-//         mealSection.appendChild(newFoodElement);
-//       });
-//     }
-
-//     console.log("Alimentos carregados do banco de dados com sucesso!");
-//   } catch (error) {
-//     console.error("Erro ao carregar alimentos do banco de dados:", error);
-//   }
-// }
-
-
+function clearMealSections() {
+  const mealSections = document.querySelectorAll(".meal_add");
+  mealSections.forEach((section) => {
+    section.innerHTML = ""; // Limpa o conteúdo da seção de refeições
+  });
+}
