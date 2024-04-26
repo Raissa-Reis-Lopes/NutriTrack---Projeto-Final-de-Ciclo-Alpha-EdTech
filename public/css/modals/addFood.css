@@ -53,11 +53,3 @@
   padding: 5px 10px;
 }
 
-#btn_cancel{
-  border: 3px solid rgb(206, 12, 12);
-  color: rgb(206, 12, 12);
-}
-#btn_cancel:hover{
-  border: 3px solid rgb(134, 30, 30);
-  color: rgb(134, 30, 30);
-}

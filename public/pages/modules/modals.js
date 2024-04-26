@@ -23,6 +23,7 @@ export function SearchFood(){
         </div>
     </div>
     `;
+      
     return divModal
 }
 
@@ -78,5 +79,43 @@ export function AddFood(){
         </div>
     </div>
     `;
+    return divModal
+}
+
+export function CreateMyFoodbtn(){
+    const divModal = document.createElement("div");
+    divModal.innerHTML=`  
+    <div class="modal container_modal_create" id="modalCreateFood">
+        <h2>Tabela Nutricional</h2>
+        <span>Insira as quantidades de acordo com uma porção de 100 gramas</span>
+        <div class="form_create_food">
+            <div class="input_create_food">
+                <label for="nameCreate">Nome</label>
+                <input type="text" id="nameCreate">
+            </div>
+            <div class="input_create_food">
+                <label for="caloriesCreate">Calorias</label>
+                <input type="text" id="caloriesCreate">
+            </div>
+            <div class="input_create_food">
+                <label for="carbCreate">Carboidratos <span class="span_grams_create">(gramas)</span></label>
+                <input type="text" id="carbCreate">
+            </div>
+            <div class="input_create_food">
+                <label for="proteinCreate">Proteínas <span class="span_grams_create">(gramas)</span></label>
+                <input type="text" id="proteinCreate">
+            </div>
+            <div class="input_create_food">
+                <label for="fatCreate">Gorduras <span class="span_grams_create">(gramas)</span></label>
+                <input type="text" id="fatCreate">
+            </div>
+            <div>
+                <button id="btn_cancel_create" class="btn_stroke btn_cancel">Cancelar</button>
+                <button id="btn_create_new" class="btn_stroke">Criar novo alimento</button>
+             </div>
+        </div> 
+    </div>
+    `;
+      
     return divModal
 }

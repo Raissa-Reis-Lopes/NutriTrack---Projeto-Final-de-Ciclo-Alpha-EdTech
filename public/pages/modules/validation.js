@@ -53,6 +53,11 @@ export function emailValid(email) {
     return weightRegex.test(weight) && !isNaN(weight) && weight >= 10 && weight <= maxWeight;
   }
 
+  export function numberValid(number) { 
+  
+    return !isNaN(number) && number >=0;
+  }
+
 
   // escape function
   export function escapeHtml(html) {
