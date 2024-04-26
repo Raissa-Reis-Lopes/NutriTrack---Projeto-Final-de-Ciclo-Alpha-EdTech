@@ -718,15 +718,15 @@ async function fetchAddedFoods(userId, dateCalendar){
   //   }
   // });
 
-  // // Event listener para o botão de deletar
-  // btnDeleteFoodElement.addEventListener("click", async () => {
-  //   try {
-  //     console.log("Botão Deletar clicado para o alimento:", food.id);
-  //     await deleteFoodItem(food.id);
-  //   } catch (error) {
-  //     console.error("Erro ao deletar alimento:", error);
-  //   }
-  // });
+  // Event listener para o botão de deletar
+  btnDeleteFoodElement.addEventListener("click", async () => {
+    try {
+      console.log("Botão Deletar clicado para o alimento:", food.id);
+      await deleteFoodItem(food.id);
+    } catch (error) {
+      console.error("Erro ao deletar alimento:", error);
+    }
+  });
       
       const newFoodElement = document.createElement("div");
       newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
@@ -753,23 +753,62 @@ function clearMealSections() {
 }
 
 
-// async function deleteFoodItem(foodId) {
-//   if (!confirm("Tem certeza que deseja deletar este alimento?")) {
+async function deleteFoodItem(foodId) {
+  if (!confirm("Tem certeza que deseja deletar este alimento?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/foodAdded/${foodId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao deletar alimento.");
+    }
+
+    console.log("Alimento deletado com sucesso!");
+   
+  } catch (error) {
+    console.error("Erro ao deletar alimento:", error);
+  }
+}
+
+
+// async function editFoodItem(foodId) {
+  
+//   const newGrams = ;
+//   const newMeal = ;
+
+//   if (!newGrams || !newMeal) {
+//     console.error("Dados de edição incompletos.");
 //     return;
 //   }
 
 //   try {
+//     const userId = await getUserId(); 
+//     const dateCalendar = document.getElementById('input-date').value; 
+
 //     const response = await fetch(`/api/foodAdded/${foodId}`, {
-//       method: "DELETE",
+//       method: "PUT", 
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         user_id: userId, 
+//         food_quantity: newGrams,
+//         meal: newMeal,
+//         date: dateCalendar, 
+//       }),
 //     });
 
 //     if (!response.ok) {
-//       throw new Error("Erro ao deletar alimento.");
+//       throw new Error("Erro ao editar alimento.");
 //     }
 
-//     console.log("Alimento deletado com sucesso!");
-   
+//     console.log("Alimento editado com sucesso!");
+    
 //   } catch (error) {
-//     console.error("Erro ao deletar alimento:", error);
+//     console.error("Erro ao editar alimento:", error);
 //   }
 // }
