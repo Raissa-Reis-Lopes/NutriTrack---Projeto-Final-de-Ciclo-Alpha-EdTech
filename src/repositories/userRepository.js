@@ -1,9 +1,6 @@
-//O repository é quem fará a conexão com o banco de dados, depois o Services vai usar os dados que serão retornados aqui
-
-const { connectToDatabase } = require('../db/postgresql');
+const { pool } = require("../db/postgresql");
 
 async function insertUser(username , email , password){
-    const pool = await connectToDatabase();
     const query = 'INSERT INTO users(username , email , password) VALUES($1, $2, $3)';
     try {
         await pool.query(query,[username , email , password]);
@@ -16,7 +13,6 @@ async function insertUser(username , email , password){
 }
 
 async function getAllUsers(){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM users';
     try {
         const result = await pool.query(query);
@@ -28,7 +24,6 @@ async function getAllUsers(){
 }
 
 async function getUserById(id) {
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM users WHERE id=$1';
     try {
         const result = await pool.query(query, [id]);
@@ -40,7 +35,6 @@ async function getUserById(id) {
 }
 
 async function updateUser(id, username , email , password){
-    const pool = await connectToDatabase();
     const query = 'UPDATE users SET username=$2 , email=$3 , password=$4 WHERE id=$1';
     try {
         await pool.query(query,[id, username , email , password]);
@@ -53,7 +47,6 @@ async function updateUser(id, username , email , password){
 }
 
 const updateUserWithoutPassword = async (id, username, email) => {
-    const pool = await connectToDatabase();
     const query = `UPDATE users SET username = $2, email = $3
     WHERE id = $1`;
     try {
@@ -66,7 +59,6 @@ const updateUserWithoutPassword = async (id, username, email) => {
 
 
 async function deleteUser(id){
-    const pool = await connectToDatabase();
     const query = 'DELETE FROM users WHERE id=$1';
     try {
         await pool.query(query,[id]);
