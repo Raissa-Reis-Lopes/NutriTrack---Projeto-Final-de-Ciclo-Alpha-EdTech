@@ -1,0 +1,27 @@
+.input_create_food{
+    display: flex;
+   justify-content: left;
+    gap: 10px;
+    font-weight: 500;
+    align-items: center;
+
+}
+
+.input_create_food input{
+    padding: 10px;
+}
+.input_create_food label{
+    max-width: 10ch;
+}
+
+.form_create_food{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: end;
+
+}
+
+.span_grams_create{
+    font-size: 0.75rem;
+}
