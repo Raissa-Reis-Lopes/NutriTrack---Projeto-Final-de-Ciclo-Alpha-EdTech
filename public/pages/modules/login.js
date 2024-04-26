@@ -88,8 +88,6 @@ export function loginBtns(){
                 },
                 body: JSON.stringify({ email, password, rememberMe }),
             });
-
-            const data = await response.json();
         
             if (!response.ok) {
                 showMessage("fail", "Usuário e/ou senha inválidos!");

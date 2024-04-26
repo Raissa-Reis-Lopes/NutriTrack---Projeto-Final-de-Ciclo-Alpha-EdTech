@@ -6,3 +6,38 @@
 span {
     color: var(--cor-p5);
 }
+
+.align_row_register{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.title_register::after{
+    content: "";
+    display: block;
+    width: 110%;
+    height: 2px;
+    border-radius: 5px;
+    background-color: var(--cor-p0);
+  }
+
+  .input_register{
+    width: 300px;
+  }
+
+  .div_input_register{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    font-size: medium;
+    font-weight: 600;
+    width: 55%;
+  }
+
+  .regsiter_conditons{
+    cursor: pointer;
+    color: #e96001 !important; 
+  } 

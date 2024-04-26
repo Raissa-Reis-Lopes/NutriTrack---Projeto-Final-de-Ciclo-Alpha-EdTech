@@ -187,11 +187,11 @@ export function configBtns() {
 
             
 
-            const erroWeight = document.getElementById("erroWeight");
-            const erroHeight = document.getElementById("erroHeight");
-            erroWeight.innerText = ''; // Limpa mensagens antigas de erro
-            erroHeight.innerText = ''; // Limpa mensagens antigas de erro
-            const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
+            // const erroWeight = document.getElementById("erroWeight");
+            // const erroHeight = document.getElementById("erroHeight");
+            // erroWeight.innerText = ''; // Limpa mensagens antigas de erro
+            // erroHeight.innerText = ''; // Limpa mensagens antigas de erro
+            // // const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
     
 
             const weight = document.getElementById("weight").value;
