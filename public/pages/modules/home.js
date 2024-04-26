@@ -15,7 +15,7 @@ export function Home() {
 
         <header>
             <div class="logo" id="logo">
-                <a href="/home">
+                <a>
                     <img src="./img/logo.svg" alt="NutriTrack">
                 </a>
             </div>

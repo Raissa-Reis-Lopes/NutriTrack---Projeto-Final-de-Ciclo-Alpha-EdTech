@@ -32,7 +32,7 @@ export function Login() {
                 <div id="message-content" class="message-content hidden"></div>
                 </div>
             </div>
-            <div class="btns_index btn_register">
+            <div class="btns_index">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
                     <button id="btn_enter" class="btn_colorLinear">Entrar</button>
                 </div>
@@ -46,7 +46,18 @@ export function Login() {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
     loginBtns();
+    logoNav();
     return div
+}
+
+export function logoNav(){
+    const logo = document.getElementById("logo");
+ 
+
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+    })
 }
 
 // aqui autenticar as infos do usuario
@@ -90,7 +101,8 @@ export function loginBtns(){
             });
         
             if (!response.ok) {
-                showMessage("fail", "Usuário e/ou senha inválidos!");
+                showMessage("fail", "Usuário e/ou senha inválidos!","-30px");
+                btnEnter.disabled = false;
                 throw new Error('Erro ao fazer login, usuário não localizado');
             }
 
@@ -113,7 +125,7 @@ export function loginBtns(){
 
             if(!checkConfig.ok){
                 btnEnter.disabled = true;
-                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!")
+                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!","-60px")
 
                 setTimeout(() => {                   
                     const customEvent = createCustomEvent('/config');

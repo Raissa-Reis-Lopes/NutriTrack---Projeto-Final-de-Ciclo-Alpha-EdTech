@@ -42,7 +42,7 @@ export function emailValid(email) {
     const maxHeightCm = 300; // Define o limite máximo de altura em centímetros
   
     // Verifica se a altura é um número e está dentro do limite máximo
-    return !isNaN(height) && height > 10 && height <= maxHeightCm;
+    return !isNaN(height) && height >= 10 && height <= maxHeightCm;
   }
 
   export function weightValid(weight) {
@@ -50,7 +50,7 @@ export function emailValid(email) {
   
     // Verifica se o peso é um número com até duas casas decimais e está dentro do limite máximo
     const weightRegex = /^\d+(\.\d{1,2})?$/; // Regex para validar números com até duas casas decimais
-    return weightRegex.test(weight) && !isNaN(weight) && weight > 10 && weight <= maxWeight;
+    return weightRegex.test(weight) && !isNaN(weight) && weight >= 10 && weight <= maxWeight;
   }
 
 

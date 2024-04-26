@@ -11,7 +11,7 @@ export function Profile() {
     <header>
         <div>
             <div class="logo" id="logo">
-                <a href="">
+                <a>
                     <img src="../img/logo.svg" alt="NutriTrack" />
                 </a>
             </div>

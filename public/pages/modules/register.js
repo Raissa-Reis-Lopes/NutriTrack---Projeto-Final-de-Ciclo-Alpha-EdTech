@@ -9,11 +9,9 @@ export function Register() {
     div.innerHTML=`
     <div class="back_general"></div>
     <header>
-        <div class="logo" id="logo">
-            <a href="">
-                <img src="../img/logo.svg" alt="NutriTrack">
-            </a>
-        </div>
+    <div class="logo" id="logo">
+        <img src="../img/logo.svg" alt="NutriTrack">
+    </div>
     </header>
     <main class="container_left container_login">
         <div class="welcome">
@@ -39,7 +37,7 @@ export function Register() {
                     <div id="fade-privacy" class="hide"></div>
                     <div id="modal-privacy" class="hide">
                         <div class="modal-header">
-                            <h2>política de privacidade</h2>
+                            <h2>Política de privacidade</h2>
                             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-privacy"> 
                         </div>
                         <div class="modal-body">
@@ -62,7 +60,7 @@ export function Register() {
                         </div>
                         <div class="modal-body">
                             <p>Ao acessar e usar o site Nutri Track, você aceita e concorda em estar vinculado por estes Termos de uso.</p>
-                            <p>Vocẽ concorda em usar o site apenas para fins legais e de maneira que não infrinja os direitos ou restrinja ou iniba o uso e aproveitamento do site por qualquer terceiro.</p>
+                            <p>Você concorda em usar o site apenas para fins legais e de maneira que não infrinja os direitos ou restrinja ou iniba o uso e aproveitamento do site por qualquer terceiro.</p>
                             <p>O conteúdo deste site, incluindo texto, gráficos, imagens e outros materiais, são protegidos por direitos autorais. Vocẽ não pode reproduzir, distribuir, modificar ou republicar materiais contidos neste site sem a permissão prévia por escrito do(s) responsável(is) legal(is) pelo Nutri Track.</p>
                             <p>O site e seu conteúdo são fornecidos "como estão". Nós não oferecemos garantias ou representações de qualquer tipo, expressas ou implícitas, sobre a integridade, precisão confiabilidade, adequação ou disponibilidade do site ou seu conteúdo.</p>
                             <p>Podemos alterar estes Termos de Uso periodicamente. Se fizermos alterações, notificaremos você.</p>
@@ -72,7 +70,7 @@ export function Register() {
                 </section>
             </section>
             </div>
-            <div class="btns_index btn_register">
+            <div class="btns_index">
                 <button id="btn_back" class="btn_stroke">Voltar</button>
                 <button id="btn_next" class="btn_colorLinear">Próximo</button>
                 </div>
@@ -121,6 +119,13 @@ export function Register() {
 export function registerBtns() {
     const btnBack = document.getElementById("btn_back");
     const btnNext = document.getElementById("btn_next");
+    const logo = document.getElementById("logo");
+ 
+
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+    })
 
     btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/');
@@ -212,7 +217,7 @@ export function registerBtns() {
 
 
                 } catch (error) {
-                    console.error('Erro ao fazer login:', error);
+                    console.error('Erro ao solicitar o token jwt:', error);
                 }
 
                 const customEvent = createCustomEvent('/config');

@@ -23,7 +23,8 @@ span {
     background-color: var(--cor-p0);
   }
 
-  .input_register{
+  .input_register,
+  .input_config{
     width: 300px;
   }
 
