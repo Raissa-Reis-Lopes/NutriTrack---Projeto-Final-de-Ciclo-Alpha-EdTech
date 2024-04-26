@@ -1,7 +1,6 @@
-const { connectToDatabase } = require('../db/postgresql');
+const { pool } = require("../db/postgresql");
 
 async function getFoods(){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food WHERE user_id IS NULL';
     try {
         const result = await pool.query(query);
@@ -13,7 +12,6 @@ async function getFoods(){
 }
 
 async function getUserFoods(user_id){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food WHERE user_id=$1';
     try {
         const result = await pool.query(query, [user_id]);
@@ -25,7 +23,6 @@ async function getUserFoods(user_id){
 }
 
 async function getFoodById(id) {
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food WHERE id=$1';
     try {
         const result = await pool.query(query, [id]);
@@ -38,7 +35,6 @@ async function getFoodById(id) {
 
 async function 
 getFoodNameById(food_id) {
-    const pool = await connectToDatabase();
     const query = 'SELECT name FROM food WHERE id=$1';
     try {
         const result = await pool.query(query, [food_id]);
@@ -51,7 +47,6 @@ getFoodNameById(food_id) {
 
 //Depois mudar a lógica para deixar o usuário definir o tamanho da porção
 async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
-    const pool = await connectToDatabase();
     const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES($1, $2, $3, $4, $5, $6)';
     try {
         await pool.query(query,[user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
@@ -64,7 +59,6 @@ async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g,
 }
 
 async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g){
-    const pool = await connectToDatabase();
     const query = 'UPDATE food SET name=$3, calorie=$4, carbohydrate_g=$5, protein_g=$6, lipid_g=$7 WHERE id=$1 AND user_id=$2';
     try {
         await pool.query(query,[id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
@@ -77,7 +71,6 @@ async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protei
 }
 
 async function deleteUserFood(id){
-    const pool = await connectToDatabase();
     const query = 'DELETE FROM food WHERE id=$1';
     try {
         await pool.query(query,[id]);

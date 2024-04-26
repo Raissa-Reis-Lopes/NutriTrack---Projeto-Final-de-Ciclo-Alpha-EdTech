@@ -1,7 +1,6 @@
-const { connectToDatabase } = require('../db/postgresql');
+const { pool } = require("../db/postgresql");
 
 async function changeAvatar (user_id, new_avatar) {
-    const pool = await connectToDatabase();
     const query = 'UPDATE users SET avatar_img=$1 WHERE id=$2';
     try {
         await pool.query(query, [new_avatar, user_id]);
@@ -12,7 +11,6 @@ async function changeAvatar (user_id, new_avatar) {
 }
 
 async function getActualAvatar (user_id) {
-    const pool = await connectToDatabase();
     const query = 'SELECT avatar_img FROM users WHERE id=$1';
     try {
         const result = await pool.query(query, [user_id]);

@@ -1,10 +1,7 @@
-// user_id, food_id, food_quantity, meal
-
-const { connectToDatabase } = require('../db/postgresql');
+const { pool } = require("../db/postgresql");
 
 
 async function getAllFoodsAdded(){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added';
     try {
         const result = await pool.query(query);
@@ -19,7 +16,6 @@ async function getFoodAddedById(id){
     console.log("*************************************")
     console.log(`Esse é o id que está sendo recebido${id}`);
     console.log("*************************************")
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE id=$1';
     try {
         const result = await pool.query(query,[id]);
@@ -31,7 +27,6 @@ async function getFoodAddedById(id){
 }
 
 async function getFoodsAddedByUserId(userId){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE user_id=$1';
     try {
         const result = await pool.query(query,[userId]);
@@ -44,7 +39,6 @@ async function getFoodsAddedByUserId(userId){
 
 
 async function getFoodsAddedByUserByDate(user_id, date){
-    const pool = await connectToDatabase();
     const query = 'SELECT * FROM food_added WHERE user_id=$1 AND created_at::date=$2';
     try {
         const result = await pool.query(query,[user_id, date]);
@@ -58,7 +52,6 @@ async function getFoodsAddedByUserByDate(user_id, date){
 
 //Não estava funcionando, coloquei o RETURNING * para ver o retorno
 async function insertFoodAdded(user_id, food_id, food_quantity, meal, date) {
-    const pool = await connectToDatabase();
     const query = 'INSERT INTO food_added(user_id, food_id, food_quantity, meal, created_at) VALUES($1, $2, $3, $4, $5) RETURNING *';
     try {
         const result = await pool.query(query, [user_id, food_id, food_quantity, meal, date]);
@@ -72,7 +65,6 @@ async function insertFoodAdded(user_id, food_id, food_quantity, meal, date) {
 }
 
 async function updateFoodAdded(user_id,food_id, date, food_quantity, meal){
-    const pool = await connectToDatabase();
     const query = 'UPDATE food_added SET food_id=$2, food_quantity=$4, meal=$5 WHERE user_id=$1 AND created_at =$3 ';
     try {
         await pool.query(query,[user_id, food_id, date, food_quantity, meal]);
@@ -85,7 +77,6 @@ async function updateFoodAdded(user_id,food_id, date, food_quantity, meal){
 }
 
 async function deleteFoodAdded(id){
-    const pool = await connectToDatabase();
     const query = 'DELETE FROM food_added WHERE id=$1';
     try {
         await pool.query(query,[id]);
