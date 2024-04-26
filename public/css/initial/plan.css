@@ -62,5 +62,5 @@
 
 
 .selected {
-  border: 2px solid rgb(255, 3, 255); /* substitua '#yourColor' pela cor desejada */
+  border: orange; 
 }

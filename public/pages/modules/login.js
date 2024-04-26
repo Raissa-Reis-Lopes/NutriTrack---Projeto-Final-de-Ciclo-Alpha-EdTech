@@ -18,7 +18,10 @@ export function Login() {
             <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
             <div class="div_input">
                 <label for="email">E-mail</label>
+                <div class="input_email_container">
                 <input type="email" name="email" id="email" class="input_email"> 
+                <div id="icon_email"></div>
+                </div>
                 <label for="password">Senha</label>
                 <div class="input_password_container">
                 <input type="password" name="password" id="password" class="input_pass">

@@ -26,6 +26,7 @@ span {
   .input_register,
   .input_config{
     width: 300px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
   .div_input_register{

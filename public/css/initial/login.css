@@ -56,6 +56,7 @@ label{
     height: 2px;
     border-radius: 5px;
     background-color: var(--cor-p0);
+    min-width: 800px
   }
 
   .register::before{
@@ -67,6 +68,7 @@ label{
     background-color: var(--cor-p0);
   }
 
+  .input_email_container,
   .input_password_container{
     position:relative;
     width:300px;
@@ -76,6 +78,7 @@ label{
     gap: 3px;
   }
 
+  .input_email_container input,
   .input_password_container input{
     position: absolute;
     bottom: 0;
@@ -83,6 +86,7 @@ label{
     width:100%;
     height:100%;
     box-shadow: 0 0 5px #0000;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
   #icon{
@@ -95,6 +99,17 @@ label{
     width: 20px;
     height:20px;
     cursor:pointer;
+  }
+
+  #icon_email{
+    position: absolute;
+    top:50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: url('../../img/o-email.png');
+    background-size: cover;
+    width: 20px;
+    height:20px;
   }
 
   #icon.hide {

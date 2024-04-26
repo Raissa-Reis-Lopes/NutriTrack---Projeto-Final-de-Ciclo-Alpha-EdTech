@@ -49,13 +49,13 @@ export function Config() {
                 <option value="extraActive">Muito Ativo (atleta / esforço físico diário)</option>
             </select>
         </div>
-        <div id="message" class="message-container">
+        <div id="message" class="message-container hidden">
         <div id="message-content" class="message-content hidden"></div>
         </div>
         </div>
         <div class="btns_index">
             <button id="btn_back" class="btn_stroke">Voltar</button>
-            <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
+            <button id="btn_next" class="btn_colorLinear">Próximo</button>
         </div>
     </div>
     <div class="welcome" id="form2" method="post" style="display:none;">
@@ -115,8 +115,8 @@ export function Config() {
         </div>
         </div>
         <div class="btns_index">
-            <button id="btn_back_3" class="btn_stroke">Voltar</button>
-            <button id="btn_next_3" class="btn_colorLinear">Próximo</button>
+            <button id="btn_back_2" class="btn_stroke">Voltar</button>
+            <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
         </div>
     </div>
 </main>
@@ -180,20 +180,24 @@ export function configBtns() {
         window.dispatchEvent(customEvent); 
     })
 
-    //Separei o form 1 do cadastro em outra página
-    let currentForm = 1;
-    showForm(currentForm);
+    // let currentForm = 1;
+    showForm(1);
 
     const btnBack = document.getElementById("btn_back");
+    const btnBack2 = document.getElementById("btn_back_2");
+    const btnNext1 = document.getElementById("btn_next");
     const btnNext2 = document.getElementById("btn_next_2");
-    const btnNext3 = document.getElementById("btn_next_3");
 
     btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/login');
             window.dispatchEvent(customEvent);
     });
 
-        btnNext2.addEventListener('click', async(event) =>{
+    btnBack2.addEventListener("click", ()=>{
+        showForm(1);
+    });
+
+        btnNext1.addEventListener('click', async(event) =>{
             event.preventDefault();
 
             
@@ -237,10 +241,10 @@ export function configBtns() {
                 return;
             }
 
-            currentForm++;
-            showForm(currentForm);
+            // currentForm++;
+            showForm(2);
 
-            btnNext3.addEventListener('click', async(event)=>{
+            btnNext2.addEventListener('click', async(event)=>{
                 event.preventDefault();
 
                 const getUserId = await fetch("/api/login/", {
