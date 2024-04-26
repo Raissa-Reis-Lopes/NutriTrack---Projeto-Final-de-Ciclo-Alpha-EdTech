@@ -15,24 +15,27 @@ export function Login() {
     </header>
     <main class="container_left container_login">
         <div class="welcome">
-            <h1 class="title_login">Bem-vindo de volta! Faça login para prosseguir com sua jornada saudável.</h1>
+            <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
             <div class="div_input">
                 <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" class="input_email">
-                <div id ="erroEmail" class="erro"></div>
+                <div class="input_email_container">
+                <input type="email" name="email" id="email" class="input_email"> 
+                <div id="icon_email"></div>
+                </div>
                 <label for="password">Senha</label>
+                <div class="input_password_container">
                 <input type="password" name="password" id="password" class="input_pass">
-                <div id ="erroPassword" class="erro"></div>
-                <span><a href="">Esqueceu a senha?</a></span>
-                <div class="align_row">
+                <div id="icon"></div>
+                </div>
+                <div class="align_row"> 
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
                 </div>
-                <div id="message" class="message-container">
+                <div id="message" class="message-container hidden">
                 <div id="message-content" class="message-content hidden"></div>
                 </div>
             </div>
-            <div class="btns_index btn_register">
+            <div class="btns_index">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
                     <button id="btn_enter" class="btn_colorLinear">Entrar</button>
                 </div>
@@ -45,8 +48,34 @@ export function Login() {
 
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
+    document.getElementById("icon").addEventListener("click", showPassword)
     loginBtns();
+    logoNav();
     return div
+}
+
+function showPassword(){
+    const password = document.getElementById("password");
+    const icon = document.getElementById("icon");
+
+    if(password.type ==="password"){
+        password.setAttribute("type","text");
+        icon.classList.add("hide");
+    } else {
+        password.setAttribute("type","password");
+        icon.classList.remove("hide");
+    }
+
+}
+
+export function logoNav(){
+    const logo = document.getElementById("logo");
+ 
+
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+    })
 }
 
 // aqui autenticar as infos do usuario
@@ -54,7 +83,7 @@ export function loginBtns(){
     const btnBack = document.getElementById("btn_back");
     const btnEnter = document.getElementById("btn_enter");
     const register = document.getElementById("register");
-    const message = document.getElementById("message")
+    const connectCheckbox = document.getElementById("connect");
 
     if(register){
         register.addEventListener ("click",function(e){
@@ -72,9 +101,10 @@ export function loginBtns(){
     }
 
     btnEnter.addEventListener("click", async () => {
-            // Desativar o botão
+            // Desativar o botão p/ não forçar vários logins
              btnEnter.disabled = true;
-             console.log("Clicou no botão de login")
+
+             const rememberMe = connectCheckbox.checked; 
 
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -85,11 +115,12 @@ export function loginBtns(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, rememberMe }),
             });
-
+        
             if (!response.ok) {
-                showMessage("fail", "Usuário e/ou senha inválidos!");
+                showMessage("fail", "Usuário e/ou senha inválidos!","-30px");
+                btnEnter.disabled = false;
                 throw new Error('Erro ao fazer login, usuário não localizado');
             }
 
@@ -112,7 +143,7 @@ export function loginBtns(){
 
             if(!checkConfig.ok){
                 btnEnter.disabled = true;
-                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!")
+                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!","-60px")
 
                 setTimeout(() => {                   
                     const customEvent = createCustomEvent('/config');

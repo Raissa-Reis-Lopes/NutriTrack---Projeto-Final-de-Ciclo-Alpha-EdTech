@@ -11,7 +11,7 @@ export function Profile() {
     <header>
         <div>
             <div class="logo" id="logo">
-                <a href="">
+                <a>
                     <img src="../img/logo.svg" alt="NutriTrack" />
                 </a>
             </div>
@@ -633,13 +633,11 @@ export function navProfile(){
     logo.addEventListener("click", ()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
-        window.location.reload();
     })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
         window.dispatchEvent(customEvent); 
-        window.location.reload();
     })
 
     navHistory.addEventListener ("click",()=>{

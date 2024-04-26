@@ -34,9 +34,7 @@ const calculateDailyCalories = (gender, weight, height, age, activityLevel) => {
         default:
             throw new Error('Nível de atividade inválido');
     }
-
-    //Para conferência do cálculo junto ao MSD
-    console.log(`Taxa metabólica Basal: ${MB}`)
+    
     return  Math.round(dailyCalories);
 };
 

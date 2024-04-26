@@ -1,10 +1,10 @@
 const loginServices = require('../services/loginServices')
 
 const authenticate = async(req, res) => {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     try {
         const user = await loginServices.getUser(email);
-        
+
         if(!user){
             return res.status(400).json({ error:'Usuário não encontrado'});
         }
@@ -12,9 +12,15 @@ const authenticate = async(req, res) => {
         const { auth, token } = await loginServices.authenticateUser(email, password);
 
         if(auth){          
-            res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });
+            const maxAge = rememberMe ? 10 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;  // 10 dias se selecionado, 1 dia se não
+            res.cookie('session_id', token, { maxAge, httpOnly: true });
             return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!'});
         }
+
+        // if(auth){          
+        //     res.cookie('session_id', token, { maxAge: 8460000, httpOnly: true });
+        //     return res.status(200).json({ auth, message: 'Usuário autenticado com sucesso!'});
+        // }
 
         return res.status(400).json({ error: 'Usuário e/ou senha inválidos'});
     } catch (error) {

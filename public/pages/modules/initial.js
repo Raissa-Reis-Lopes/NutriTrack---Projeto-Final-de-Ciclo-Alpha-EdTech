@@ -4,7 +4,7 @@ export function Initial() {
     const div = document.createElement("div");
 
     div.innerHTML=`  
-    <div class="logo" id="logo">
+    <div class="logo_initial" id="logo">
     <img src="../../img/logo.svg" alt="NutriTrack">
 </div>
     <div class="back_initial"></div>
