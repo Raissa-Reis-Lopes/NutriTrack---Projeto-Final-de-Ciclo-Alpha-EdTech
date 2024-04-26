@@ -18,17 +18,17 @@ export function Login() {
             <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
             <div class="div_input">
                 <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" class="input_email">
-                <div id ="erroEmail" class="erro"></div>
+                <input type="email" name="email" id="email" class="input_email"> 
                 <label for="password">Senha</label>
+                <div class="input_password_container">
                 <input type="password" name="password" id="password" class="input_pass">
-                <div id ="erroPassword" class="erro"></div>
-                <!--  <span><a href="">Esqueceu a senha?</a></span>  -->
-                <div class="align_row">
+                <div id="icon"></div>
+                </div>
+                <div class="align_row"> 
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
                 </div>
-                <div id="message" class="message-container">
+                <div id="message" class="message-container hidden">
                 <div id="message-content" class="message-content hidden"></div>
                 </div>
             </div>
@@ -45,9 +45,24 @@ export function Login() {
 
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
+    document.getElementById("icon").addEventListener("click", showPassword)
     loginBtns();
     logoNav();
     return div
+}
+
+function showPassword(){
+    const password = document.getElementById("password");
+    const icon = document.getElementById("icon");
+
+    if(password.type ==="password"){
+        password.setAttribute("type","text");
+        icon.classList.add("hide");
+    } else {
+        password.setAttribute("type","password");
+        icon.classList.remove("hide");
+    }
+
 }
 
 export function logoNav(){

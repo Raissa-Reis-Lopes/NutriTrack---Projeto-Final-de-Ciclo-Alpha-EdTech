@@ -66,3 +66,38 @@ label{
     border-radius: 5px;
     background-color: var(--cor-p0);
   }
+
+  .input_password_container{
+    position:relative;
+    width:300px;
+    height:30px;
+    display: flex;
+    flex-direction: column; 
+    gap: 3px;
+  }
+
+  .input_password_container input{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    box-shadow: 0 0 5px #0000;
+  }
+
+  #icon{
+    position: absolute;
+    top:50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: url('../../img/close-eye.png');
+    background-size: cover;
+    width: 20px;
+    height:20px;
+    cursor:pointer;
+  }
+
+  #icon.hide {
+    background: url('../../img/open-eye.png');
+    background-size: cover;
+  }
