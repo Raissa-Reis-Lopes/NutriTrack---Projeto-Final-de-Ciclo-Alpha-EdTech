@@ -5,7 +5,7 @@ import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
 import { nameValid, numberValid } from "./validation.js";
-import { privacyPolicyModal, termsModal, sacModal, createModalEvents } from "./modals.js";
+import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
 import { footerHome } from "./footer.js";
 
 let proteinChartInstance = null;
@@ -175,7 +175,7 @@ export function Home() {
     footerContainer.appendChild(footer);
     
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
-    createModalEvents();
+    createModalEventsDefault();
 
     return div
 }

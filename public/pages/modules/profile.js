@@ -3,7 +3,7 @@ import createCustomEvent from "./event.js";
 import { limitDate } from"../utils/limitDates.js"
 import { logout } from "../utils/logout.js";
 import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml } from "./validation.js";
-import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEvents } from "./modals.js";
+import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEventsProfile } from "./modals.js";
 import { footerProfile } from "./footer.js";
 
 export function Profile() {
@@ -148,7 +148,7 @@ export function Profile() {
 
 
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
-    createModalEvents();
+    createModalEventsProfile();
 
 
     return div
