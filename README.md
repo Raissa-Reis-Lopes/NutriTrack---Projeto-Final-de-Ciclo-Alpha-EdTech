@@ -40,7 +40,7 @@ Gráficos de histórico: Gráfico para realizar o acompanhamento de toda a traje
 <h2>Instalação e Uso</h2>
 <ol>
     <li>Clone o repositório via http: git clone https://github.com/Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech.git</li>
-    <li>Clone o repositório ou via ssh: git clone git@github.com:Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech.git</li>
+    <li>Ou via ssh: git clone git@github.com:Raissa-Reis-Lopes/NutriTrack---Projeto-Final-de-Ciclo-Alpha-EdTech.git</li>
     <li>Instale as dependências com o comando: npm install</li>
     <li>Configure as tabelas no banco de dados seguindo a ordem de criação fornecida no arquivo create-table.sql</li>
     <li>Configure as variáveis de ambiente no arquivo .env conforme o modelo fornecido em .env-example</li>
