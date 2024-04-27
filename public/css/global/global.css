@@ -91,10 +91,6 @@ ul {
   cursor: pointer;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--cor-p1); /* cor de fundo do track */
-}
-
 ::-webkit-scrollbar-thumb {
   background: var(--cor-p5); /* cor do scroll */
   border-radius: 6px; /* borda do scroll */

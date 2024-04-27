@@ -351,7 +351,7 @@ async function loadUserDataForDate(date) {
 
         }
     } catch(error) {
-        showMessage("fail","Não há alimentos cadastrados para a data selecionada");
+       console.log(error.message)
     }
     loadAddedFoods();
 }
