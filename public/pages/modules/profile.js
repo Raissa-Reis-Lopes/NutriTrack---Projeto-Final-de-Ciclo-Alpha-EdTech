@@ -265,7 +265,7 @@ function createModalEvents(){
 
     return div
 }
-}
+
 
 
 async function getUserId(){
