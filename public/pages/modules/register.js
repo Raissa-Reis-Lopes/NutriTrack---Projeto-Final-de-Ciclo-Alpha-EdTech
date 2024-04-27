@@ -144,13 +144,13 @@ export function registerBtns() {
         const terms = document.getElementById("terms").checked;
 
         if(!username){
-            showMessage('fail',"O nome não pode ser vazio!","30%","58%");
+            showMessage('fail',"O nome não pode ser vazio!","-8%");
             return;
         }
     
     
         if (!emailValid(email)) {
-            showMessage('fail',"Por favor, insira um email válido!","35%","58%");
+            showMessage('fail',"Por favor, insira um email válido!","-8%");
             return;
         }
             
@@ -161,17 +161,17 @@ export function registerBtns() {
             - pelo menos uma letra maiúscula
             - pelo menos uma letra minúscula
             - pelo menos um número 
-            - pelo menos um caractere especial`,"30%","58%");
+            - pelo menos um caractere especial`,"-8%");
             return;
         }
     
         if (password !== confirmPassword){
-            showMessage('fail',"As senhas precisam ser iguais", "40%","58%");
+            showMessage('fail',"As senhas precisam ser iguais","-8%");
             return;
         }
 
         if(!terms){
-            showMessage('fail',"É necessário ler e concordar com os termos de uso e privacidade");
+            showMessage('fail',"É necessário ler e concordar com os termos de uso e privacidade","-8%");
             return;
         }
 
@@ -197,7 +197,7 @@ export function registerBtns() {
 
              
         
-                if (!response.ok) {
+                if (!response.success) {
                     throw new Error("Erro ao realizar o registro");
                 }
 

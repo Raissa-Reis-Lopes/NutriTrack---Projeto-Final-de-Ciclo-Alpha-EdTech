@@ -16,7 +16,7 @@ export function Config() {
     </header>
     <main class="container_left container_login">
     <div class="welcome"  id="form1" method="post" style="display:none;">
-        <h1 class="title_login">Agora vamos calcular seu gasto energético diário!</h1>
+        <h1 class="title_config">Agora vamos calcular seu gasto energético diário!</h1>
         <div class="div_input div_input_config">
         <div class="align_row_register">
             <label for="weight">Peso</label>
@@ -59,15 +59,15 @@ export function Config() {
         </div>
     </div>
     <div class="welcome" id="form2" method="post" style="display:none;">
-        <h1 class="title_login">Escolha seu plano alimentar!</h1>
+        <h1 class="title_plan">Escolha seu plano alimentar!</h1>
         <div class="div_input" >
             <div class="container_center">
                 <div class="plan">
-                    <div id="plan1" class="chosenPlan">
+                    <div>
                         <h1>Perder peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
+                            <div class="flip-card-inner chosenPlan" id="plan1">
+                                <div class="flip-card-front" >
                                     <h1>45% Carboidratos</h1>
                                     <h1>30% Proteínas</h1>
                                     <h1>25% Gorduras</h1>
@@ -78,10 +78,10 @@ export function Config() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan2" class="chosenPlan">
+                    <div>
                         <h1>Manter o peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
+                            <div class="flip-card-inner  chosenPlan"  id="plan2">
                                 <div class="flip-card-front">
                                     <h1>55% Carboidratos</h1>
                                     <h1>15% Proteínas</h1>
@@ -93,11 +93,11 @@ export function Config() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan3" class="chosenPlan">
+                    <div>
                         <h1>Ganhar peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
+                            <div class="flip-card-inner chosenPlan"  id="plan3">
+                                <div class="flip-card-front ">
                                     <h1>50% Carboidratos</h1>
                                     <h1>25% Proteínas</h1>
                                     <h1>25% Gorduras</h1>
@@ -110,7 +110,7 @@ export function Config() {
                     </div>
                 </div>
             </div> 
-        <div id="message" class="message-container">
+        <div id="message" class="message-container hidden">
         <div id="message-content" class="message-content hidden"></div>
         </div>
         </div>
