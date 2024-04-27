@@ -5,6 +5,8 @@ import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
 import { nameValid, numberValid } from "./validation.js";
+import { privacyPolicyModal, termsModal, sacModal, createModalEvents } from "./modals.js";
+import { footerHome } from "./footer.js";
 
 let proteinChartInstance = null;
 let carboChartInstance = null;
@@ -126,18 +128,16 @@ export function Home() {
             </section>
         </div>
 
-        <footer class="footer footer_home">
-            <span>all rights reserved</span>
-            <a href=""><span>Termos de uso</span></a>
-            <a href=""><span>Politica de Privacidade</span></a>
-            <div id="help">
-                <img src="" alt="">
-                <span>Precisa de ajuda</span>
-            </div>
-        </footer>
+        <!-- Tags para o footer e modais -->
+        <section id="privacy_policy_container">
+        <section id="terms_container">
+        <section id="sac_container">
+        <section id="footer_container"></section>
     `;
 
+    document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
+
     navRoutes();
     homeBtns();
     limitDate('input-date');
@@ -154,6 +154,28 @@ export function Home() {
         const selectedDate = inputDate.value;
         loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
     });
+
+        
+        
+    // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+    const privacyModalContainer = document.getElementById('privacy_policy_container');
+    const privacyModal = privacyPolicyModal();
+    privacyModalContainer.appendChild(privacyModal);
+    
+    const termsContainer = document.getElementById("terms_container");
+    const terms = termsModal();
+    termsContainer.appendChild(terms);
+    
+    const sacContainer = document.getElementById("sac_container");
+    const sac = sacModal();
+    sacContainer.appendChild(sac);
+    
+    const footerContainer = document.getElementById("footer_container");
+    const footer = footerHome();
+    footerContainer.appendChild(footer);
+    
+    //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+    createModalEvents();
 
     return div
 }
@@ -272,7 +294,7 @@ async function loadUserDataForDate(date) {
             });
 
             if (!getDailyGoal.ok) {
-                throw new Error("Erro ao localizar o objetivo diário de consumo do usuário");         
+                throw new Error("Erro ao localizar calcular objetivo diário de consumo de calorias do usuário");         
             } 
 
             const userDailyGoal = await getDailyGoal.json();
