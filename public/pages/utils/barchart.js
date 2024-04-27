@@ -1,3 +1,66 @@
+
+export function generateBarChart(dias){
+  const canvas = document.createElement("canvas");
+  canvas.width = 300;
+  canvas.height = 300;
+  
+  const ctx = canvas.getContext('2d');
+  
+  let labels = dias.map(dia => dia.data);
+  let dados = {
+      calorias: dias.map(dia => dia.calorias),
+      gordura: dias.map(dia => dia.gordura),
+      proteina: dias.map(dia => dia.proteina),
+      carboidrato: dias.map(dia => dia.carboidrato)
+  };
+  
+  let chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+          datasets: [
+              {
+                label: 'Calorias',
+                backgroundColor: '#FDFD96',
+                borderColor: '#C8CA66',
+                borderWidth: 1,
+                data: dados.calorias
+              },
+              {
+                  label: 'Gordura',
+                  backgroundColor: '#D9D8F7',
+                  borderColor: '#1E1BFF',
+                  borderWidth: 1,
+                  data: dados.gordura
+                },
+              {
+                  label: 'Proteína',
+                  backgroundColor: '#F5D8C4',
+                  borderColor: '#E96001',
+                  borderWidth: 1,
+                  data: dados.proteina
+                },
+                {
+                  label: 'Carboidrato',
+                  backgroundColor: '#FACFF6',
+                  borderColor: '#FF0DE5',
+                  borderWidth: 1,
+                  data: dados.carboidrato
+                }
+              ]
+            },
+      options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+      }
+    });
+    const chartContainer = document.getElementById("week-chart");
+    chartContainer.appendChild(canvas);
+};
+
 // export function generateBarChart(title, totalValue, consumedValue, chartId, color, backgroundColor) {
 //     const canvas = document.createElement("canvas");
 //     canvas.width = 300;
@@ -60,65 +123,3 @@
 //     chart.options.plugins.title.text = title;
 //     chart.update();
 // }
-
-export function generateBarChart(dias){
-  const canvas = document.createElement("canvas");
-  canvas.width = 300;
-  canvas.height = 300;
-  
-  const ctx = canvas.getContext('2d');
-  
-  let labels = dias.map(dia => dia.data);
-  let dados = {
-      calorias: dias.map(dia => dia.calorias),
-      gordura: dias.map(dia => dia.gordura),
-      proteina: dias.map(dia => dia.proteina),
-      carboidrato: dias.map(dia => dia.carboidrato)
-  };
-  
-  let chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: labels,
-          datasets: [
-              {
-                  label: 'Calorias',
-                  backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                  borderColor: 'rgba(255, 99, 132, 1)',
-                  borderWidth: 1,
-                  data: dados.calorias
-              },
-              {
-                  label: 'Gordura',
-                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                  borderColor: 'rgba(54, 162, 235, 1)',
-                  borderWidth: 1,
-                  data: dados.gordura
-              },
-              {
-                  label: 'Proteína',
-                  backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                  borderColor: 'rgba(255, 206, 86, 1)',
-                  borderWidth: 1,
-                  data: dados.proteina
-              },
-              {
-                  label: 'Carboidrato',
-                  backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1,
-                  data: dados.carboidrato
-              }
-          ]
-      },
-      options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
-    const chartContainer = document.getElementById("week-chart");
-    chartContainer.appendChild(canvas);
-};

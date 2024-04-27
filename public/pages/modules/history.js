@@ -3,8 +3,6 @@ import createCustomEvent from "./event.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
 
-let chartInstance = null;
-
 export function History() {
     const div = document.createElement("div");
 
@@ -144,16 +142,16 @@ export function History() {
         document.getElementById('dataFim').value = formatarData(dataFim);
     });
 
-    let dias = [];
+    const dias = [];
     generateBarChart(dias);
     
     return div
 }
 
 function formatarData(data) {
-    let ano = data.getFullYear();
-    let mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
-    let dia = String(data.getDate()).padStart(2, '0');
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
+    const dia = String(data.getDate()).padStart(2, '0');
     
     return `${ano}-${mes}-${dia}`;
 }
@@ -171,23 +169,23 @@ function navegar(direcao) {
     document.getElementById('dataFim').value = formatarData(dataFim);
 }
 
-function calcularDias(dataInicio, dataFim) {
-    let dataAtual = new Date(dataInicio);
+// function calcularDias(dataInicio, dataFim) {
+//     const dataAtual = new Date(dataInicio);
 
-    while (dataAtual <= dataFim) {
-        let dia = {
-            data: formatarDataGrafico(dataAtual, 'ddd'),
-            calorias: Math.floor(Math.random() * 1000),
-            gordura: Math.floor(Math.random() * 100),
-            proteina: Math.floor(Math.random() * 100),
-            carboidrato: Math.floor(Math.random() * 200)
-        };
-        dias.push(dia);
-        dataAtual.setDate(dataAtual.getDate() + 1);
-    }
+//     while (dataAtual <= dataFim) {
+//         let dia = {
+//             data: formatarDataGrafico(dataAtual, 'ddd'),
+//             calorias: Math.floor(Math.random() * 1000),
+//             gordura: Math.floor(Math.random() * 100),
+//             proteina: Math.floor(Math.random() * 100),
+//             carboidrato: Math.floor(Math.random() * 200)
+//         };
+//         dias.push(dia);
+//         dataAtual.setDate(dataAtual.getDate() + 1);
+//     }
 
-    return dias;
-}
+//     return dias;
+// }
 
 function formatarDataGrafico(data, formato) {
     let diaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -201,46 +199,6 @@ function formatarDataGrafico(data, formato) {
 
     return `${ano}-${mes}-${dia}`;
 }
-
-
-
-// function getweek(selectedDate) {
-//     let selecionado = document.getElementById('selecionarData').value;
-//     let data = new Date();
-    
-//     switch (selecionado) {
-//         case 'hoje':
-//             document.getElementById('dataInicio').value = formatarData(data);
-//             document.getElementById('dataFim').value = formatarData(data);
-//             break;
-//         case 'essaSemana':
-//             let diaDaSemana = data.getDay();
-//             let ultimoDia = 6 - diaDaSemana;
-//             let primeiroDia = 1 - diaDaSemana;
-//             data.setDate(data.getDate() + primeiroDia);
-//             document.getElementById('dataInicio').value = formatarData(data);
-//             data.setDate(data.getDate() + ultimoDia);
-//             document.getElementById('dataFim').value = formatarData(data);
-//             break;
-//         case 'semanaPassada':
-//             let primeiroDiaPassada = -6 - data.getDay();
-//             let ultimoDiaPassada = -7 - data.getDay();
-//             data.setDate(data.getDate() + primeiroDiaPassada);
-//             document.getElementById('dataInicio').value = formatarData(data);
-//             data.setDate(data.getDate() + ultimoDiaPassada);
-//             document.getElementById('dataFim').value = formatarData(data);
-//             break;
-//         // Adicione mais cases conforme necessário
-//     }
-// }
-
-// function formatarData(data) {
-//     let ano = data.getFullYear();
-//     let mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
-//     let dia = String(data.getDate()).padStart(2, '0');
-    
-//     return `${ano}-${mes}-${dia}`;
-// }
 
 function createModalEvents() {
     const openModalPrivacy = document.getElementById("open-modal-privacy");
