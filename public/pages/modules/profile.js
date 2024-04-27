@@ -10,7 +10,10 @@ export function Profile() {
     const div = document.createElement("div");
 
     div.innerHTML=`
-    <header>
+    <div class="back_profile"></div>
+    <div class="logo_profile"></div>
+    <header class="header_profile">
+        <!-- 
         <div>
             <div class="logo" id="logo">
                 <a>
@@ -18,16 +21,18 @@ export function Profile() {
                 </a>
             </div>
         </div>
+        -->
         <nav class="header_nav">
         <div id="navHome">Home</div>
         <div id="navHistory">Histórico</div>
         <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
     </nav>
     </header>
-    <div id="message" class="message-container">
+    <div id="message" class="message-container hidden">
     <div id="message-content" class="message-content hidden"></div>
 </div>
     <div class="profile_form">
+    <h1 class="profile_title">Perfil</h1>
         <div class="profile_picture">
             <input type="file" id="input-image" accept="image/*" style="display:none;" />
             <label for="input-image">
@@ -96,7 +101,7 @@ export function Profile() {
             </div>
         </div>
     </div>
-    <div>
+    <div class="btns_profile">
         <button id="btn-save-changes" class="btn_stroke">Salvar Alterações</button>
         <button class="btn_stroke" id="btn-delete">APAGAR CONTA</button>
     </div>
@@ -520,13 +525,13 @@ export function navProfile(){
     const navHome = document.getElementById("navHome");
     const navHistory = document.getElementById("navHistory");
     const btnExit = document.getElementById("btnExit");
-    const logo = document.getElementById("logo");
+    // const logo = document.getElementById("logo");
  
 
-    logo.addEventListener("click", ()=>{
-        const customEvent = createCustomEvent('/home');
-        window.dispatchEvent(customEvent); 
-    })
+    // logo.addEventListener("click", ()=>{
+    //     const customEvent = createCustomEvent('/home');
+    //     window.dispatchEvent(customEvent); 
+    // })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
