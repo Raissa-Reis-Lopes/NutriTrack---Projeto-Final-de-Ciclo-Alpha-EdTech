@@ -74,39 +74,42 @@ const newFoodAdded = async(req, res) =>{
 }
 
 
-
-
-const updateFoodAdded = async(req, res) => {
-    
+const updateFoodAdded = async (req, res) => {
     try {
-    const { user_id, food_id, date, food_quantity, meal } = req.body;
+        const { id } = req.params; // Obtém o ID serial do alimento da URL
+        const { user_id, food_id, date, food_quantity, meal } = req.body;
 
-    if(!user_id){
-        throw new Error('O id do usuário é obrigatório');
-    }
+        if (!id) {
+            throw new Error('O ID do alimento adicionado é obrigatório');
+        }
 
-    if(!food_id){
-        throw new Error('O id do alimento é obrigatório')
-    }
+        if (!user_id) {
+            throw new Error('O ID do usuário é obrigatório');
+        }
 
-    if(!food_quantity){
-        throw new Error('Forneça a quantidade consumida');
-    }
+        if (!food_id) {
+            throw new Error('O ID do alimento é obrigatório');
+        }
 
-    if(!meal){
-        throw new Error("Informe em qual refeição este aliemnto foi adicionado")
-    }
+        if (!food_quantity) {
+            throw new Error('Forneça a quantidade consumida');
+        }
 
-    if(!date){
-        throw new Error('A data é obrigatória')
-    }
+        if (!meal) {
+            throw new Error('Informe em qual refeição este alimento foi adicionado');
+        }
 
-    const result = await foodAddedServices.updateFoodAdded(user_id, food_id, date, food_quantity, meal);
-    return res.status(200).json({ success: true, message:'Alimento atualizado com sucesso', data: result});
+        if (!date) {
+            throw new Error('A data é obrigatória');
+        }
+
+        const result = await foodAddedServices.updateFoodAdded(user_id, food_id, date, food_quantity, meal, id); // Passa o ID serial como primeiro argumento
+        return res.status(200).json({ success: true, message: 'Alimento atualizado com sucesso', data: result });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-}
+};
+
 
 const deleteFoodAdded = async(req, res) => {
     const { id } = req.params;

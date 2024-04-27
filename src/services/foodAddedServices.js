@@ -124,9 +124,9 @@ const newFoodAdded = async(user_id, food_id, food_quantity, meal, date)=> {
     }
 }
 
-const updateFoodAdded = async(user_id, food_id, date, food_quantity, meal) => {
+const updateFoodAdded = async(user_id, food_id, date, food_quantity, meal,id) => {
     try {
-        const result = await foodAddedRepository.updateFoodAdded(user_id, food_id, date, food_quantity, meal );
+        const result = await foodAddedRepository.updateFoodAdded(user_id, food_id, date, food_quantity, meal,id );
         return result;
     } catch (error) {
         console.log(error);
