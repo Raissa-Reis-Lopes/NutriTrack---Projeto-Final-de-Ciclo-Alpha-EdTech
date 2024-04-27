@@ -40,3 +40,12 @@ margin-top: 50px;
     align-items: center;
     justify-content: left;
 }
+
+.footer_profile{
+    display: flex;
+    gap: 80px;
+    align-items: center;
+    justify-content: right;
+    padding-right: 50px;
+}
+

@@ -8,64 +8,66 @@ export function Config() {
     const div = document.createElement("div");
 
     div.innerHTML=`
+    <div class="back_general"></div>
     <header>
     <div class="logo" id="logo">
-            <img src="../img/logo.svg" alt="NutriTrack">
+        <img src="../img/logo.svg" alt="NutriTrack">
     </div>
     </header>
-    <main class="welcome"> 
-    <div id="message" class="message-container">
-    <div id="message-content" class="message-content hidden"></div>
+    <main class="container_left container_login">
+    <div class="welcome"  id="form1" method="post" style="display:none;">
+        <h1 class="title_config">Agora vamos calcular seu gasto energético diário!</h1>
+        <div class="div_input div_input_config">
+        <div class="align_row_register">
+            <label for="weight">Peso</label>
+            <input class="input_config" type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
+        </div>    
+        <div class="align_row_register">
+            <label for="height">Altura</label>
+            <input class="input_config"  type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
+        </div>
+        <div class="align_row_register">
+            <label for="date">Data de nascimento</label>
+            <input class="input_config"  type="date" name="date" id="birth_date" />
+        </div>
+        <div class="align_row_register">
+            <label for="gender">Sexo biológico</label>
+            <select class="input_config"  name="gender" id="gender">
+                <option value="">Selecione</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+            </select>
+        </div>
+        <div class="align_row_register">
+            <label for="activity">Nivel de atividade</label>
+            <select class="input_config"  name="activity" id="activity">
+                <option value="">Selecione</option>
+                <option value="sedentary">Sedentário (0 a 1 vez por semana) </option>
+                <option value="lightlyActive">Levemente Ativo (2 a 3 vezes por semana)</option>
+                <option value="moderatelyActive">Moderadamente Ativo (3 a 5 vezes por semana)</option>
+                <option value="veryActive">Ativo (mais de 5 vezes na semana) </option>
+                <option value="extraActive">Muito Ativo (atleta / esforço físico diário)</option>
+            </select>
+        </div>
+        <div id="message" class="message-container hidden">
+        <div id="message-content" class="message-content hidden"></div>
+        </div>
+        </div>
+        <div class="btns_index">
+            <button id="btn_back" class="btn_stroke">Voltar</button>
+            <button id="btn_next" class="btn_colorLinear">Próximo</button>
+        </div>
     </div>
-        <form id="form2" method="post" class="calculator_input" style="display:none;">
-        <h1>Agora, vamos calcular seu gasto energético diário!</h1>
-            <div class="form">
-                <label for="weight">Peso</label>
-                <input type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
-                <div id ="erroWeight" class="erro"></div>
-            </div>
-            <div class="form">
-                <label for="height">Altura</label>
-                <input type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
-                <div id ="erroHeight" class="erro"></div>
-            </div>
-            <div class="form">
-                <label for="date">Data de nascimento</label>
-                <input type="date" name="date" id="birth_date" />
-            </div>
-            <div class="form">
-                <label for="gender">Sexo biológico</label>
-                <select name="gender" id="gender">
-                    <option value="">Selecione</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Feminino</option>
-                </select>
-            </div>
-            <div class="form">
-                <label for="activity">Nivel de atividade</label>
-                <select name="activity" id="activity">
-                    <option value="">Selecione</option>
-                    <option value="sedentary">Sedentário</option>
-                    <option value="lightlyActive">Leve</option>
-                    <option value="moderatelyActive">Moderado</option>
-                    <option value="veryActive">Ativo</option>
-                    <option value="extraActive">Muito Ativo</option>
-                </select>
-            </div>
-            <div class="btns_index">
-                <button id="btn_back" class="btn_stroke">Voltar</button>
-                <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
-            </div>
-        </form>
-        <form id="form3" method="post" style="display:none;">
-        <h1>Escolha seu plano alimentar!</h1>
+    <div class="welcome" id="form2" method="post" style="display:none;">
+        <h1 class="title_plan">Escolha seu plano alimentar!</h1>
+        <div class="div_input" >
             <div class="container_center">
                 <div class="plan">
-                    <div id="plan1" class="chosenPlan">
+                    <div>
                         <h1>Perder peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
+                            <div class="flip-card-inner chosenPlan" id="plan1">
+                                <div class="flip-card-front" >
                                     <h1>45% Carboidratos</h1>
                                     <h1>30% Proteínas</h1>
                                     <h1>25% Gorduras</h1>
@@ -76,10 +78,10 @@ export function Config() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan2" class="chosenPlan">
+                    <div>
                         <h1>Manter o peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
+                            <div class="flip-card-inner  chosenPlan"  id="plan2">
                                 <div class="flip-card-front">
                                     <h1>55% Carboidratos</h1>
                                     <h1>15% Proteínas</h1>
@@ -91,11 +93,11 @@ export function Config() {
                             </div>
                         </div>
                     </div>
-                    <div id="plan3" class="chosenPlan">
+                    <div>
                         <h1>Ganhar peso</h1>
                         <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
+                            <div class="flip-card-inner chosenPlan"  id="plan3">
+                                <div class="flip-card-front ">
                                     <h1>50% Carboidratos</h1>
                                     <h1>25% Proteínas</h1>
                                     <h1>25% Gorduras</h1>
@@ -107,19 +109,20 @@ export function Config() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="btns_index">
-                <button id="btn_back_3" class="btn_stroke">Voltar</button>
-                <button id="btn_next_3" class="btn_colorLinear">Próximo</button>
-            </div>
-        </form>
-
-       
-
-    </main>
-    <footer>
-        <span>all rights reserved</span>
-    </footer>
+            </div> 
+        <div id="message" class="message-container hidden">
+        <div id="message-content" class="message-content hidden"></div>
+        </div>
+        </div>
+        <div class="btns_index">
+            <button id="btn_back_2" class="btn_stroke">Voltar</button>
+            <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
+        </div>
+    </div>
+</main>
+<footer class="footer footer_full">
+    <span>all rights reserved</span>
+</footer>
     `;
 
     document.getElementById("root").innerHTML = '';
@@ -169,29 +172,41 @@ document.getElementById('plan3').addEventListener('click', () => selectPlan('pla
 
 export function configBtns() {
 
-    //Separei o form 1 do cadastro em outra página
-    let currentForm = 2;
-    showForm(currentForm);
+    const logo = document.getElementById("logo");
+ 
+
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/');
+        window.dispatchEvent(customEvent); 
+    })
+
+    // let currentForm = 1;
+    showForm(1);
 
     const btnBack = document.getElementById("btn_back");
+    const btnBack2 = document.getElementById("btn_back_2");
+    const btnNext1 = document.getElementById("btn_next");
     const btnNext2 = document.getElementById("btn_next_2");
-    const btnNext3 = document.getElementById("btn_next_3");
 
     btnBack.addEventListener("click", () => {
             const customEvent = createCustomEvent('/login');
             window.dispatchEvent(customEvent);
     });
 
-        btnNext2.addEventListener('click', async(event) =>{
+    btnBack2.addEventListener("click", ()=>{
+        showForm(1);
+    });
+
+        btnNext1.addEventListener('click', async(event) =>{
             event.preventDefault();
 
             
 
-            const erroWeight = document.getElementById("erroWeight");
-            const erroHeight = document.getElementById("erroHeight");
-            erroWeight.innerText = ''; // Limpa mensagens antigas de erro
-            erroHeight.innerText = ''; // Limpa mensagens antigas de erro
-            const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
+            // const erroWeight = document.getElementById("erroWeight");
+            // const erroHeight = document.getElementById("erroHeight");
+            // erroWeight.innerText = ''; // Limpa mensagens antigas de erro
+            // erroHeight.innerText = ''; // Limpa mensagens antigas de erro
+            // // const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
     
 
             const weight = document.getElementById("weight").value;
@@ -202,34 +217,34 @@ export function configBtns() {
 
 
             if(!weightValid(weight)){
-                showMessage('fail',"Insira um peso válido");
+                showMessage('fail',"Insira um peso válido", "30%","59%");
                 return;
             }
 
             if(!heightValid(height)){
-                showMessage('fail',"Insira uma altura válida, em centímetros");
+                showMessage('fail',"Insira uma altura válida, em centímetros", "35%","59%");
                 return;
             }
 
             if(!birthDate){
-                showMessage('fail',"A data de nascimento é obrigatória");
+                showMessage('fail',"A data de nascimento é obrigatória", "40%","59%");
                 return;
             }
 
             if(!gender){
-                showMessage("fail","Selecione o sexo biológico");
+                showMessage("fail","Selecione o sexo biológico", "50%","59%");
                 return;
             }
 
             if(!activityLevel){
-                showMessage("fail","Selecione o nível de atividade semanal");
+                showMessage("fail","Selecione o nível de atividade semanal","55%","59%");
                 return;
             }
 
-            currentForm++;
-            showForm(currentForm);
+            // currentForm++;
+            showForm(2);
 
-            btnNext3.addEventListener('click', async(event)=>{
+            btnNext2.addEventListener('click', async(event)=>{
                 event.preventDefault();
 
                 const getUserId = await fetch("/api/login/", {
@@ -289,8 +304,8 @@ export function configBtns() {
 }
 
 function showForm(formNumber) {
+    document.getElementById("form1").style.display = "none";
     document.getElementById("form2").style.display = "none";
-    document.getElementById("form3").style.display = "none";
-    document.getElementById(`form${formNumber}`).style.display = "block";
+    document.getElementById(`form${formNumber}`).style.display = "flex";
 }
 

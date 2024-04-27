@@ -11,6 +11,10 @@ ul {
     padding: 0px;
     list-style: none;
   }
+
+  select{
+    outline: none;
+  }
   
   a {
     text-decoration: none;
@@ -29,6 +33,12 @@ ul {
   }
 
   .logo{
+    width: 100%;
+    max-width: 250px;
+    cursor: pointer;
+  }
+
+  .logo_initial{
     width: 100%;
     max-width: 250px;
   }
@@ -71,3 +81,21 @@ ul {
     color: red;
     font-weight: 600;
   }
+
+
+  /* Para o scroll */
+
+::-webkit-scrollbar {
+  width: 12px; 
+  height: 4px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cor-p5); /* cor do scroll */
+  border-radius: 6px; /* borda do scroll */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cor-p4); /* cor do scroll ao passar o mouse */
+}

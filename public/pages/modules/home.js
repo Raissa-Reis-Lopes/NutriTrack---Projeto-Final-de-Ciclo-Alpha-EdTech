@@ -1,9 +1,12 @@
 import createCustomEvent from "./event.js";
-import { AddFood, SearchFood } from "./modals.js";
+import { AddFood, SearchFood, CreateMyFoodbtn } from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
+import { nameValid, numberValid } from "./validation.js";
+import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
+import { footerHome } from "./footer.js";
 
 let proteinChartInstance = null;
 let carboChartInstance = null;
@@ -12,10 +15,10 @@ let lipidChartInstance = null;
 export function Home() {
     const div = document.createElement("div");
     div.innerHTML=`  
-
+    <div id="modal_container_home" class="modal_container_home hidden"></div>
         <header>
             <div class="logo" id="logo">
-                <a href="/home">
+                <a>
                     <img src="./img/logo.svg" alt="NutriTrack">
                 </a>
             </div>
@@ -125,18 +128,16 @@ export function Home() {
             </section>
         </div>
 
-        <footer class="footer footer_home">
-            <span>all rights reserved</span>
-            <a href=""><span>Termos de uso</span></a>
-            <a href=""><span>Politica de Privacidade</span></a>
-            <div id="help">
-                <img src="" alt="">
-                <span>Precisa de ajuda</span>
-            </div>
-        </footer>
+        <!-- Tags para o footer e modais -->
+        <section id="privacy_policy_container">
+        <section id="terms_container">
+        <section id="sac_container">
+        <section id="footer_container"></section>
     `;
 
+    document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
+
     navRoutes();
     homeBtns();
     limitDate('input-date');
@@ -153,6 +154,28 @@ export function Home() {
         const selectedDate = inputDate.value;
         loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
     });
+
+        
+        
+    // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+    const privacyModalContainer = document.getElementById('privacy_policy_container');
+    const privacyModal = privacyPolicyModal();
+    privacyModalContainer.appendChild(privacyModal);
+    
+    const termsContainer = document.getElementById("terms_container");
+    const terms = termsModal();
+    termsContainer.appendChild(terms);
+    
+    const sacContainer = document.getElementById("sac_container");
+    const sac = sacModal();
+    sacContainer.appendChild(sac);
+    
+    const footerContainer = document.getElementById("footer_container");
+    const footer = footerHome();
+    footerContainer.appendChild(footer);
+    
+    //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+    createModalEventsDefault();
 
     return div
 }
@@ -271,7 +294,7 @@ async function loadUserDataForDate(date) {
             });
 
             if (!getDailyGoal.ok) {
-                throw new Error("Erro ao localizar o objetivo diário de consumo do usuário");         
+                throw new Error("Erro ao localizar calcular objetivo diário de consumo de calorias do usuário");         
             } 
 
             const userDailyGoal = await getDailyGoal.json();
@@ -350,7 +373,7 @@ async function loadUserDataForDate(date) {
 
         }
     } catch(error) {
-        showMessage("fail","Não há alimentos cadastrados para a data selecionada");
+       console.log(error.message)
     }
     loadAddedFoods();
 }
@@ -376,16 +399,23 @@ export function navRoutes() {
 
   navProfile.addEventListener("click", () => {
     const customEvent = createCustomEvent("/profile");
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
     window.dispatchEvent(customEvent);
   });
 
   navHistory.addEventListener("click", () => {
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
     const customEvent = createCustomEvent("/history");
     window.dispatchEvent(customEvent);
   });
 
   btnExit.addEventListener("click", logout);
 }
+
 
 export function homeBtns() {
   const btnBreakfast = document.getElementById("btn_add_breakfast");
@@ -404,54 +434,191 @@ export function homeBtns() {
 let selectedMealType = "";
 
 async function openModalWithMeal(meal) {
+
   selectedMealType = meal;
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
   const modalSearchFood = modal.querySelector("#modalSearchFood");
+  const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
+  
   let userId;
 
-  try {
-    const responseFood = await fetch("/api/food", {
-      method: "GET",
-    });
+ 
+    const showFoods = modal.querySelector("#showFoods");
+    const showMyFoods = modal.querySelector("#showMyFoods");   
 
-    if (!responseFood.ok) {
-      throw new Error("Falha ao tentar localizar os alimentos");
+
+    if (showFoods) {
+      showFoods.addEventListener("click", async() => {
+        datafoodContainer.innerHTML="";
+        btnCreatefoodContainer.innerHTML="";
+        try {
+          const responseFood = await fetch("/api/food", {
+            method: "GET",
+          });
+      
+          if (!responseFood.ok) {
+            throw new Error("Falha ao tentar localizar os alimentos");
+          }
+      
+          const foodList = await responseFood.json(); // Trata a resposta JSON
+          userId = await getUserId();
+          console.log(userId);
+      
+          // Adiciona os alimentos à lista no modal
+          foodList.forEach((foodItem) => {
+            const foodElement = document.createElement("div");
+            foodElement.textContent = foodItem.name;
+            foodElement.addEventListener("click", async () => {
+              await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
+              modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+            });
+            datafoodContainer.appendChild(foodElement);
+          });
+        } catch (error) {
+          console.log("Erro ao buscar alimentos:", error);
+        }
+      });
     }
 
-    const foodList = await responseFood.json(); // Trata a resposta JSON
-    userId = await getUserId();
-    console.log(userId);
+    if (showMyFoods) {
+      showMyFoods.addEventListener("click", async() => {
+        datafoodContainer.innerHTML="";
+        btnCreatefoodContainer.innerHTML="";
 
-    // Adiciona os alimentos à lista no modal
-    foodList.forEach((foodItem) => {
-      const foodElement = document.createElement("div");
-      foodElement.textContent = foodItem.name;
-      foodElement.addEventListener("click", async () => {
-        await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
-        modal.remove(); // Remove o modal após clicar em um elemento do foodlist
-      });
-      datafoodContainer.appendChild(foodElement);
-    });
-  } catch (error) {
-    console.log("Erro ao buscar alimentos:", error);
-  }
+        const createMyFoodbtn = document.createElement("button");
+        createMyFoodbtn.innerText="criar alimento"
+        btnCreatefoodContainer.appendChild(createMyFoodbtn);
+        const listCreatefoodContainer = document.createElement("div");
+        userId = await getUserId();
+
+        createMyFoodbtn.addEventListener("click", ()=>{
+          console.log(userId,"create");
+          const modalCreate = CreateMyFoodbtn();
+          const btnCancelCreate = modalCreate.querySelector("#btn_cancel_create");
+          const btnCreateNew = modalCreate.querySelector("#btn_create_new");
+
+
+          btnCancelCreate.addEventListener("click", ()=> modalCreate.remove());
+
+          btnCreateNew.addEventListener("click", async()=>{
+            const nameCreate = modalCreate.querySelector("#nameCreate").value;
+            const caloriesCreate = modalCreate.querySelector("#caloriesCreate").value;
+            const carbCreate = modalCreate.querySelector("#carbCreate").value;
+            const proteinCreate = modalCreate.querySelector("#proteinCreate").value;
+            const fatCreate = modalCreate.querySelector("#fatCreate").value;
+
+          if (!nameValid(nameCreate)) {
+              showMessage('fail',"Formato de nome inválido!");
+              return;
+          }
+          if (!numberValid(caloriesCreate)||!numberValid(carbCreate)||!numberValid( proteinCreate)||!numberValid(caloriesCreate)||!numberValid(fatCreate)) {
+            showMessage('fail',"Precisa ser um numero inteiro maior que 0");
+            return;
+        }
+
+            // função para salvar o alimento no banco de dados
+            createNewFood(userId,nameCreate,caloriesCreate,carbCreate,proteinCreate,fatCreate);
+            
+            modalCreate.remove();
+          });
+
+         document.body.appendChild(modalCreate);
+          });
+
+          refreshFoodList(userId);
+          // função para listar os alimentos da tabela food que contenham o userID
+          async function refreshFoodList(userId) {
+            try {
+              const responseFood = await fetch(`/api/food/user/${userId}`, {
+                method: "GET",
+              });
+          
+              if (!responseFood.ok) {
+                throw new Error("Falha ao tentar localizar os alimentos");
+              }
+          
+              const myFoodList = await responseFood.json(); // Trata a resposta JSON
+          
+              // Limpa a lista existente antes de adicionar os novos alimentos
+              listCreatefoodContainer.innerHTML = "";
+          
+              // Adiciona os alimentos à lista no modal
+              myFoodList.forEach((myFoodItem) => {
+                const myFoodElement = document.createElement("div");
+                myFoodElement.textContent = myFoodItem.name;
+                myFoodElement.addEventListener("click", async () => {
+                  await openAddFoodModal(userId, myFoodItem, meal); // Abre o modal de adicionar comida
+                  modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+                });
+                listCreatefoodContainer.appendChild(myFoodElement);
+                btnCreatefoodContainer.appendChild(listCreatefoodContainer);
+              });
+            } catch (error) {
+              console.log("Erro ao buscar alimentos:", error);
+              return [];
+            }
+          }
+
+          // função para criar um novo alimento no banco de dados food
+          async function createNewFood(userId, nameCreate, caloriesCreate, carbCreate, proteinCreate, fatCreate) {
+            const foodData = {
+              user_id: userId,
+              name: nameCreate,
+              calorie: caloriesCreate,
+              carbohydrate_g: carbCreate,
+              protein_g: proteinCreate,
+              lipid_g: fatCreate,
+            };
+
+            try {
+              const responseFood = await fetch("/api/food", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(foodData),
+              });
+
+              if (!responseFood.ok) {
+                throw new Error("Falha ao tentar criar o alimento");
+              }
+
+              const newFood = await responseFood.json(); 
+              refreshFoodList(userId);
+
+              console.log("Alimento criado com sucesso:", newFood);
+            } catch (error) {
+              console.error("Erro ao criar alimento:", error);
+            }
+          }
+
+
+        })
+       
+
+      };
+
+  
+  
   modal.querySelector("#back_modal_searchFood").addEventListener("click", () => {
     document.querySelector(".modal").remove();
   });
   document.body.appendChild(modal); // Adiciona o modal ao body
+ 
+  modalSearchFood.appendChild(btnCreatefoodContainer);
   modalSearchFood.appendChild(datafoodContainer);
-}
+ }
 
-function openAddFoodModal(userId,item, meal) {
+function openAddFoodModal(userId,item,meal) {
   
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
   modal.querySelector("#nameFood").textContent = item.name;
-  // modal.querySelector("#quantity_calories").textContent = item.calories;
-  // modal.querySelector("#quantity_carb").textContent = item.carbs;
-  // modal.querySelector("#quantity_proteins").textContent = item.proteins;
-  // modal.querySelector("#quantity_fat").textContent = item.fat;
+  modal.querySelector("#quantity_calories").textContent = item.calorie;
+  modal.querySelector("#quantity_carb").textContent = item.carbohydrate_g;
+  modal.querySelector("#quantity_proteins").textContent = item.protein_g;
+  modal.querySelector("#quantity_fat").textContent = item.lipid_g;
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = meal;
   
@@ -464,6 +631,10 @@ function openAddFoodModal(userId,item, meal) {
     const gramsInput = modal.querySelector("#grams").value;
     const mealSelect = modal.querySelector("#meal").value;
     const dateCalendar = document.getElementById('input-date').value;
+    if (!numberValid(gramsInput)) {
+      showMessage('fail',"Precisa ser um numero inteiro maior que 0");
+      return;
+    }
     console.log(dateCalendar);
     const foodId = item.id;
     console.log(userId);
@@ -509,40 +680,23 @@ function openAddFoodModal(userId,item, meal) {
 
 async function updateMealSection(userId,dateCalendar) {
  
-  try {
-    clearMealSections();
-    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro ao obter alimentos adicionados");
-    }
-
-    const responseData = await response.json();
-    const addedFoods = responseData.data.foodDetails; 
-    console.log("Response from server:", addedFoods);
-
-    addedFoods.forEach((food) => {
-      const mealSection = document.querySelector(`#meal_add_${food.meal}`);
-      const newFoodElement = document.createElement("div");
-      newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
-      mealSection.appendChild(newFoodElement);
-    });
-
-    console.log("Alimentos carregados do banco de dados com sucesso!");
-  } catch (error) {
-    console.error("Erro ao carregar alimentos do banco de dados:", error);
-  }
+  clearMealSections();
+  fetchAddedFoods(userId,dateCalendar);
 }
 
 async function loadAddedFoods() {
   const dateCalendar = document.getElementById('input-date').value;
   console.log(dateCalendar, "carregando")
   const userId = await getUserId();
+  clearMealSections();
+
+  fetchAddedFoods(userId,dateCalendar)
   console.log(userId, "carregando")
 
+}
 
+
+async function fetchAddedFoods(userId, dateCalendar){
   try {
     const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`, {
       method: "GET",
@@ -554,6 +708,8 @@ async function loadAddedFoods() {
 
     const responseData = await response.json();
     const addedFoods = responseData.data.foodDetails; 
+    console.log(addedFoods);
+    console.log(dateCalendar);
 
     if (addedFoods.length === 0) {
       const noFoodsMessage = document.createElement("div");
@@ -561,12 +717,48 @@ async function loadAddedFoods() {
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
       mealSection.appendChild(noFoodsMessage);
     } else {
-      addedFoods.forEach((food) => {
-        const mealSection = document.querySelector(`#meal_add_${food.meal}`);
-        const newFoodElement = document.createElement("div");
-        newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
-        mealSection.appendChild(newFoodElement);
-      });
+    addedFoods.forEach((food) => {
+      const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+      const divFoodElement = document.createElement("div");
+      const btnsFoodElement = document.createElement("div");
+      console.log(food.id,"foodid");
+      console.log(food.meal,"foodmeal");
+
+      const btnEditFoodElement = document.createElement("button");
+      btnEditFoodElement.textContent = `Editar`;
+      const btnDeleteFoodElement = document.createElement("button");
+      btnDeleteFoodElement.textContent = `Deletar`;
+
+  //       // Event listener para o botão de editar
+  // btnEditFoodElement.addEventListener("click", async () => {
+
+  //   try {
+  //     console.log("Botão Editar clicado para o alimento:", food.id);
+  //     await editFoodItem(food.id);
+  //   } catch (error) {
+  //     console.error("Erro ao editar alimento:", error);
+  //   }
+  // });
+
+  // Event listener para o botão de deletar
+  btnDeleteFoodElement.addEventListener("click", async () => {
+    try {
+      console.log("Botão Deletar clicado para o alimento:", food.id);
+      await deleteFoodItem(food.id);
+    } catch (error) {
+      console.error("Erro ao deletar alimento:", error);
+    }
+  });
+      
+      const newFoodElement = document.createElement("div");
+      newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
+
+      divFoodElement.appendChild(newFoodElement);
+      btnsFoodElement.appendChild(btnEditFoodElement);
+      btnsFoodElement.appendChild(btnDeleteFoodElement);
+      divFoodElement.appendChild(btnsFoodElement);
+      mealSection.appendChild(divFoodElement);
+    });
     }
 
     console.log("Alimentos carregados do banco de dados com sucesso!");
@@ -575,10 +767,70 @@ async function loadAddedFoods() {
   }
 }
 
-
 function clearMealSections() {
   const mealSections = document.querySelectorAll(".meal_add");
   mealSections.forEach((section) => {
     section.innerHTML = ""; // Limpa o conteúdo da seção de refeições
   });
 }
+
+
+async function deleteFoodItem(foodId) {
+  if (!confirm("Tem certeza que deseja deletar este alimento?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/foodAdded/${foodId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao deletar alimento.");
+    }
+
+    console.log("Alimento deletado com sucesso!");
+   
+  } catch (error) {
+    console.error("Erro ao deletar alimento:", error);
+  }
+}
+
+
+// async function editFoodItem(foodId) {
+  
+//   const newGrams = ;
+//   const newMeal = ;
+
+//   if (!newGrams || !newMeal) {
+//     console.error("Dados de edição incompletos.");
+//     return;
+//   }
+
+//   try {
+//     const userId = await getUserId(); 
+//     const dateCalendar = document.getElementById('input-date').value; 
+
+//     const response = await fetch(`/api/foodAdded/${foodId}`, {
+//       method: "PUT", 
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         user_id: userId, 
+//         food_quantity: newGrams,
+//         meal: newMeal,
+//         date: dateCalendar, 
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Erro ao editar alimento.");
+//     }
+
+//     console.log("Alimento editado com sucesso!");
+    
+//   } catch (error) {
+//     console.error("Erro ao editar alimento:", error);
+//   }
+// }

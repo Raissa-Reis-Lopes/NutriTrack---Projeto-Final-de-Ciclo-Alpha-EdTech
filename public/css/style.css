@@ -9,6 +9,7 @@
 @import "./utilities/colors.css";
 @import "./utilities/forms.css";
 @import "./utilities/message.css";
+@import "./utilities/loader.css";
 @import "./initial/history.css";
 @import "./initial/profile.css";
 
@@ -25,6 +26,8 @@
 @import "./modals/container.css";
 @import "./modals/searchFood.css";
 @import "./modals/addFood.css";
+@import "./modals/createFoods.css";
+@import "./modals/modalHome.css";
 
 
 

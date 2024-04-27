@@ -109,7 +109,6 @@
     padding: 20px;
     border-radius: 8px;
     height: 80%;
-    overflow: scroll;
 }
 
 #modal-sac {
@@ -144,6 +143,15 @@
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 16px;
+}
+
+.modal-header h2{
+    margin-left: 4%;
+}
+
+.modal-body{
+    overflow: scroll;
+    height: 90%;
 }
 
 .modal-body p {

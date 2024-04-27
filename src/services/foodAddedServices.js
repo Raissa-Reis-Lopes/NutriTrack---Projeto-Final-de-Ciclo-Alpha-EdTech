@@ -7,6 +7,7 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
     
         // Buscar todos os alimentos adicionados pelo usuário na data especificada
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserByDate(user_id, date);
+        console.log(foodsAdded)
 
         if (!foodsAdded || foodsAdded.length === 0) {
             return {
@@ -31,7 +32,7 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
 
         // Calcular o total de nutrientes para o dia e coletar detalhes dos alimentos
         for (const food of foodsAdded) {
-            const { food_id, food_quantity, meal } = food;
+            const { id, food_id, food_quantity, meal } = food;
 
             // Buscar detalhes do alimento pelo food_id
             const foodInfo = await foodRepository.getFoodById(food_id);
@@ -56,6 +57,7 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
             totalNutrition.lipid += nutrition.lipid;
 
             const foodDetail = {
+                id,
                 food_id,
                 food_name: name,
                 food_quantity,

@@ -12,7 +12,7 @@ export function History() {
     <header>
         <div class="back_general"></div>
         <div class="logo" id="logo">
-            <a href="">
+            <a>
                 <img src="../img/logo.svg" alt="NutriTrack">
             </a>
         </div>

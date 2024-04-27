@@ -4,6 +4,13 @@ header{
     justify-content: space-between;
 }
 
+.header_profile{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 90px;
+}
+
 .header_nav{
     display: flex;
     gap: 25px;
