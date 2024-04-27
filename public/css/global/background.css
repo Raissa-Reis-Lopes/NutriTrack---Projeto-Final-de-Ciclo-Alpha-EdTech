@@ -78,4 +78,5 @@
     width: 200px;
     background-size: contain;
     z-index: 2;
+    cursor: pointer;
 }

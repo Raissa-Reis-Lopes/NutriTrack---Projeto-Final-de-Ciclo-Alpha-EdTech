@@ -11,17 +11,8 @@ export function Profile() {
 
     div.innerHTML=`
     <div class="back_profile"></div>
-    <div class="logo_profile"></div>
+    <div class="logo_profile" id="logo"></div>
     <header class="header_profile">
-        <!-- 
-        <div>
-            <div class="logo" id="logo">
-                <a>
-                    <img src="../img/logo.svg" alt="NutriTrack" />
-                </a>
-            </div>
-        </div>
-        -->
         <nav class="header_nav">
         <div id="navHome">Home</div>
         <div id="navHistory">Histórico</div>
@@ -525,13 +516,13 @@ export function navProfile(){
     const navHome = document.getElementById("navHome");
     const navHistory = document.getElementById("navHistory");
     const btnExit = document.getElementById("btnExit");
-    // const logo = document.getElementById("logo");
+    const logo = document.getElementById("logo");
  
 
-    // logo.addEventListener("click", ()=>{
-    //     const customEvent = createCustomEvent('/home');
-    //     window.dispatchEvent(customEvent); 
-    // })
+    logo.addEventListener("click", ()=>{
+        const customEvent = createCustomEvent('/home');
+        window.dispatchEvent(customEvent); 
+    })
 
     navHome.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/home');
