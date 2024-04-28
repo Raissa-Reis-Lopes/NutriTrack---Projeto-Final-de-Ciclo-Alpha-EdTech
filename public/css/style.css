@@ -9,6 +9,7 @@
 @import "./utilities/colors.css";
 @import "./utilities/forms.css";
 @import "./utilities/message.css";
+@import "./utilities/loader.css";
 @import "./initial/history.css";
 @import "./initial/profile.css";
 
