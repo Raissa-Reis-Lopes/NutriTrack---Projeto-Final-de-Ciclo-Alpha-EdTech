@@ -212,13 +212,17 @@ export function sacModal(){
             <h2>Fale Conosco</h2>
             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-sac"> 
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-body_sac">
             <h3>Bem vindo à central de atendimento!</h3>
             <h4>Como podemos ajudá-lo?</h4>
+            <div class="align_row_modal">
             <img src="../img/whatsapp.png" alt="whatsapp" />
             <p>WhatsApp: (11) 91234-5678</p>
+            </div> 
+            <div class="align_row_modal">
             <img src="../img/o-email.png" alt="email" />
             <p>Email: contato@email.com</p>
+            </div> 
         </div>
     </div>
     `

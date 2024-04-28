@@ -154,6 +154,19 @@
     height: 90%;
 }
 
+.modal-body_sac{
+    padding-left: 20px;
+}
+
+.modal-body_sac h3, .modal-body_sac h4{
+    margin-bottom: 20px;
+}
+
+.align_row_modal{
+    display: flex;
+    align-items: center;
+}
+
 .modal-body p {
     margin: 16px;
 }

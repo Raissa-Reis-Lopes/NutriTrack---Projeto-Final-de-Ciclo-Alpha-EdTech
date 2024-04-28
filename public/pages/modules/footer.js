@@ -1,7 +1,8 @@
 export function footerProfile(){
-    const sectionModal = document.createElement("section");
-    sectionModal.innerHTML=`
-    <footer class="footer footer_profile">
+    const sectionFooterProfile = document.createElement("footer");
+    sectionFooterProfile.classList.add("footer")
+    sectionFooterProfile.classList.add("footer_profile")
+    sectionFooterProfile.innerHTML=`
         <span>all rights reserved</span>
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
@@ -9,15 +10,15 @@ export function footerProfile(){
             <img src="" alt="">
             <span id="open-modal-sac">Precisa de ajuda?</span>
         </div>
-    </footer>
     `
-    return sectionModal;
+    return sectionFooterProfile;
 }
 
 export function footerHome(){
-    const sectionModal = document.createElement("section");
-    sectionModal.innerHTML=`
-    <footer class="footer footer_home">
+    const sectionFooterHome = document.createElement("footer");
+    sectionFooterHome.classList.add("footer")
+    sectionFooterHome.classList.add("footer_home")
+    sectionFooterHome.innerHTML=`
         <span>all rights reserved</span>
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
@@ -25,15 +26,15 @@ export function footerHome(){
             <img src="" alt="">
             <span id="open-modal-sac">Precisa de ajuda?</span>
         </div>
-    </footer>
     `
-    return sectionModal;
+    return sectionFooterHome;
 }
 
 export function footerHistory(){
-    const sectionModal = document.createElement("section");
-    sectionModal.innerHTML=`
-    <footer class="footer footer_history">
+    const sectionFooterHistory = document.createElement("footer");
+    sectionFooterHistory.classList.add("footer")
+    sectionFooterHistory.classList.add("footer_history")
+    sectionFooterHistory.innerHTML=`
         <span>all rights reserved</span>
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
@@ -41,7 +42,6 @@ export function footerHistory(){
             <img src="" alt="">
             <span id="open-modal-sac">Precisa de ajuda?</span>
         </div>
-    </footer>
     `
-    return sectionModal;
+    return sectionFooterHistory;
 }
