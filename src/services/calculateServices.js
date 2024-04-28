@@ -83,6 +83,8 @@ const calculateDailyNutrition = async (userId, date) => {
     try {
         // Encontra a config_history para a data fornecida
         const config = await configService.findConfigByDate(userId, date);
+
+        console.log(`Essa é a config que está vindo no calculateDailyNutrition em Calculate Services`, config)
         
         if (!config) {
             throw new Error('Configuração não encontrada para a data fornecida');

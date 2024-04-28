@@ -213,7 +213,7 @@ export function registerBtns() {
                         body: JSON.stringify({ email, password }),
                     });        
                     
-                    showMessage("success", "Parabéns, você começou a sua jornada de transformação!");
+                    // showMessage("success", "Parabéns, você começou a sua jornada de transformação!","-8%");
 
 
                 } catch (error) {
@@ -226,7 +226,7 @@ export function registerBtns() {
             }
             catch (error) {
                 console.error("Erro ao realizar o registro:", error);
-                showMessage("fail", "Erro ao realizar o registro. Tente novamente")
+                showMessage("fail", `Erro ao realizar o registro:${error.message} `,"-8%")
             }
         })
 }

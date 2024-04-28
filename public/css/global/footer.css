@@ -1,5 +1,6 @@
 .footer{
  background-color: var(--cor-p1);
+ font-weight: 600;  
 }
 
 .footer_withoutBack, .footer{
@@ -7,7 +8,7 @@
  padding: 10px;
  justify-content: flex-start;
  align-items: center;
- font-size: 0.75rem;
+ font-size: 0.8rem;
  color: var(--cor-12);
  text-transform: capitalize;
  z-index: -1;
@@ -38,7 +39,9 @@ margin-top: 50px;
     display: flex;
     gap:20px;
     align-items: center;
-    justify-content: left;
+    justify-content: space-between;
+    padding-right: 280px;
+    padding-left: 150px;
 }
 
 .footer_profile{

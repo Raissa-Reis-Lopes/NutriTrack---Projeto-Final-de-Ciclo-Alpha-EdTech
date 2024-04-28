@@ -4,9 +4,12 @@ import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
-import { nameValid, numberValid } from "./validation.js";
+import { escapeHtml, nameValid, numberValid } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
 import { footerHome } from "./footer.js";
+import { loader } from "../utils/loader.js";
+import { panAnimation } from "../utils/panAnimation.js";
+import { scroller } from "../utils/scrollerAnimation.js";
 
 let proteinChartInstance = null;
 let carboChartInstance = null;
@@ -39,7 +42,7 @@ export function Home() {
                 </div>
                     <div class="user_welcome">
                         <h1>Olá, <span id="username"></span></h1>
-                        <p>Animado? Hoje é um novo dia de transformação!</p>
+                        <div id="scroller_container"></div>
                     </div>
                 </div>
                 <div class="goal">
@@ -129,9 +132,9 @@ export function Home() {
         </div>
 
         <!-- Tags para o footer e modais -->
-        <section id="privacy_policy_container">
-        <section id="terms_container">
-        <section id="sac_container">
+        <section id="privacy_policy_container"></section>
+        <section id="terms_container"></section>
+        <section id="sac_container"></section>
         <section id="footer_container"></section>
     `;
 
@@ -176,6 +179,11 @@ export function Home() {
     
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
     createModalEventsDefault();
+
+
+    const scrollerContainer = document.getElementById("scroller_container");
+    const scroll = scroller();
+    scrollerContainer.appendChild(scroll);
 
     return div
 }
@@ -234,7 +242,7 @@ async function getUsername(userId){
 
         const userData = await getUsername.json();
 
-        const username = userData.username;
+        const username = escapeHtml(userData.username);
 
         return username;
     } catch (error) {
@@ -285,6 +293,7 @@ async function loadUserDataForDate(date) {
                 date: date
             }
 
+          
             const getDailyGoal = await fetch('/api/calculate',{
                 method:"POST",
                 headers: {
@@ -294,7 +303,7 @@ async function loadUserDataForDate(date) {
             });
 
             if (!getDailyGoal.ok) {
-                throw new Error("Erro ao localizar calcular objetivo diário de consumo de calorias do usuário");         
+                throw new Error("Erro ao localizar e calcular objetivo diário de consumo de calorias do usuário");         
             } 
 
             const userDailyGoal = await getDailyGoal.json();
@@ -413,7 +422,12 @@ export function navRoutes() {
     window.dispatchEvent(customEvent);
   });
 
-  btnExit.addEventListener("click", logout);
+  btnExit.addEventListener("click", ()=>{
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
+    logout();
+  });
 }
 
 
@@ -463,7 +477,7 @@ async function openModalWithMeal(meal) {
       
           const foodList = await responseFood.json(); // Trata a resposta JSON
           userId = await getUserId();
-          console.log(userId);
+          // console.log(userId);
       
           // Adiciona os alimentos à lista no modal
           foodList.forEach((foodItem) => {
@@ -615,10 +629,10 @@ function openAddFoodModal(userId,item,meal) {
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
   modal.querySelector("#nameFood").textContent = item.name;
-  modal.querySelector("#quantity_calories").textContent = item.calorie;
-  modal.querySelector("#quantity_carb").textContent = item.carbohydrate_g;
-  modal.querySelector("#quantity_proteins").textContent = item.protein_g;
-  modal.querySelector("#quantity_fat").textContent = item.lipid_g;
+  modal.querySelector("#quantity_calories").textContent = Number(item.calorie).toFixed(2);
+  modal.querySelector("#quantity_carb").textContent = Number(item.carbohydrate_g).toFixed(2);
+  modal.querySelector("#quantity_proteins").textContent = Number(item.protein_g).toFixed(2);
+  modal.querySelector("#quantity_fat").textContent = Number(item.lipid_g).toFixed(2);
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = meal;
   
@@ -635,9 +649,9 @@ function openAddFoodModal(userId,item,meal) {
       showMessage('fail',"Precisa ser um numero inteiro maior que 0");
       return;
     }
-    console.log(dateCalendar);
+    // console.log(dateCalendar);
     const foodId = item.id;
-    console.log(userId);
+    // console.log(userId);
 
     try {
       const response = await fetch("/api/foodAdded/", {
@@ -654,14 +668,15 @@ function openAddFoodModal(userId,item,meal) {
           date: dateCalendar,
         }),
       });
-      console.log(response);
+      // console.log(response);
     
 
       if (!response.ok) {
         throw new Error("Erro ao salvar alimento");
       }
 
-      console.log("Alimento salvo com sucesso!");
+      loadUserDataForDate(dateCalendar);
+      // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       updateMealSection(userId,dateCalendar);
     } catch (error) {
@@ -686,12 +701,12 @@ async function updateMealSection(userId,dateCalendar) {
 
 async function loadAddedFoods() {
   const dateCalendar = document.getElementById('input-date').value;
-  console.log(dateCalendar, "carregando")
+  // console.log(dateCalendar, "carregando")
   const userId = await getUserId();
   clearMealSections();
 
   fetchAddedFoods(userId,dateCalendar)
-  console.log(userId, "carregando")
+  // console.log(userId, "carregando")
 
 }
 
@@ -708,8 +723,8 @@ async function fetchAddedFoods(userId, dateCalendar){
 
     const responseData = await response.json();
     const addedFoods = responseData.data.foodDetails; 
-    console.log(addedFoods);
-    console.log(dateCalendar);
+    // console.log(addedFoods);
+    // console.log(dateCalendar);
 
     if (addedFoods.length === 0) {
       const noFoodsMessage = document.createElement("div");
@@ -721,8 +736,8 @@ async function fetchAddedFoods(userId, dateCalendar){
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
       const divFoodElement = document.createElement("div");
       const btnsFoodElement = document.createElement("div");
-      console.log(food.id,"foodid");
-      console.log(food.meal,"foodmeal");
+      // console.log(food.id,"foodid");
+      // console.log(food.meal,"foodmeal");
 
       const btnEditFoodElement = document.createElement("button");
       btnEditFoodElement.textContent = `Editar`;
@@ -743,7 +758,7 @@ async function fetchAddedFoods(userId, dateCalendar){
   // Event listener para o botão de deletar
   btnDeleteFoodElement.addEventListener("click", async () => {
     try {
-      console.log("Botão Deletar clicado para o alimento:", food.id);
+      // console.log("Botão Deletar clicado para o alimento:", food.id);
       await deleteFoodItem(food.id);
     } catch (error) {
       console.error("Erro ao deletar alimento:", error);
@@ -761,7 +776,7 @@ async function fetchAddedFoods(userId, dateCalendar){
     });
     }
 
-    console.log("Alimentos carregados do banco de dados com sucesso!");
+    // console.log("Alimentos carregados do banco de dados com sucesso!");
   } catch (error) {
     console.error("Erro ao carregar alimentos do banco de dados:", error);
   }
