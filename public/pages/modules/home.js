@@ -264,6 +264,7 @@ async function getUserAvatar(userId){
 
 async function loadUserDataForDate(date) {
     clearScreenValues(); // Limpa os valores da tela
+    console.log("Chegou aqui no loadUserDataForDate")
     try { 
          const userId = await getUserId();
 
@@ -285,6 +286,7 @@ async function loadUserDataForDate(date) {
                 date: date
             }
 
+            console.log(`Essa é a data que está sendo passada para o calculate na função loadUserForDate: ${date}`)
             const getDailyGoal = await fetch('/api/calculate',{
                 method:"POST",
                 headers: {
@@ -413,7 +415,12 @@ export function navRoutes() {
     window.dispatchEvent(customEvent);
   });
 
-  btnExit.addEventListener("click", logout);
+  btnExit.addEventListener("click", ()=>{
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
+    logout();
+  });
 }
 
 
@@ -463,7 +470,7 @@ async function openModalWithMeal(meal) {
       
           const foodList = await responseFood.json(); // Trata a resposta JSON
           userId = await getUserId();
-          console.log(userId);
+          // console.log(userId);
       
           // Adiciona os alimentos à lista no modal
           foodList.forEach((foodItem) => {
@@ -635,9 +642,9 @@ function openAddFoodModal(userId,item,meal) {
       showMessage('fail',"Precisa ser um numero inteiro maior que 0");
       return;
     }
-    console.log(dateCalendar);
+    // console.log(dateCalendar);
     const foodId = item.id;
-    console.log(userId);
+    // console.log(userId);
 
     try {
       const response = await fetch("/api/foodAdded/", {
@@ -654,14 +661,14 @@ function openAddFoodModal(userId,item,meal) {
           date: dateCalendar,
         }),
       });
-      console.log(response);
+      // console.log(response);
     
 
       if (!response.ok) {
         throw new Error("Erro ao salvar alimento");
       }
 
-      console.log("Alimento salvo com sucesso!");
+      // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       updateMealSection(userId,dateCalendar);
     } catch (error) {
@@ -686,12 +693,12 @@ async function updateMealSection(userId,dateCalendar) {
 
 async function loadAddedFoods() {
   const dateCalendar = document.getElementById('input-date').value;
-  console.log(dateCalendar, "carregando")
+  // console.log(dateCalendar, "carregando")
   const userId = await getUserId();
   clearMealSections();
 
   fetchAddedFoods(userId,dateCalendar)
-  console.log(userId, "carregando")
+  // console.log(userId, "carregando")
 
 }
 
@@ -708,8 +715,8 @@ async function fetchAddedFoods(userId, dateCalendar){
 
     const responseData = await response.json();
     const addedFoods = responseData.data.foodDetails; 
-    console.log(addedFoods);
-    console.log(dateCalendar);
+    // console.log(addedFoods);
+    // console.log(dateCalendar);
 
     if (addedFoods.length === 0) {
       const noFoodsMessage = document.createElement("div");
@@ -721,8 +728,8 @@ async function fetchAddedFoods(userId, dateCalendar){
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
       const divFoodElement = document.createElement("div");
       const btnsFoodElement = document.createElement("div");
-      console.log(food.id,"foodid");
-      console.log(food.meal,"foodmeal");
+      // console.log(food.id,"foodid");
+      // console.log(food.meal,"foodmeal");
 
       const btnEditFoodElement = document.createElement("button");
       btnEditFoodElement.textContent = `Editar`;
@@ -743,7 +750,7 @@ async function fetchAddedFoods(userId, dateCalendar){
   // Event listener para o botão de deletar
   btnDeleteFoodElement.addEventListener("click", async () => {
     try {
-      console.log("Botão Deletar clicado para o alimento:", food.id);
+      // console.log("Botão Deletar clicado para o alimento:", food.id);
       await deleteFoodItem(food.id);
     } catch (error) {
       console.error("Erro ao deletar alimento:", error);
@@ -761,7 +768,7 @@ async function fetchAddedFoods(userId, dateCalendar){
     });
     }
 
-    console.log("Alimentos carregados do banco de dados com sucesso!");
+    // console.log("Alimentos carregados do banco de dados com sucesso!");
   } catch (error) {
     console.error("Erro ao carregar alimentos do banco de dados:", error);
   }
@@ -789,7 +796,7 @@ async function deleteFoodItem(foodId) {
       throw new Error("Erro ao deletar alimento.");
     }
 
-    console.log("Alimento deletado com sucesso!");
+    // console.log("Alimento deletado com sucesso!");
    
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);

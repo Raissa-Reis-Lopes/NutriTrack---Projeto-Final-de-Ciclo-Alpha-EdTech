@@ -192,7 +192,7 @@ export async function uploadImage(){
             
             if (data.success) {
                 imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
-                showMessage('success','Imagem atualizada com sucesso!', );
+                showMessage('success','Imagem atualizada com sucesso!', "-8%");
             } else {
                 console.log("Falha ao atualizar a imagem");
             }
@@ -376,6 +376,8 @@ async function saveChanges(){
         month: '2-digit',
         day: '2-digit'
     }).split('/').reverse().join('-');
+
+    console.log(`Essa é a nova data do config:`,date)
 
     if(!username){
         showMessage('fail',"O nome de usuário não pode ficar vazio!");

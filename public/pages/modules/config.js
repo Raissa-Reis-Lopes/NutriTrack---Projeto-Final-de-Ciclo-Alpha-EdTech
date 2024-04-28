@@ -261,6 +261,16 @@ export function configBtns() {
                         month: '2-digit',
                         day: '2-digit'
                     }).split('/').reverse().join('-');
+
+
+                    console.log(`userId no cadastro:${userId}`);
+                    console.log(`food_plan_id no cadastro:${selectPlan}`);
+                    console.log(`activity_level no cadastro:${activityLevel}`);
+                    console.log(`weight no cadastro:${weight}`);
+                    console.log(`height no cadastro:${height}`);
+                    console.log(`birth_date no cadastro:${birthDate}`);
+                    console.log(`gender no cadastro:${gender}`);
+                    console.log(`date no cadastro:${date}`);
     
                     const configData = {
                         user_id: userId, 

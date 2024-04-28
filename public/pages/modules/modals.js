@@ -127,11 +127,11 @@ export function privacyPolicyModal(){
     <div id="fade-privacy" class="hide"></div>
     <div id="modal-privacy" class="hide">
         <div class="modal-header">
-            <h2>política de privacidade</h2>
+            <h2>Política de privacidade</h2>
             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-privacy"> 
         </div>
         <div class="modal-body">
-            <p>Bem vindo ao Nutri Track. Nós respeitamos sua privacidade e queremos proteger suas informações pessoais.</p>
+            <p>Bem vindo ao NutriTrack. Nós respeitamos sua privacidade e queremos proteger suas informações pessoais.</p>
             <p>Podemos coletar informações pessoais, como nome, e-mail, peso, altura, data de nascimento, sexo biológico e nível de atividade. Enquanto você usa nosso site podemos coletar informações sobre suas atividades online.</p>
             <p>Usamos suas informações para fornecer os serviços solicitados, para melhorar nosso site e para nos comunicarmos com vocẽ.</p>
             <p>Não vendemos ou alugamos suas informações pessoais com terceiros. Podemos compartilhar suas informações com parceiros de negócios ou fornecedores que nos ajudam a operar o site.</p>
@@ -155,9 +155,8 @@ export function termsModal(){
             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-terms">
         </div>
         <div class="modal-body">
-            <p>Ao acessar e usar o site Nutri Track, você aceita e concorda em estar vinculado por estes Termos de uso.</p>
-            <p>Vocẽ concorda em usar o site apenas para fins legais e de maneira que não infrinja os direitos ou restrinja ou iniba o uso e aproveitamento do site por qualquer terceiro.</p>
-            <p>O conteúdo deste site, incluindo texto, gráficos, imagens e outros materiais, são protegidos por direitos autorais. Vocẽ não pode reproduzir, distribuir, modificar ou republicar materiais contidos neste site sem a permissão prévia por escrito do(s) responsável(is) legal(is) pelo Nutri Track.</p>
+            <p>Ao acessar e usar o site NutriTrack, você aceita e concorda em estar vinculado por estes Termos de uso.</p>
+            <p>O conteúdo deste site, incluindo texto, gráficos, imagens e outros materiais, são protegidos por direitos autorais. Vocẽ não pode reproduzir, distribuir, modificar ou republicar materiais contidos neste site sem a permissão prévia por escrito do(s) responsável(is) legal(is) pelo NutriTrack.</p>
             <p>O site e seu conteúdo são fornecidos "como estão". Nós não oferecemos garantias ou representações de qualquer tipo, expressas ou implícitas, sobre a integridade, precisão confiabilidade, adequação ou disponibilidade do site ou seu conteúdo.</p>
             <p>Podemos alterar estes Termos de Uso periodicamente. Se fizermos alterações, notificaremos você.</p>
             <p>Se você tiver alguma dúvida sobre este Termo de Uso, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
@@ -173,11 +172,11 @@ export function sacModal(){
     <div id="fade-sac" class="hide"></div>
     <div id="modal-sac" class="hide">
         <div class="modal-header">
-            <h2>política de privacidade</h2>
+            <h2>Fale Conosco</h2>
             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-sac"> 
         </div>
         <div class="modal-body">
-            <h3>Bem vindo a central de atendimento!</h3>
+            <h3>Bem vindo à central de atendimento!</h3>
             <h4>Como podemos ajudá-lo?</h4>
             <img src="../img/whatsapp.png" alt="whatsapp" />
             <p>WhatsApp: (11) 91234-5678</p>
