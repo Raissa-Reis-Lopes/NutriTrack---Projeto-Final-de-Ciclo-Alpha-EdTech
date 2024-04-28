@@ -34,7 +34,7 @@
   }
   
   .scroller[data-speed="fast"] {
-    --_animation-duration: 40s;
+    --_animation-duration: 60s;
   }
 
   
@@ -55,6 +55,7 @@
     background-color: transparent;
     border: 1px solid #eceff133;
     border-radius: 0.5rem;
+    font-weight: 500;
   }
 
   

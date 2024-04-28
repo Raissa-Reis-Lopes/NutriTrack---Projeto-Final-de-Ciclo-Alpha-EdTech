@@ -5,12 +5,13 @@ export function scroller() {
     scrollerContainer.innerHTML = `
     <ul class="tag-list scroller__inner">
         <li>Animado?</li>
-        <li>Sem animação não há transformação</li> 
-        <li>Hoje o dia vai ser incrível</li>
-        <li>É um dia de transformação</li>
+        <li>Sem animação não há transformação!</li> 
+        <li>Hoje o dia vai ser incrível!</li>
+        <li>É um dia de transformação!</li>
         <li>Cada dia mais saudável!</li>
-        <li>Você é capaz de tudo!</li>
-        <li>Hoje eu escolho ser saudável e feliz!</li>
+        <li>A mudança começa em mim!</li>
+        <li>O sucesso é a soma de pequenos esforços repetidos dia após dia</li>
+        <li>A melhor maneira de prever o futuro é criá-lo!</li>
     </ul>
     `;
 
