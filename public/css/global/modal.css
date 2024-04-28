@@ -1,5 +1,5 @@
 
-#open-modal-add-food,
+#open-modal-search-food,
 #open-modal-privacy {
     cursor: pointer;
 }
@@ -16,7 +16,7 @@
     cursor: pointer;
 }
 
-#close-modal-add-food,
+#close-modal-search-food,
 #close-modal-privacy {
     cursor: pointer;
 }
@@ -33,12 +33,12 @@
     cursor: pointer;
 }
 
-#fade-add-food,
+#fade-search-food,
 #fade-privacy,
 #fade-terms,
 #fade-sac,
 #fade-account,
-#modal-add-food,
+#modal-search-food,
 #modal-privacy,
 #modal-terms,
 #modal-sac,
@@ -48,7 +48,7 @@
     pointer-events: all;
 }
 
-#fade-add-food,
+#fade-search-food,
 #fade-privacy {
     position: fixed;
     top: 0;
@@ -130,7 +130,7 @@
     border-radius: 8px;
 }
 
-#modal-add-food,
+#modal-search-food,
 #modal-account {
     position: fixed;
     left: 50%;
@@ -178,12 +178,12 @@
     margin: 16px;
 }
 
-#fade-add-food.hide,
 #modal-privacy.hide,
 #fade-privacy.hide {
     opacity: 0;
     pointer-events: none;
 }
+
 
 #modal-terms.hide,
 #fade-terms.hide {
@@ -203,7 +203,13 @@
     pointer-events: none;
 }
 
-#modal-add-food.hide,
+#modal-search-food.hide,
+#fade-search-food.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#modal-search-food.hide,
 #modal-privacy.hide,
 #modal-terms.hide,
 #modal-sac.hide,

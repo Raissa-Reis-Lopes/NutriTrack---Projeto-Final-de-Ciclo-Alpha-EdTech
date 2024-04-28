@@ -146,6 +146,9 @@ export function Profile() {
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
     createModalEventsProfile();
 
+    const btnSave = document.getElementById("btn-save-changes");
+    btnSave.addEventListener("click", saveChanges);
+
 
     return div
 }
@@ -192,7 +195,7 @@ export async function uploadImage(){
             
             if (data.success) {
                 imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
-                showMessage('success','Imagem atualizada com sucesso!', "-8%");
+                showMessage('success','Imagem atualizada com sucesso!', "-5%");
             } else {
                 console.log("Falha ao atualizar a imagem");
             }
@@ -297,7 +300,7 @@ function handleInputChange(event) {
         case 'input-new-password':
             isValid = passwordValid(inputValue);
             if (!isValid) {
-                showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.");
+                showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.","-5%");
             }
             break;
         case 'input-repeat-password':
@@ -305,37 +308,31 @@ function handleInputChange(event) {
 
             if(!isValid){
                 if(newPassword !== repeatPassword){
-                    showMessage("fail","A nova senha não confere com a confirmação");
+                    showMessage("fail","A nova senha não confere com a confirmação","-5%");
                 } else {
-                    showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.");
+                    showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.","-5%");
                 }
             }
             break;
         case 'input-email':
             isValid = emailValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Formato de e-mail inválido");
+                showMessage("fail","Formato de e-mail inválido","-5%");
             }
             break;
         case 'input-weight':
             isValid = weightValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Peso inválido");
+                showMessage("fail","Peso inválido","-5%");
             }
             break; 
         case 'input-height':
             isValid = heightValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Altura inválida");
-            }
-            break;       
+                showMessage("fail","Altura inválida","-5%");
+            }      
         default:
             break;
-    }
-
-    if(isValid){
-        const btnSave = document.getElementById("btn-save-changes");
-        btnSave.addEventListener("click", saveChanges);
     }
 }
 
@@ -363,6 +360,14 @@ async function saveChanges(){
     const password = document.getElementById("input-password").value;
     const newPassword = document.getElementById("input-new-password").value;
     const confirmPassword = document.getElementById("input-repeat-password").value;
+
+    console.log("Esse é o username no perfil", username);
+    console.log("Esse é o  email  no perfil", email);
+    console.log("Esse é o  password  no perfil", password);
+    console.log("Esse é o  newpassword  no perfil", newPassword);
+    console.log("Esse é o  confirmpassword  no perfil", confirmPassword);
+    
+ 
     
     //Para o configHistory (user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date)
     const weight = document.getElementById("input-weight").value;
@@ -379,57 +384,65 @@ async function saveChanges(){
 
     console.log(`Essa é a nova data do config:`,date)
 
+    console.log("Esse é o weight no perfil",weight );
+    console.log("Esse é o height no perfil", height);
+    console.log("Esse é o birthDate no perfil", birthDate);
+    console.log("Esse é o gender no perfil",gender );
+    console.log("Esse é o activityLevel no perfil", activityLevel);
+    console.log("Esse é o selectedPlanId no perfil", selectedPlanId);
+    console.log("Esse é o date no perfil", date);
+
     if(!username){
-        showMessage('fail',"O nome de usuário não pode ficar vazio!");
+        showMessage('fail',"O nome de usuário não pode ficar vazio!","-5%");
         return;
     }
 
     if (!emailValid(email)) {
-        showMessage('fail',"Formato de email inválido!");
+        showMessage('fail',"Formato de email inválido!","-5%");
         return;
     }
 
     //Essa validação das novas senhas só vai acontecer SE o usuário tiver optado por colocar uma nova senha ali, senão, essa validação será ignorada:
     if(newPassword || confirmPassword){
         if(!password){
-            showMessage('fail',"Informe a sua senha atual");
+            showMessage('fail',"Informe a sua senha atual","-5%");
             return;
         }
 
         if (!passwordValid(newPassword) || !passwordValid(confirmPassword)) {
-            showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)");
+            showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)","-5%");
             return;
         }
     
         if (newPassword !== confirmPassword){
-            showMessage('fail',"A nova senha informada não confere com a confirmação");
+            showMessage('fail',"A nova senha informada não confere com a confirmação","-5%");
             return;
         }
     }
         
 
     if(!weightValid(weight)){
-        showMessage('fail',"Insira um peso válido");
+        showMessage('fail',"Insira um peso válido","-5%");
         return;
     }
 
     if(!heightValid(height)){
-        showMessage('fail',"Insira uma altura válida, em centímetros");
+        showMessage('fail',"Insira uma altura válida, em centímetros","-5%");
         return;
     }
 
     if(!birthDate){
-        showMessage('fail',"A data de nascimento é obrigatória");
+        showMessage('fail',"A data de nascimento é obrigatória","-5%");
         return;
     }
 
     if(!gender){
-        showMessage("fail","Selecione o sexo biológico");
+        showMessage("fail","Selecione o sexo biológico","-5%");
         return;
     }
 
     if(!activityLevel){
-        showMessage("fail","Selecione o nível de atividade semanal");
+        showMessage("fail","Selecione o nível de atividade semanal","-5%");
         return;
     }
 

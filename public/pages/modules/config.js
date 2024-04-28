@@ -273,9 +273,6 @@ export function configBtns() {
                         date
                     }
 
-                    console.log(configData);
-
-
                     try {
                         const response = await fetch('/api/config', {
                             method: 'POST',
