@@ -98,10 +98,10 @@ export function Profile() {
     </div>
     </section>
     <!-- Tags para o footer e modais -->
-    <section id="privacy_policy_container">
-    <section id="terms_container">
-    <section id="sac_container">
-    <section id="delete_account_container">
+    <section id="privacy_policy_container"></section>
+    <section id="terms_container"></section>
+    <section id="sac_container"></section>
+    <section id="delete_account_container"></section>
     <section id="footer_container"></section>
   `;
   

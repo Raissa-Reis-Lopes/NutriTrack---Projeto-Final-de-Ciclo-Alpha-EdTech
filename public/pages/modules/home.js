@@ -129,9 +129,9 @@ export function Home() {
         </div>
 
         <!-- Tags para o footer e modais -->
-        <section id="privacy_policy_container">
-        <section id="terms_container">
-        <section id="sac_container">
+        <section id="privacy_policy_container"></section>
+        <section id="terms_container"></section>
+        <section id="sac_container"></section>
         <section id="footer_container"></section>
     `;
 
@@ -667,6 +667,7 @@ function openAddFoodModal(userId,item,meal) {
         throw new Error("Erro ao salvar alimento");
       }
 
+      loadUserDataForDate(dateCalendar);
       // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       updateMealSection(userId,dateCalendar);

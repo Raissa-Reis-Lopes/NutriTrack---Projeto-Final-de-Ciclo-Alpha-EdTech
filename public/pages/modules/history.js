@@ -2,25 +2,25 @@ import createCustomEvent from "./event.js";
 // import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
+import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
+import { footerHistory } from "./footer.js";
 
 export function History() {
     const div = document.createElement("div");
 
     div.innerHTML=`
+    <div class="back_general"></div>
     <header>
-        <div class="back_general"></div>
         <div class="logo" id="logo">
-            <a>
-                <img src="../img/logo.svg" alt="NutriTrack">
-            </a>
+            <img src="./img/logo.svg" alt="NutriTrack">
         </div>
         <nav class="header_nav">
-            <div id="navToHome">Home</div>
+            <div id="navHome">Home</div>
             <div id="navProfile">Perfil</div>
-            <button class="btn_exit">Sair</button>
+            <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
         </nav>
     </header>
-    <main>
+    <main class="history_container">
         <div class="titles">
             <h1>Histórico</h1>
             <h5>Calorias consumidas:</h5>
@@ -45,73 +45,15 @@ export function History() {
         </section>
         </div>
     </main>
-    <!-- Tags para o modal -->
-        <section>
-            <div id="fade-privacy" class="hide"></div>
-            <div id="modal-privacy" class="hide">
-                <div class="modal-header">
-                    <h2>política de privacidade</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-privacy"> 
-                </div>
-                <div class="modal-body">
-                    <p>Bem vindo ao Nutri Track. Nós respeitamos sua privacidade e queremos proteger suas informações pessoais.</p>
-                    <p>Podemos coletar informações pessoais, como nome, e-mail, peso, altura, data de nascimento, sexo biológico e nível de atividade. Enquanto você usa nosso site podemos coletar informações sobre suas atividades online.</p>
-                    <p>Usamos suas informações para fornecer os serviços solicitados, para melhorar nosso site e para nos comunicarmos com vocẽ.</p>
-                    <p>Não vendemos ou alugamos suas informações pessoais com terceiros. Podemos compartilhar suas informações com parceiros de negócios ou fornecedores que nos ajudam a operar o site.</p>
-                    <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
-                    <p>Podemos atualizar esta política de privacidade periodicamente. Se fizermos alterações significativas, notificaremos você.</p>
-                    <p>Se você tiver alguma dúvida sobre esta política de privacidade, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
-                </div>
-            </div>
-        </section>
-        <section>
-            <div id="fade-terms" class="hide"></div>
-            <div id="modal-terms" class="hide">
-                <div class="modal-header">
-                    <h2>Termos de uso</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-terms">
-                </div>
-                <div class="modal-body">
-                    <p>Ao acessar e usar o site Nutri Track, você aceita e concorda em estar vinculado por estes Termos de uso.</p>
-                    <p>Vocẽ concorda em usar o site apenas para fins legais e de maneira que não infrinja os direitos ou restrinja ou iniba o uso e aproveitamento do site por qualquer terceiro.</p>
-                    <p>O conteúdo deste site, incluindo texto, gráficos, imagens e outros materiais, são protegidos por direitos autorais. Vocẽ não pode reproduzir, distribuir, modificar ou republicar materiais contidos neste site sem a permissão prévia por escrito do(s) responsável(is) legal(is) pelo Nutri Track.</p>
-                    <p>O site e seu conteúdo são fornecidos "como estão". Nós não oferecemos garantias ou representações de qualquer tipo, expressas ou implícitas, sobre a integridade, precisão confiabilidade, adequação ou disponibilidade do site ou seu conteúdo.</p>
-                    <p>Podemos alterar estes Termos de Uso periodicamente. Se fizermos alterações, notificaremos você.</p>
-                    <p>Se você tiver alguma dúvida sobre este Termo de Uso, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
-                </div>
-            </div>
-        </section>
-        <!-- Tags para o modal sac -->
-        <section>
-            <div id="fade-sac" class="hide"></div>
-            <div id="modal-sac" class="hide">
-                <div class="modal-header">
-                    <h2>Bem vindo a central de atendimento</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-sac"> 
-                </div>
-                <div class="modal-body">
-                    <h4>Como podemos ajudá-lo?</h4>
-                    <img src="../img/whatsapp.png" alt="whatsapp" />
-                    <p>WhatsApp: (11) 91234-5678</p>
-                    <img src="../img/o-email.png" alt="email" />
-                    <p>Email: contato@email.com</p>
-                </div>
-            </div>
-        </section>
-    <footer>
-        <div class="footer_history">
-            <span>all rights reserved</span>
-            <span id="open-modal-terms">termos de uso</span>
-            <span id="open-modal-privacy">política de privacidade</span>
-            <span id="open-modal-sac">posso ajudar?</span>
-        </div>
-    </footer>
+    <!-- Tags para o footer e modais -->
+        <section id="privacy_policy_container"></section>
+        <section id="terms_container"></section>
+        <section id="sac_container"></section>
+        <section id="footer_container"></section>
     `;
   
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-    registerBtns();
-    createModalEvents();
     // limitDate('input-date');
 
     const dataAtual = new Date();
@@ -144,6 +86,30 @@ export function History() {
 
     const dias = [];
     generateBarChart(dias);
+
+
+
+     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+     const privacyModalContainer = document.getElementById('privacy_policy_container');
+     const privacyModal = privacyPolicyModal();
+     privacyModalContainer.appendChild(privacyModal);
+     
+     const termsContainer = document.getElementById("terms_container");
+     const terms = termsModal();
+     termsContainer.appendChild(terms);
+     
+     const sacContainer = document.getElementById("sac_container");
+     const sac = sacModal();
+     sacContainer.appendChild(sac);
+     
+     const footerContainer = document.getElementById("footer_container");
+     const footer = footerHistory();
+     footerContainer.appendChild(footer);
+     
+     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+     createModalEventsDefault();
+
+     navRoutes();
     
     return div
 }
@@ -200,84 +166,22 @@ function formatarDataGrafico(data, formato) {
     return `${ano}-${mes}-${dia}`;
 }
 
-function createModalEvents() {
-    const openModalPrivacy = document.getElementById("open-modal-privacy");
-    const openModalTerms = document.getElementById("open-modal-terms");
-    const closeModalPrivacy = document.getElementById("close-modal-privacy");
-    const closeModalTerms = document.getElementById("close-modal-terms");
-    const modalPrivacy = document.querySelector("#modal-privacy");
-    const modalTerms = document.querySelector("#modal-terms");
-    const fadePrivacy = document.querySelector("#fade-privacy");
-    const fadeTerms = document.querySelector("#fade-terms");
-    const openModalSac = document.getElementById("open-modal-sac");
-    const closeModalSac = document.getElementById("close-modal-sac");
-    const modalSac = document.querySelector("#modal-sac");
-    const fadeSac = document.querySelector("#fade-sac");
-    
-    // adiciona ou remove a classe "hide"
-    function toggleModalPrivacy () {
-        modalPrivacy.classList.toggle("hide");
-        fadePrivacy.classList.toggle("hide");
-    }
-    
-    function toggleModalTerms() {
-        modalTerms.classList.toggle("hide");
-        fadeTerms.classList.toggle("hide");
-    }
-    
-    function toggleModalSac() {
-        modalSac.classList.toggle("hide");
-        fadeSac.classList.toggle("hide");
-    }
-    
-    // Para cada variável cria um EventListener de click e chama a função
-    [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
-        el.addEventListener("click", () => toggleModalPrivacy());
-    });
-    
-    [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
-        el.addEventListener("click", () => toggleModalTerms());
-    });
-    
-    [openModalSac, closeModalSac, fadeSac].forEach((el) => {
-        el.addEventListener("click", () => toggleModalSac());
-    });
-}
-
-export function registerBtns() {
-    const btnHome = document.getElementById("btn_home");
-    const btnProfile = document.getElementById("btn_profile");
-
-    if(btnHome){
-        register.addEventListener ("click",function(e){
-            e.preventDefault();
-            const customEvent = createCustomEvent('/home');
-            window.dispatchEvent(customEvent); 
-        });
-    }
-
-    if (btnProfile) {
-        btnBack.addEventListener("click", () => {
-            const customEvent = createCustomEvent('/profile');
-            window.dispatchEvent(customEvent);
-        });
-    }
-}
-
 export function navRoutes() {
-    const navProfile = document.getElementById("navToProfile");
-    const navHistory = document.getElementById("navHome");
-    const btnExit = document.querySelector(".btnExit");
+    const navProfile = document.getElementById("navProfile");
+    const navHome = document.getElementById("navHome");
+    const btnExit = document.getElementById("btnExit");
 
     navProfile.addEventListener("click", () => {
         const customEvent = createCustomEvent("/profile");
         window.dispatchEvent(customEvent);
     });
 
-    navHistory.addEventListener("click", () => {
+    navHome.addEventListener("click", () => {
         const customEvent = createCustomEvent("/home");
         window.dispatchEvent(customEvent);
     });
 
-    btnExit.addEventListener("click", logout);
+    btnExit.addEventListener("click", ()=>{
+        logout();
+      });
 }
