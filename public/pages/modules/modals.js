@@ -1,5 +1,3 @@
-// import createCustomEvent from "./event.js";
-
 export function SearchFood(){
     const divModal = document.createElement("div");
     divModal.innerHTML=`  
@@ -236,15 +234,16 @@ export function deleteAccountModal(){
     <div id="fade-account" class="hide"></div>
     <div id="modal-account" class="hide">
         <div class="modal-header" id="modal-header-delete">
-            <h2>Apagar a conta</h2>
             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-account"> 
         </div>
-        <div id="body1" class="modal-body">
-            <h1>ATENÇÃO!</h1>
+        <div id="body1" class="modal-body modal-body-account">
+            <h1 class="delete_account_title">ATENÇÃO!</h1>
             <h3>Tem certeza que deseja apagar sua conta?</h3>
             <p>Esta ação é irreversível e você perderá todos os seus dados e histórico de uso. Por favor, tenha em mente que uma vez que sua conta for apagada, não poderemos recuperar suas informações.</p>
+            <div class="btn_delete_account">
             <button id= cancelDelete class="btn_stroke">Cancelar</button>
             <button id="deleteAccount" class="btn_stroke">Confirmar</button>
+            </div>
         </div>
         <div id="body2" class="modal-body">
             <h1>Conta excluída com sucesso!</h1>
@@ -360,3 +359,174 @@ export function createModalEventsDefault(){
     });
 
 }
+
+
+
+//Só testando
+
+// export function createModalEventsHome(){
+//     const openModalPrivacy = document.getElementById("open-modal-privacy");
+//     const openModalTerms = document.getElementById("open-modal-terms");
+//     const closeModalPrivacy = document.getElementById("close-modal-privacy");
+//     const closeModalTerms = document.getElementById("close-modal-terms");
+//     const modalPrivacy = document.querySelector("#modal-privacy");
+//     const modalTerms = document.querySelector("#modal-terms");
+//     const fadePrivacy = document.querySelector("#fade-privacy");
+//     const fadeTerms = document.querySelector("#fade-terms");
+//     const openModalSac = document.getElementById("open-modal-sac");
+//     const closeModalSac = document.getElementById("close-modal-sac");
+//     const modalSac = document.querySelector("#modal-sac");
+//     const fadeSac = document.querySelector("#fade-sac");
+    
+// const openModalAddFood = document.querySelector(".btn_add");
+// const closeModalAddFood = document.getElementById("close-modal-add-food");
+// const modalAddFood = document.querySelector("#modal-add-food");
+// const fadeAddFood = document.querySelector("#fade-add-food");
+// const foodAddBody = document.getElementById("modal_body_search_food")
+    
+//     // adiciona ou remove a classe "hide"
+//     function toggleModalPrivacy () {
+//         modalPrivacy.classList.toggle("hide");
+//         fadePrivacy.classList.toggle("hide");
+//     }
+    
+//     function toggleModalTerms() {
+//         modalTerms.classList.toggle("hide");
+//         fadeTerms.classList.toggle("hide");
+//     }
+
+//     function toggleModalSac() {
+//         modalSac.classList.toggle("hide");
+//         fadeSac.classList.toggle("hide");
+//     }
+
+//     function toggleModalAddFood() {
+//         modalAddFood.classList.toggle("hide");
+//         fadeAddFood.classList.toggle("hide");
+//         foodAddBody.classList.toggle("hide");
+//     }
+    
+//     // Para cada variável cria um EventListener de click e chama a função
+//     [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
+//         el.addEventListener("click", () => toggleModalPrivacy());
+//     });
+    
+//     [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
+//         el.addEventListener("click", () => toggleModalTerms());
+//     });
+
+//     [openModalSac, closeModalSac, fadeSac].forEach((el) => {
+//         el.addEventListener("click", () => toggleModalSac());
+//     });
+
+//     [openModalAddFood, closeModalAddFood, fadeAddFood].forEach((el) => {
+//         el.addEventListener("click", () => toggleModalAddFood());
+//     });
+
+// }
+
+
+// export function AddFood(){
+//     const divModal = document.createElement("div");
+//     divModal.innerHTML=`  
+
+//     <div id="fade-add-food" class="hide"></div>
+//     <div id="modal-add-food" class="hide">
+//         <div class="modal-header">
+//             <div class="modal_img">
+//                 <img src="../img/go_back.svg" alt="Voltar" id="back_modal_addFood">
+//             </div>
+//             <div class="container_modal">
+//                 <h2 id="nameFood" class="foodName">
+                    
+//                 </h2>
+//             </div>
+//             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-add-food"> 
+//         </div>
+//         <div class="modal-body">
+//             <div class="modal">
+//                 <div class="container_modal quantity_nutri">
+//                     <div class="calories">
+//                         <div id="quantity_calories"></div>
+//                         <span>Calorias</span>
+//                     </div>
+//                     <div class="carb">
+//                         <div id="quantity_carb"></div>
+//                         <span>Carboidratos</span>
+//                     </div>
+//                     <div class="proteins">
+//                         <div id="quantity_proteins"></div>
+//                         <span>Proteínas</span>
+//                     </div>
+//                     <div class="fat">
+//                         <div id="quantity_fat"></div>
+//                         <span>Gorduras</span>
+//                     </div>
+//                 </div>
+//                 <div class="container_grams">
+//                     <div class="grams_input">
+//                         <span>Digite a quantidade consumida em gramas</span>
+//                         <input type="text" name="grams" id="grams">
+//                     </div>
+//                     <div class="grams_select">
+//                         <span>Selecione a refeição</span>
+//                         <select name="meal" id="meal">
+//                             <option selected disabled>Escolha uma opção</option>
+//                             <option value="breakfast">Café da manhã</option>
+//                             <option value="lunch">Almoço</option>
+//                             <option value="dinner">Jantar</option>
+//                             <option value="snack">Lanche</option>
+//                         </select>
+//                     </div>
+//                 </div>
+//                 <div class="btns_addFood">
+//                     <button id="btn_cancel_addFood" class="btn_stroke">Cancelar</button>
+//                     <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+//     `;
+//     return divModal
+// }
+
+
+// const openModalAddFood = document.getElementById("open-modal-add-food");
+// const closeAddFood = document.getElementById("close-modal-add-food");
+// const modalAddFood = document.querySelector("#modal-add-food");
+// const fadeAddFood = document.querySelector("#fade-add-food");
+
+
+// export function SearchFood(){
+//     const divModal = document.createElement("div");
+//     divModal.innerHTML=`  
+//     <div id="fade-add-food" class="hide"></div>
+//     <div id="modal-add-food" class="hide">
+//         <div class="modal-header">
+//             <div class="modal_img">
+//                 <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
+//             </div>
+//             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-add-food"> 
+//         </div>
+//         <div id="modal_body_search_food" class="modal-body hide">
+//             <div id="modalSearchFood" class="modal">
+//                 <div class="container_modal">
+//                     <div id="showFoods" class="foodSearch">
+//                         Tudo
+//                     </div>
+//                     <div id="showMyFoods" class="foodSearch">
+//                         Meus produtos
+//                     </div>
+//                 </div>
+//                 <div class="container_modal">
+//                     <input type="text" name="search" id="search" placeholder="Procurar Produtos">
+//                 </div>
+//                 <div id="datafood" class="container_dataFood">
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+//     `;
+      
+//     return divModal
+// }

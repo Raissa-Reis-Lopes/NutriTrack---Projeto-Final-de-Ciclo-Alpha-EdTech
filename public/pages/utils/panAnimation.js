@@ -1,4 +1,4 @@
-export function loader(){
+export function panAnimation(){
     const div = document.createElement('div');
     div.classList.add("pan-loader");
     div.innerHTML= `

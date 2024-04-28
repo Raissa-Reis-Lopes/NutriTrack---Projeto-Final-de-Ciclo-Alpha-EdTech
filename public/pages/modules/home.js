@@ -4,9 +4,12 @@ import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
 import { showMessage } from "../utils/message.js";
-import { nameValid, numberValid } from "./validation.js";
+import { escapeHtml, nameValid, numberValid } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
 import { footerHome } from "./footer.js";
+import { loader } from "../utils/loader.js";
+import { panAnimation } from "../utils/panAnimation.js";
+import { scroller } from "../utils/scrollerAnimation.js";
 
 let proteinChartInstance = null;
 let carboChartInstance = null;
@@ -39,7 +42,7 @@ export function Home() {
                 </div>
                     <div class="user_welcome">
                         <h1>Olá, <span id="username"></span></h1>
-                        <p>Animado? Hoje é um novo dia de transformação!</p>
+                        <div id="scroller_container"></div>
                     </div>
                 </div>
                 <div class="goal">
@@ -177,6 +180,11 @@ export function Home() {
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
     createModalEventsDefault();
 
+
+    const scrollerContainer = document.getElementById("scroller_container");
+    const scroll = scroller();
+    scrollerContainer.appendChild(scroll);
+
     return div
 }
 
@@ -234,7 +242,7 @@ async function getUsername(userId){
 
         const userData = await getUsername.json();
 
-        const username = userData.username;
+        const username = escapeHtml(userData.username);
 
         return username;
     } catch (error) {
@@ -295,7 +303,7 @@ async function loadUserDataForDate(date) {
             });
 
             if (!getDailyGoal.ok) {
-                throw new Error("Erro ao localizar calcular objetivo diário de consumo de calorias do usuário");         
+                throw new Error("Erro ao localizar e calcular objetivo diário de consumo de calorias do usuário");         
             } 
 
             const userDailyGoal = await getDailyGoal.json();
@@ -621,10 +629,10 @@ function openAddFoodModal(userId,item,meal) {
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
   modal.querySelector("#nameFood").textContent = item.name;
-  modal.querySelector("#quantity_calories").textContent = item.calorie;
-  modal.querySelector("#quantity_carb").textContent = item.carbohydrate_g;
-  modal.querySelector("#quantity_proteins").textContent = item.protein_g;
-  modal.querySelector("#quantity_fat").textContent = item.lipid_g;
+  modal.querySelector("#quantity_calories").textContent = Number(item.calorie).toFixed(2);
+  modal.querySelector("#quantity_carb").textContent = Number(item.carbohydrate_g).toFixed(2);
+  modal.querySelector("#quantity_proteins").textContent = Number(item.protein_g).toFixed(2);
+  modal.querySelector("#quantity_fat").textContent = Number(item.lipid_g).toFixed(2);
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = meal;
   
