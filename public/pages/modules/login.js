@@ -119,6 +119,7 @@ export function loginBtns(){
             });
         
             if (!response.ok) {
+               
                 showMessage("fail", "Usuário e/ou senha inválidos!","-30px");
                 btnEnter.disabled = false;
                 throw new Error('Erro ao fazer login, usuário não localizado');
@@ -143,7 +144,7 @@ export function loginBtns(){
 
             if(!checkConfig.ok){
                 btnEnter.disabled = true;
-                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!","-60px")
+                showMessage("success","Bem-vindo de volta! Precisamos apenas completar o seu cadastro!","8%")
 
                 setTimeout(() => {                   
                     const customEvent = createCustomEvent('/config');

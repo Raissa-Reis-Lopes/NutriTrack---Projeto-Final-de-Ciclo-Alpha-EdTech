@@ -1,109 +1,187 @@
 import createCustomEvent from "./event.js";
+// import { limitDate } from "../utils/limitDates.js";
+import { logout } from "../utils/logout.js";
+import { generateBarChart } from '../utils/barchart.js';
+import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
+import { footerHistory } from "./footer.js";
 
 export function History() {
     const div = document.createElement("div");
 
     div.innerHTML=`
+    <div class="back_general"></div>
     <header>
-        <div class="back_general"></div>
         <div class="logo" id="logo">
-            <a>
-                <img src="../img/logo.svg" alt="NutriTrack">
-            </a>
+            <img src="./img/logo.svg" alt="NutriTrack">
         </div>
         <nav class="header_nav">
-            <a href="/home" class="btn_home">Home</a>
-            <a href="/profile" class="btn_profile">Perfil</a>
-            <a href="/chalenge">Desafios</a>
-            <button class="btn_exit">Sair</button>
+            <div id="navHome">Home</div>
+            <div id="navProfile">Perfil</div>
+            <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
         </nav>
     </header>
-    <main>
+    <main class="history_container">
         <div class="titles">
             <h1>Histórico</h1>
             <h5>Calorias consumidas:</h5>
             <h5>Meta de calorias:</h5>
         </div>
         <div class="period">
-            <label for="period">Periódo:</label>
-            <input type="date" id="period" name="period" />
+            <div id="input-date">
+                <button class="btn_stroke" onclick="navegar('-')">← Anterior</button>
+                <input type="date" id="dataInicio">
+                <input type="date" id="dataFim">
+                <button class="btn_stroke" onclick="navegar('+')">Próximo →</button>
+            </div>
         </div>
-        <div class="chart"></div>
+        <div class="chart">
+        <section>
+            <div class="chart-container">
+                <span class="span_green ">Gráfico Semanal</span>
+                <div>
+                    <div class="chart" id="week-chart"></div>
+                </div>
+            </div>
+        </section>
+        </div>
     </main>
-    <footer>
-        <div class="footer_history">
-            <span>all rights reserved</span>
-            <span id="open-modal-terms">termos de uso</span>
-            <span id="open-modal-privacy">política de privacidade</span>
-        </div>
-    </footer>
-  `;
+    <!-- Tags para o footer e modais -->
+        <section id="privacy_policy_container"></section>
+        <section id="terms_container"></section>
+        <section id="sac_container"></section>
+        <section id="footer_container"></section>
+    `;
   
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-    registerBtns();
+    // limitDate('input-date');
+
+    const dataAtual = new Date();
+    const dataInicioInput = document.getElementById('dataInicio');
+    const dataFimInput = document.getElementById('dataFim');
+
+    // Define a data atual como o valor inicial dos elementos de entrada de data
+    dataInicioInput.value = formatarData(dataAtual);
+    dataFimInput.value = formatarData(new Date(dataAtual.getTime() - (7 * 24 * 60 * 60 * 1000))); // Adiciona uma semana à data atual
+
+    const inputDate = document.getElementById('input-date');
   
-    const openModalPrivacy = document.getElementById("open-modal-privacy");
-    const openModalTerms = document.getElementById("open-modal-terms");
-    const closeModalPrivacy = document.getElementById("close-modal-privacy");
-    const closeModalTerms = document.getElementById("close-modal-terms");
-    const modalPrivacy = document.querySelector("#modal-privacy");
-    const modalTerms = document.querySelector("#modal-terms");
-    const fadePrivacy = document.querySelector("#fade-privacy");
-    const fadeTerms = document.querySelector("#fade-terms");
-    const openModalSac = document.getElementById("open-modal-sac");
-    const closeModalSac = document.getElementById("close-modal-sac");
-    const modalSac = document.querySelector("#modal-sac");
-    const fadeSac = document.querySelector("#fade-sac");
-    
-    // adiciona ou remove a classe "hide"
-    function toggleModalPrivacy () {
-        modalPrivacy.classList.toggle("hide");
-        fadePrivacy.classList.toggle("hide");
-    }
-    
-    function toggleModalTerms() {
-        modalTerms.classList.toggle("hide");
-        fadeTerms.classList.toggle("hide");
-    }
-
-    function toggleModalSac() {
-        modalSac.classList.toggle("hide");
-        fadeSac.classList.toggle("hide");
-    }
-    
-    // Para cada variável cria um EventListener de click e chama a função
-    [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
-        el.addEventListener("click", () => toggleModalPrivacy());
-    });
-    
-    [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
-        el.addEventListener("click", () => toggleModalTerms());
+    inputDate.addEventListener("change", function() {
+        const selectedDate = inputDate.value;
+        // getweek(selectedDate);
+        // loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
+        
+        let dataInicio = new Date(document.getElementById('dataInicio').value);
+        let dataFim = new Date(document.getElementById('dataFim').value);
+        let dias = calcularDias(dataInicio, dataFim);
+        
+        // Define dataInicio para o último domingo
+        dataInicio.setDate(dataInicio.getDate() - dataInicio.getDay());
+        document.getElementById('dataInicio').value = formatarData(dataInicio);
+        
+        // Define dataFim para o próximo sábado
+        dataFim.setDate(dataInicio.getDate() + 6);
+        document.getElementById('dataFim').value = formatarData(dataFim);
     });
 
-    [openModalSac, closeModalSac, fadeSac].forEach((el) => {
-        el.addEventListener("click", () => toggleModalSac());
-    });
+    const dias = [];
+    generateBarChart(dias);
 
+
+
+     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+     const privacyModalContainer = document.getElementById('privacy_policy_container');
+     const privacyModal = privacyPolicyModal();
+     privacyModalContainer.appendChild(privacyModal);
+     
+     const termsContainer = document.getElementById("terms_container");
+     const terms = termsModal();
+     termsContainer.appendChild(terms);
+     
+     const sacContainer = document.getElementById("sac_container");
+     const sac = sacModal();
+     sacContainer.appendChild(sac);
+     
+     const footerContainer = document.getElementById("footer_container");
+     const footer = footerHistory();
+     footerContainer.appendChild(footer);
+     
+     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+     createModalEventsDefault();
+
+     navRoutes();
+    
     return div
 }
 
-export function registerBtns() {
-    const btnHome = document.getElementById("btn_home");
-    const btnProfile = document.getElementById("btn_profile");
+function formatarData(data) {
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
+    const dia = String(data.getDate()).padStart(2, '0');
+    
+    return `${ano}-${mes}-${dia}`;
+}
 
-    if(btnHome){
-        register.addEventListener ("click",function(e){
-            e.preventDefault();
-            const customEvent = createCustomEvent('/home');
-            window.dispatchEvent(customEvent); 
-        });
+function navegar(direcao) {
+    if (direcao === '-') {
+        dataInicio.setDate(dataInicio.getDate() - 7);
+        dataFim.setDate(dataFim.getDate() - 7);
+    } else if (direcao === '+') {
+        dataInicio.setDate(dataInicio.getDate() + 7);
+        dataFim.setDate(dataFim.getDate() + 7);
     }
 
-    if (btnProfile) {
-        btnBack.addEventListener("click", () => {
-            const customEvent = createCustomEvent('/profile');
-            window.dispatchEvent(customEvent);
-        });
+    document.getElementById('dataInicio').value = formatarData(dataInicio);
+    document.getElementById('dataFim').value = formatarData(dataFim);
+}
+
+// function calcularDias(dataInicio, dataFim) {
+//     const dataAtual = new Date(dataInicio);
+
+//     while (dataAtual <= dataFim) {
+//         let dia = {
+//             data: formatarDataGrafico(dataAtual, 'ddd'),
+//             calorias: Math.floor(Math.random() * 1000),
+//             gordura: Math.floor(Math.random() * 100),
+//             proteina: Math.floor(Math.random() * 100),
+//             carboidrato: Math.floor(Math.random() * 200)
+//         };
+//         dias.push(dia);
+//         dataAtual.setDate(dataAtual.getDate() + 1);
+//     }
+
+//     return dias;
+// }
+
+function formatarDataGrafico(data, formato) {
+    let diaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    let ano = data.getFullYear();
+    let mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
+    let dia = String(data.getDate()).padStart(2, '0');
+    
+    if (formato === 'ddd') {
+        return `${diaSemana[data.getDay()]} ${dia}/${mes}`;
     }
+
+    return `${ano}-${mes}-${dia}`;
+}
+
+export function navRoutes() {
+    const navProfile = document.getElementById("navProfile");
+    const navHome = document.getElementById("navHome");
+    const btnExit = document.getElementById("btnExit");
+
+    navProfile.addEventListener("click", () => {
+        const customEvent = createCustomEvent("/profile");
+        window.dispatchEvent(customEvent);
+    });
+
+    navHome.addEventListener("click", () => {
+        const customEvent = createCustomEvent("/home");
+        window.dispatchEvent(customEvent);
+    });
+
+    btnExit.addEventListener("click", ()=>{
+        logout();
+      });
 }
