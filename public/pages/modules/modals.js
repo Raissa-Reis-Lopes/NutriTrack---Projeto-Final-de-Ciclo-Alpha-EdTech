@@ -36,7 +36,7 @@ export function AddFood(){
         </div>
         <div class="container_modal">
             <h2 id="nameFood" class="foodName">
-                Alimento
+                
             </h2>
         </div>
         <div class="container_modal quantity_nutri">
@@ -119,6 +119,43 @@ export function CreateMyFoodbtn(){
       
     return divModal
 }
+
+
+export function EditFoodAdded(){
+    const divModal = document.createElement("div");
+    divModal.innerHTML=`  
+    <div class="modal">
+        <div class="modal_img">
+            <img src="../img/go_back.svg" alt="Voltar" id="back_modal_editFoodAdded">
+        </div>
+        <div class="container_modal">
+            <div>Editar</div>
+            <h2 id="nameEditFood" class="foodName"></h2>
+        </div>
+       
+        <div class="container_grams">
+            <div class="grams_input">
+                <span>Modifique a quantidade consumida em gramas</span>
+                <input type="text" name="newGrams" id="newGrams">
+            </div>
+            <div class="grams_select">
+                <span>Selecione a refeição</span>
+                <select name="newMeal" id="newMeal">
+                    <option selected disabled>Escolha uma opção</option>
+                    <option value="breakfast">Café da manhã</option>
+                    <option value="lunch">Almoço</option>
+                    <option value="dinner">Jantar</option>
+                    <option value="snack">Lanche</option>
+                </select>
+            </div>
+        </div>
+        <div class="btns_addFood">
+            <button id="btn_cancel_editFood" class="btn_stroke">Cancelar</button>
+            <button id="btn_save_editFood" class="btn_stroke">Salvar</button>
+        </div>
+    </div>
+    `;
+    return divModal
 
 
 export function privacyPolicyModal(){
@@ -318,4 +355,5 @@ export function createModalEventsDefault(){
     [openModalSac, closeModalSac, fadeSac].forEach((el) => {
         el.addEventListener("click", () => toggleModalSac());
     });
+
 }

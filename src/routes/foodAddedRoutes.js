@@ -14,7 +14,7 @@ router.get('/:id', foodAddedController.getFoodAddedById);
 
 
 router.post('/', foodAddedController.newFoodAdded);
-router.put('/', foodAddedController.updateFoodAdded);
+router.put('/:id', foodAddedController.updateFoodAdded);
 router.delete('/:id', foodAddedController.deleteFoodAdded);
 
 module.exports = router;
