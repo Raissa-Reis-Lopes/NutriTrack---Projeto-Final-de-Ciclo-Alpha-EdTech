@@ -156,7 +156,7 @@ export function EditFoodAdded(){
     </div>
     `;
     return divModal
-
+}
 
 export function privacyPolicyModal(){
     const sectionModal = document.createElement("section");
