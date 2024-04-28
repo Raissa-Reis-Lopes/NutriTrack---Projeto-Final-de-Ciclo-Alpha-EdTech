@@ -264,7 +264,6 @@ async function getUserAvatar(userId){
 
 async function loadUserDataForDate(date) {
     clearScreenValues(); // Limpa os valores da tela
-    console.log("Chegou aqui no loadUserDataForDate")
     try { 
          const userId = await getUserId();
 
@@ -286,7 +285,7 @@ async function loadUserDataForDate(date) {
                 date: date
             }
 
-            console.log(`Essa é a data que está sendo passada para o calculate na função loadUserForDate: ${date}`)
+          
             const getDailyGoal = await fetch('/api/calculate',{
                 method:"POST",
                 headers: {
