@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-import { AddFood, SearchFood, CreateMyFoodbtn } from "./modals.js";
+import { AddFood, SearchFood, CreateMyFoodbtn, EditFoodAdded } from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateDonutChart, updateCharts } from '../utils/donutchart.js';
@@ -453,7 +453,7 @@ async function openModalWithMeal(meal) {
  
     const showFoods = modal.querySelector("#showFoods");
     const showMyFoods = modal.querySelector("#showMyFoods");   
-
+   
 
     if (showFoods) {
       showFoods.addEventListener("click", async() => {
@@ -737,15 +737,15 @@ async function fetchAddedFoods(userId, dateCalendar){
       btnDeleteFoodElement.textContent = `Deletar`;
 
   //       // Event listener para o botão de editar
-  // btnEditFoodElement.addEventListener("click", async () => {
+  btnEditFoodElement.addEventListener("click", async () => {
 
-  //   try {
-  //     console.log("Botão Editar clicado para o alimento:", food.id);
-  //     await editFoodItem(food.id);
-  //   } catch (error) {
-  //     console.error("Erro ao editar alimento:", error);
-  //   }
-  // });
+    try {
+      console.log("Botão Editar clicado para o alimento:", food.id);
+      await editFoodItem(food.id,food.food_name,food.meal,food.food_id);
+    } catch (error) {
+      console.error("Erro ao editar alimento:", error);
+    }
+  });
 
   // Event listener para o botão de deletar
   btnDeleteFoodElement.addEventListener("click", async () => {
@@ -796,7 +796,8 @@ async function deleteFoodItem(foodId) {
       throw new Error("Erro ao deletar alimento.");
     }
 
-    // console.log("Alimento deletado com sucesso!");
+    console.log("Alimento deletado com sucesso!");
+    location.reload();
    
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);
@@ -804,40 +805,65 @@ async function deleteFoodItem(foodId) {
 }
 
 
-// async function editFoodItem(foodId) {
-  
-//   const newGrams = ;
-//   const newMeal = ;
+async function editFoodItem(foodId,foodName,meal,id_food) {
+  const modalEditFoodAdded = EditFoodAdded();
+  modalEditFoodAdded.querySelector("#nameEditFood").textContent = foodName;
 
-//   if (!newGrams || !newMeal) {
-//     console.error("Dados de edição incompletos.");
-//     return;
-//   }
+  const btnCancelEdit = modalEditFoodAdded.querySelector("#btn_cancel_editFood");
+  btnCancelEdit.addEventListener("click", ()=> modalEditFoodAdded.remove());
 
-//   try {
-//     const userId = await getUserId(); 
-//     const dateCalendar = document.getElementById('input-date').value; 
+  const backModalEditFoodAdded = modalEditFoodAdded.querySelector("#back_modal_editFoodAdded");
+  backModalEditFoodAdded.addEventListener("click", ()=> modalEditFoodAdded.remove());
 
-//     const response = await fetch(`/api/foodAdded/${foodId}`, {
-//       method: "PUT", 
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         user_id: userId, 
-//         food_quantity: newGrams,
-//         meal: newMeal,
-//         date: dateCalendar, 
-//       }),
-//     });
+  modalEditFoodAdded.querySelector("#newMeal").value = meal;
 
-//     if (!response.ok) {
-//       throw new Error("Erro ao editar alimento.");
-//     }
+  console.log(foodId,"teste");
+  const btnSaveEdit = modalEditFoodAdded.querySelector("#btn_save_editFood");
+  btnSaveEdit.addEventListener("click", async () => {
+    const newGrams = modalEditFoodAdded.querySelector("#newGrams").value;
+    const newMeal = modalEditFoodAdded.querySelector("#newMeal").value;
 
-//     console.log("Alimento editado com sucesso!");
     
-//   } catch (error) {
-//     console.error("Erro ao editar alimento:", error);
-//   }
-// }
+    if (!newGrams || !newMeal) {
+      console.error("Dados de edição incompletos.");
+      return;
+    }
+
+    try {
+      const userId = await getUserId();
+      const dateCalendar = document.getElementById('input-date').value;
+      
+
+      const response = await fetch(`/api/foodAdded/${foodId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          food_id: id_food,
+          date: dateCalendar,
+          food_quantity: newGrams,
+          meal: newMeal,
+          id:foodId
+
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao editar alimento.");
+      }
+
+      console.log("Alimento editado com sucesso!");
+
+      // Atualizar a página para refletir as mudanças
+      location.reload();
+      
+
+    } catch (error) {
+      console.error("Erro ao editar alimento:", error);
+    }
+  });
+
+  document.body.appendChild(modalEditFoodAdded);
+}
