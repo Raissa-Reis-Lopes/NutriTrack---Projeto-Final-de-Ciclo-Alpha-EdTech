@@ -36,7 +36,7 @@ export function Register() {
                     <label for="terms">Li e concordo com a <span id="open-modal-privacy" class="regsiter_conditons">política de privacidade</span> e <span id="open-modal-terms" class="regsiter_conditons">termos de uso</span></label>
                 </div>
                     <div id="message_terms"></div>
-                <div id="message" class="message-container">
+                <div id="message" class="message-container hidden">
                     <div id="message-content" class="message-content hidden"></div>
                 </div>
             </div>
@@ -100,13 +100,13 @@ export function registerBtns() {
         const terms = document.getElementById("terms").checked;
 
         if(!username){
-            messageError("message_name","O nome não pode ser vazio",3000)          
+            messageError("message_name","O nome não pode ser vazio")          
             return;
         }
     
     
         if (!emailValid(email)) {
-            messageError("message_email","Por favor, insira um email válido",3000) 
+            messageError("message_email","Por favor, insira um email válido") 
             return;
         }
             
@@ -114,19 +114,18 @@ export function registerBtns() {
             messageError("message_password",
             `Insira uma senha válida:
             - mín. 8 e máx. 15 caracteres
-            - mín. uma letra maiúscula e uma minúscula
-            - pelo menos um número 
+            - pelo menos um número, uma letra maiúscula e uma minúscula
             - pelo menos um caractere especial`,5000,"0.8rem") 
             return;
         }
     
         if (password !== confirmPassword){
-            messageError("message_repeat_password","As senhas não conferem",3000)
+            messageError("message_repeat_password","As senhas não conferem")
             return;
         }
         
         if(!terms){
-            messageError("message_terms","É necessário ler e concordar com os termos de uso e privacidade",3000)
+            messageError("message_terms","É necessário ler e concordar com os termos de uso e privacidade")
             return;
         }
 
@@ -153,7 +152,7 @@ export function registerBtns() {
                 const data = await response.json();
              
         
-                if (!response.success) {
+                if (!response.ok) {
                     throw new Error(data.message);
                 }
 

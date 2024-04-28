@@ -36,7 +36,7 @@ export function showMessage(status, statusMessage, top, left){
 
 E, tem que ter essa div no html:
 
- <div id="message" class="message-container">
+ <div id="message" class="message-container hidden">
      <div id="message-content" class="message-content hidden"></div>
  </div>
 

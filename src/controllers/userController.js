@@ -41,7 +41,7 @@ const createUser = async(req, res) => {
         if (error.code === '23505' && error.constraint === 'users_email_key') {
             return res.status(500).json({ message: "Email já cadastrado" });
         } else {
-            return res.status(500).json({ message: "Erro ao cadastrar usuário" });
+            return res.status(500).json({ error: error.message, message:"Falha ao realizar o cadastro do usuário" });
         }
     }
 }
