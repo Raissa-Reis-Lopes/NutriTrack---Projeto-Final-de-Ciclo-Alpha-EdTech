@@ -127,3 +127,9 @@
 #date input{
   cursor: pointer;
 }
+
+.no_config{
+  color: red;
+  font-weight: 800;
+  font-size: larger;
+}

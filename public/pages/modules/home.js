@@ -55,8 +55,9 @@ export function Home() {
             <div class="calories_bar">
                 <div class="calories_progress" id="calories-progress"></div>
             </div>
-            <p class="container_calories"><span id="consumed-calories"></span> calorias ingeridas</p>
-        </div>
+              <p class="container_calories"><span id="consumed-calories"></span> calorias ingeridas</p>
+           </div>
+           <div id="no_config" class="no_config"></div>
                 <div id="date">
                     <input type="date" name="date" id="input-date">
                 </div>
@@ -276,7 +277,21 @@ async function getUserAvatar(userId){
     }
 }
 
+
+
+ //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
+ const computedStyle = getComputedStyle(document.documentElement);
+ const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
+ const corBgProtein = computedStyle.getPropertyValue('--cor-bg-protein').trim(); 
+ const corCarbo = computedStyle.getPropertyValue('--cor-carbo').trim(); 
+ const corBgCarbo = computedStyle.getPropertyValue('--cor-bg-carbo').trim(); 
+ const corLipid = computedStyle.getPropertyValue('--cor-lipid').trim(); 
+ const corBgLipid = computedStyle.getPropertyValue('--cor-bg-lipid').trim(); 
+
 async function loadUserDataForDate(date) {
+    const noConfig = document.getElementById("no_config");
+    noConfig.innerText = "";
+
     clearScreenValues(); // Limpa os valores da tela
     try { 
          const userId = await getUserId();
@@ -383,22 +398,16 @@ async function loadUserDataForDate(date) {
             progressBar.style.width = consumedPercent + '%';
             remainingCalories.innerHTML = message;
 
-
-            //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
-            const computedStyle = getComputedStyle(document.documentElement);
-            const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
-            const corBgProtein = computedStyle.getPropertyValue('--cor-bg-protein').trim(); 
-            const corCarbo = computedStyle.getPropertyValue('--cor-carbo').trim(); 
-            const corBgCarbo = computedStyle.getPropertyValue('--cor-bg-carbo').trim(); 
-            const corLipid = computedStyle.getPropertyValue('--cor-lipid').trim(); 
-            const corBgLipid = computedStyle.getPropertyValue('--cor-bg-lipid').trim(); 
-
             proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
             carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
             lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
         }
     } catch(error) {
-       console.log(error.message)
+      proteinChartInstance = updateOrCreateDonutChart('Proteínas', 0, 0, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+      carboChartInstance = updateOrCreateDonutChart('Carboidratos', 0, 0, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+      lipidChartInstance = updateOrCreateDonutChart('Gorduras', 0, 0, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
+      noConfig.innerText = "Não há dados cadastrados para o usuário nesta data!"
+      console.log(error.message)
     }
     loadAddedFoods();
 }
@@ -413,9 +422,6 @@ function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstanc
         return chartInstance;  
     }
 }
-
-
-
 
 export function navRoutes() {
   const navProfile = document.getElementById("navProfile");
@@ -456,9 +462,7 @@ export function homeBtns() {
   btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
   btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
   btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
-  btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
-
-  
+  btnSnack.addEventListener("click", () => openModalWithMeal("snack")); 
 }
 
 let selectedMealType = "";
@@ -1069,9 +1073,6 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
   document.body.appendChild(modalEditMyFood);
 }
 
-
-
-
 async function deleteMyFoodItem(userId, myFoodItemId){
   console.log(myFoodItemId);
   if (!confirm("Tem certeza que deseja deletar este alimento?")) {
@@ -1096,8 +1097,6 @@ async function deleteMyFoodItem(userId, myFoodItemId){
     console.error("Erro ao deletar alimento:", error);
   }
 }
-
-
 
 // Função para renderizar os alimentos filtrados no modal
 function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {

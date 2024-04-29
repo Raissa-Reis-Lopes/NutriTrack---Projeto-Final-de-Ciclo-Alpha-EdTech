@@ -14,6 +14,7 @@
     background-size: 470px;
     z-index: -4;
 }
+
 .back_initial::after{
     position: absolute;
     display: block;
