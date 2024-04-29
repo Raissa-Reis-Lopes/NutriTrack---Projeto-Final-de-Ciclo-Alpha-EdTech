@@ -73,3 +73,9 @@ export function emailValid(email) {
         return escapeMap[match];
     });
 }
+
+export function validateImageFormat(imageFileName) {
+  const allowedFormats = ['jpeg', 'jpg', 'png', 'gif'];
+  const extension = imageFileName.split('.').pop().toLowerCase();
+  return allowedFormats.includes(extension);
+}

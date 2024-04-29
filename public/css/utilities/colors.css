@@ -18,8 +18,11 @@
     --cor-p3: #4B874A;
     --cor-p4: #216B1F;
     --cor-p5: #014100;
+    --cor-p6: #ff4500;
+    --cor-p7: chocolate;
   }
   
+
   .cor-0 {
     color: var(--cor-0);
   }
@@ -76,5 +79,8 @@
   }
   .cor-p5 {
     color: var(--cor-p5);
+  }
+  .cor-p6 {
+    color: var(--cor-p6);
   }
   

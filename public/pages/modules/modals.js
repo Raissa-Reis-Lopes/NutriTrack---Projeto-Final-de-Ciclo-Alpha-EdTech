@@ -18,8 +18,7 @@ export function SearchFood(){
             <input type="text" name="search" id="search" placeholder="Procurar Produtos">
         </div>
         <div class="food_data_container">
-        <div id="datafood" class="container_dataFood">
-        </div>
+            <div id="datafood" class="container_dataFood"></div>
         </div>
     </div>
     `;

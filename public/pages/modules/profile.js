@@ -2,7 +2,7 @@ import { showMessage } from "../utils/message.js";
 import createCustomEvent from "./event.js";
 import { limitDate } from"../utils/limitDates.js"
 import { logout } from "../utils/logout.js";
-import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml } from "./validation.js";
+import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml, validateImageFormat } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEventsProfile } from "./modals.js";
 import { footerProfile } from "./footer.js";
 import { messageError } from "../utils/messageError.js"
@@ -30,9 +30,11 @@ export function Profile() {
             <label for="input-image">
             <div class="image-profile" style="cursor:pointer;">
                 <img id="img-user" src="" alt="Imagem do usuario" />
+                <div id="change-image-overlay" class="change-image-overlay">Alterar imagem</div>
             </div>
             </label>
-        </div>
+            </div>
+        <div id="message_picture"></div>
         <div class="profile_info">
             <div class="info_item" id="name">
                 <span>Nome: </span>
@@ -70,7 +72,7 @@ export function Profile() {
             </div>
             <div id="message_height"></div>
               <div class="info_item" id="birth">
-                <span>Nascimento: </span>
+                <span>Data de Nascimento: </span>
                 <input id="input-birth" type="date" value="" placeholder="" readonly />
             </div>
             <div id="message_birthdate"></div>
@@ -161,9 +163,25 @@ export function Profile() {
     // const btnSave = document.getElementById("btn-save-changes");
     // btnSave.addEventListener("click", saveChanges);
     activateSaveBtn();
+    changeImageOverlay();
 
     return div
 }
+
+
+function changeImageOverlay(){
+    const imageProfile = div.querySelector(".image-profile");
+    const changeImageOverlay = div.querySelector("#change-image-overlay");
+
+    imageProfile.addEventListener("mouseenter", () => {
+        changeImageOverlay.style.display = "flex";
+    });
+
+    imageProfile.addEventListener("mouseleave", () => {
+        changeImageOverlay.style.display = "none";
+    });
+}
+
 
 //Função para só ativar o botão quando houver uma mudança e desativar quando ele for clicado, para não pemritir o envio de múltiplas requisições
 export function activateSaveBtn() {
@@ -204,16 +222,29 @@ async function getUserId(){
 export async function uploadImage(){
         const inputImage = document.querySelector("#input-image");
         const imgProfile = document.querySelector("#img-user");         
-        
         const userId = await getUserId();
         const formData = new FormData();
-        formData.append('avatar', inputImage.files[0]);
+
         
         if (inputImage.files.length === 0) {
             console.log('Por favor, selecione uma imagem.');
             return;
         }
+    
+        const imageFile = inputImage.files[0];
+        const imageName = imageFile.name;
+    
+        if (!validateImageFormat(imageName)) {
+            messageError("message_picture","Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif")
+            console.log('Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif.');
+            return;
+        }
+        
 
+        formData.append('avatar', inputImage.files[0]);
+        
+        
+        
         try {
             const response = await fetch(`/api/upload/${userId}`, {
                 method: 'POST',
