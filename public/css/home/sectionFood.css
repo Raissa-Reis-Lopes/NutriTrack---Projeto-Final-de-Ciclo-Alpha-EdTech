@@ -36,3 +36,8 @@
     align-items: center;
     justify-content: end;
 }
+
+.dataFoodScroll{
+    max-height: 100px;
+    overflow: scroll;
+}
