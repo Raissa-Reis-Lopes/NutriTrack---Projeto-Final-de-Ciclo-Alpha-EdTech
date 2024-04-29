@@ -109,7 +109,7 @@ export function CreateMyFoodbtn(){
             </div>
             <div>
                 <button id="btn_cancel_create" class="btn_stroke btn_cancel">Cancelar</button>
-                <button id="btn_create_new" class="btn_stroke">Criar novo alimento</button>
+                <button id="btn_create_new" class="btn_stroke">Salvar alimento</button>
              </div>
         </div> 
     </div>
