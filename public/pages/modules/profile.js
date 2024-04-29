@@ -160,13 +160,13 @@ export function Profile() {
 
     // const btnSave = document.getElementById("btn-save-changes");
     // btnSave.addEventListener("click", saveChanges);
-
+    activateSaveBtn();
 
     return div
 }
 
 //Função para só ativar o botão quando houver uma mudança e desativar quando ele for clicado, para não pemritir o envio de múltiplas requisições
-document.addEventListener('DOMContentLoaded', function () {
+export function activateSaveBtn() {
     const inputFields = document.querySelectorAll('.info_item input, .info_item select');
     const btnSaveChanges = document.getElementById('btn-save-changes');
 
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnSaveChanges.addEventListener('click', function () {
         this.disabled = true;
     });
-});
+};
 
 async function getUserId(){
     try {
