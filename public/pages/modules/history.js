@@ -188,10 +188,10 @@ function navegar(direcao) {
 // }
 
 function formatarDataGrafico(data, formato) {
-    let diaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-    let ano = data.getFullYear();
-    let mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
-    let dia = String(data.getDate()).padStart(2, '0');
+    const diaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
+    const dia = String(data.getDate()).padStart(2, '0');
     
     if (formato === 'ddd') {
         return `${diaSemana[data.getDay()]} ${dia}/${mes}`;
@@ -199,6 +199,23 @@ function formatarDataGrafico(data, formato) {
 
     return `${ano}-${mes}-${dia}`;
 }
+
+// Faz uma requisição para a rota /api/semana no backend
+fetch('/api/week')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao obter os dados da semana');
+    }
+    return response.json();
+  })
+  .then(dadosDaSemana => {
+    // Manipule os dados da semana como desejar, por exemplo, passe-os para generateBarChart
+    generateBarChart(dadosDaSemana);
+  })
+  .catch(error => {
+    console.error('Erro ao obter os dados da semana:', error);
+  });
+
 
 function createModalEvents() {
     const openModalPrivacy = document.getElementById("open-modal-privacy");
