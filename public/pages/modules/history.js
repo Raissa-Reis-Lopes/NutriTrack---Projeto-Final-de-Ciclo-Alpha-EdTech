@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-import { limitDate } from "../utils/limitDates.js";
+// import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
@@ -112,18 +112,6 @@ export function History() {
      createModalEventsDefault();
 
      navRoutes();
-    backDate.addEventListener("click", function() {
-        const startDate = new Date(dataInicioInput.value);
-        const endDate = new Date(dataFimInput.value);
-        navegar('-', startDate, endDate);
-    });
-    nextDate.addEventListener("click", function() {
-        const startDate = new Date(dataInicioInput.value);
-        const endDate = new Date(dataFimInput.value);
-        navegar('+', startDate, endDate);
-    });
-    
-    limitDate(inputDate);
     
     return div
 }
@@ -265,49 +253,6 @@ export function navRoutes() {
         window.dispatchEvent(customEvent);
     });
 }
-function createModalEvents() {
-    const openModalPrivacy = document.getElementById("open-modal-privacy");
-    const openModalTerms = document.getElementById("open-modal-terms");
-    const closeModalPrivacy = document.getElementById("close-modal-privacy");
-    const closeModalTerms = document.getElementById("close-modal-terms");
-    const modalPrivacy = document.querySelector("#modal-privacy");
-    const modalTerms = document.querySelector("#modal-terms");
-    const fadePrivacy = document.querySelector("#fade-privacy");
-    const fadeTerms = document.querySelector("#fade-terms");
-    const openModalSac = document.getElementById("open-modal-sac");
-    const closeModalSac = document.getElementById("close-modal-sac");
-    const modalSac = document.querySelector("#modal-sac");
-    const fadeSac = document.querySelector("#fade-sac");
-    
-    // adiciona ou remove a classe "hide"
-    function toggleModalPrivacy () {
-        modalPrivacy.classList.toggle("hide");
-        fadePrivacy.classList.toggle("hide");
-    }
-    
-    function toggleModalTerms() {
-        modalTerms.classList.toggle("hide");
-        fadeTerms.classList.toggle("hide");
-    }
-    
-    function toggleModalSac() {
-        modalSac.classList.toggle("hide");
-        fadeSac.classList.toggle("hide");
-    }
-    
-    // Para cada variável cria um EventListener de click e chama a função
-    [openModalPrivacy, closeModalPrivacy, fadePrivacy].forEach((el) => {
-        el.addEventListener("click", () => toggleModalPrivacy());
-    });
-    
-    [openModalTerms, closeModalTerms, fadeTerms].forEach((el) => {
-        el.addEventListener("click", () => toggleModalTerms());
-    });
-    
-    [openModalSac, closeModalSac, fadeSac].forEach((el) => {
-        el.addEventListener("click", () => toggleModalSac());
-    });
-}
 
 export function registerBtns() {
     const btnHome = document.getElementById("btn_home");
@@ -330,9 +275,15 @@ export function registerBtns() {
 }
 
 export function navRoutes() {
-    const navProfile = document.getElementById("navToProfile");
-    const navHistory = document.getElementById("navHome");
-    const btnExit = document.querySelector(".btnExit");
+    const navProfile = document.getElementById("navProfile");
+    const navHome = document.getElementById("navHome");
+    const logo = document.getElementById("logo");
+    const btnExit = document.getElementById("btnExit");
+
+    logo.addEventListener("click", () => {
+        const customEvent = createCustomEvent("/home");
+        window.dispatchEvent(customEvent);
+    });
 
     navProfile.addEventListener("click", () => {
         const customEvent = createCustomEvent("/profile");
@@ -346,5 +297,5 @@ export function navRoutes() {
 
     btnExit.addEventListener("click", ()=>{
         logout();
-    });
+      });
 }
