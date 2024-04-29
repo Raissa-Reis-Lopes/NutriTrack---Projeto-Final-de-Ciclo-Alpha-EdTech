@@ -451,10 +451,11 @@ async function openModalWithMeal(meal) {
 
   selectedMealType = meal;
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
-  const modalSearchFood = modal.querySelector("#modalSearchFood");
+  const datafood = modal.querySelector("#datafood");
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
   
+
   let userId;
 
     // variavel para o inputSearch
@@ -536,34 +537,47 @@ async function openModalWithMeal(meal) {
         createMyFoodbtn.addEventListener("click", ()=>{
           console.log(userId,"create");
           const modalCreate = CreateMyFoodbtn();
+          
+
+          const btnsCreateFood = modalCreate.querySelector("#btnsCreateFood");
+
+          const errorMessageCreate = document.createElement("div");
+
           const btnCancelCreate = modalCreate.querySelector("#btn_cancel_create");
           const btnCreateNew = modalCreate.querySelector("#btn_create_new");
-
 
           btnCancelCreate.addEventListener("click", ()=> modalCreate.remove());
 
           btnCreateNew.addEventListener("click", async()=>{
+            // errorMessageCreate="";
             const nameCreate = escapeHtml(modalCreate.querySelector("#nameCreate").value);
             const caloriesCreate = escapeHtml(modalCreate.querySelector("#caloriesCreate").value);
             const carbCreate = escapeHtml(modalCreate.querySelector("#carbCreate").value);
             const proteinCreate = escapeHtml(modalCreate.querySelector("#proteinCreate").value);
             const fatCreate = escapeHtml(modalCreate.querySelector("#fatCreate").value);
 
+            errorMessageCreate.innerText = "";
+            if (!nameCreate || !caloriesCreate || !carbCreate || !proteinCreate || !fatCreate) {
+              errorMessageCreate.innerText="Dados de criação incompletos.";
+              return;
+            }
           if (!nameValid(nameCreate)) {
-              showMessage('fail',"Formato de nome inválido!");
+            errorMessageCreate.innerText="Formato de nome inválido!";
               return;
           }
           if (!numberValid(caloriesCreate)||!numberValid(carbCreate)||!numberValid( proteinCreate)||!numberValid(caloriesCreate)||!numberValid(fatCreate)) {
-            showMessage('fail',"Precisa ser um numero inteiro maior que 0");
+            errorMessageCreate.innerText="Precisa ser um numero inteiro maior que 0";
             return;
         }
 
+        
             // função para salvar o alimento no banco de dados
             createNewFood(userId,nameCreate,caloriesCreate,carbCreate,proteinCreate,fatCreate);
             
             modalCreate.remove();
           });
 
+          btnsCreateFood.appendChild(errorMessageCreate);
          document.body.appendChild(modalCreate);
           });
 
@@ -701,8 +715,8 @@ async function openModalWithMeal(meal) {
   });
   document.body.appendChild(modal); // Adiciona o modal ao body
  
-  modalSearchFood.appendChild(btnCreatefoodContainer);
-  modalSearchFood.appendChild(datafoodContainer);
+  datafood.appendChild(btnCreatefoodContainer);
+  datafood.appendChild(datafoodContainer);
  }
 
 function openAddFoodModal(userId,item,meal) {
@@ -717,6 +731,8 @@ function openAddFoodModal(userId,item,meal) {
   modal.querySelector("#quantity_fat").textContent = escapeHtml(Number(item.lipid_g).toFixed(2));
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = escapeHtml(meal);
+
+  const errorMessage = modal.querySelector("#errorMessage");
   
 
   const btnCancel = modal.querySelector("#btn_cancel_addFood");
@@ -727,8 +743,9 @@ function openAddFoodModal(userId,item,meal) {
     const gramsInput = escapeHtml(modal.querySelector("#grams").value);
     const mealSelect = escapeHtml(modal.querySelector("#meal").value);
     const dateCalendar = escapeHtml(document.getElementById('input-date').value);
-    if (!numberValid(gramsInput)) {
-      showMessage('fail',"Precisa ser um numero inteiro maior que 0");
+    errorMessage.innerText="";
+    if (!numberValid(gramsInput)|| !grams) {
+      errorMessage.innerText="Precisa ser um numero inteiro maior que 0";
       return;
     }
     // console.log(dateCalendar);
@@ -826,7 +843,7 @@ async function fetchAddedFoods(userId, dateCalendar){
       const btnDeleteFoodElement = document.createElement("button");
       btnDeleteFoodElement.textContent = `Deletar`;
 
-  //       // Event listener para o botão de editar
+  // Event listener para o botão de editar
   btnEditFoodElement.addEventListener("click", async () => {
 
     try {
@@ -984,18 +1001,19 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
     const newCarbCreate = escapeHtml(modalEditMyFood.querySelector("#carbCreate").value);
     const newProteinCreate = escapeHtml(modalEditMyFood.querySelector("#proteinCreate").value);
     const newFatCreate = escapeHtml(modalEditMyFood.querySelector("#fatCreate").value);
+    const errorMessageCreateEdit = modalEditMyFood.querySelector("#errorMessageCreateEdit");
 
-    
+    errorMessageCreateEdit.innerText="";
     if (!newNameCreate || !newCaloriesCreate || !newCarbCreate || !newProteinCreate || !newFatCreate) {
-      console.error("Dados de edição incompletos.");
+      errorMessageCreateEdit.innerText="Dados de criação incompletos.";
       return;
     }
     if (!nameValid(newNameCreate)) {
-      showMessage('fail',"Formato de nome inválido!");
+      errorMessageCreateEdit.innerText="Formato de nome inválido!";
       return;
   }
     if (!numberValid(newCaloriesCreate)||!numberValid(newCarbCreate)||!numberValid(newProteinCreate)||!numberValid(newFatCreate)) {
-      showMessage('fail',"Precisa ser um numero inteiro maior que 0");
+      errorMessageCreateEdit.innerText="Precisa ser um numero inteiro maior que 0";
       return;
   }
 

@@ -74,7 +74,8 @@ export function AddFood(){
                 </select>
             </div>
         </div>
-        <div class="btns_addFood">
+        <div id="errorMessage"></div>
+        <div class="btns_addFood" id ="btnsAddFood">
             <button id="btn_cancel_addFood" class="btn_stroke">Cancelar</button>
             <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
         </div>
@@ -111,10 +112,11 @@ export function CreateMyFoodbtn(){
                 <label for="fatCreate">Gorduras <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="fatCreate">
             </div>
-            <div>
+            <div id="btnsCreateFood">
                 <button id="btn_cancel_create" class="btn_stroke btn_cancel">Cancelar</button>
                 <button id="btn_create_new" class="btn_stroke">Salvar alimento</button>
              </div>
+             <div id="errorMessageCreateEdit"></div>
         </div> 
     </div>
     `;
