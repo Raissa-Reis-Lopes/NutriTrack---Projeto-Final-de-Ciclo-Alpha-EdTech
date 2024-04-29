@@ -453,7 +453,8 @@ async function openModalWithMeal(meal) {
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
   const modalSearchFood = modal.querySelector("#modalSearchFood");
   const btnCreatefoodContainer = document.createElement("div");
-  const datafoodContainer = document.createElement("div");
+  // const datafoodContainer = document.createElement("div");
+  const datafoodContainer = document.getElementById("datafood");  
   
   let userId;
 
@@ -480,7 +481,7 @@ async function openModalWithMeal(meal) {
             throw new Error("Falha ao tentar localizar os alimentos");
           }
       
-           foodList = await responseFood.json(); // Trata a resposta JSON
+          foodList = await responseFood.json(); // Trata a resposta JSON
           userId = await getUserId();
           // console.log(userId);
       
