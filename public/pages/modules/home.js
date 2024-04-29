@@ -717,6 +717,10 @@ async function openModalWithMeal(meal) {
  
   datafood.appendChild(btnCreatefoodContainer);
   datafood.appendChild(datafoodContainer);
+
+  if (showFoods) {
+    showFoods.click();
+  }
  }
 
 function openAddFoodModal(userId,item,meal) {
