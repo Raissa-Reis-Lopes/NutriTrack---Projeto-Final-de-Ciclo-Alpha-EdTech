@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-// import { limitDate } from "../utils/limitDates.js";
+import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
 
@@ -28,22 +28,22 @@ export function History() {
         </div>
         <div class="period">
             <div id="input-date">
-                <button class="btn_stroke" onclick="navegar('-')">← Anterior</button>
                 <input type="date" id="dataInicio">
                 <input type="date" id="dataFim">
-                <button class="btn_stroke" onclick="navegar('+')">Próximo →</button>
             </div>
         </div>
-        <div class="chart">
         <section>
-            <div class="chart-container">
-                <span class="span_green ">Gráfico Semanal</span>
-                <div>
+            <div class="chart">
+                <div class="chart-container">
+                    <span class="span_green ">Gráfico Semanal</span>
+                    <div>
                     <div class="chart" id="week-chart"></div>
+                    </div>
+                    <button class="btn_stroke" id="nextDate">Próxima Semana →</button>
+                    <button class="btn_stroke" id="backDate">← Semana Anterior</button>
                 </div>
             </div>
         </section>
-        </div>
     </main>
     <!-- Tags para o modal -->
         <section>
@@ -112,40 +112,109 @@ export function History() {
     document.getElementById("root").appendChild(div);
     registerBtns();
     createModalEvents();
-    // limitDate('input-date');
-
+    
     const dataAtual = new Date();
     const dataInicioInput = document.getElementById('dataInicio');
     const dataFimInput = document.getElementById('dataFim');
-
+    const backDate = document.getElementById('backDate');
+    const nextDate = document.getElementById('nextDate');
+    
     // Define a data atual como o valor inicial dos elementos de entrada de data
     dataInicioInput.value = formatarData(dataAtual);
     dataFimInput.value = formatarData(new Date(dataAtual.getTime() - (7 * 24 * 60 * 60 * 1000))); // Adiciona uma semana à data atual
 
     const inputDate = document.getElementById('input-date');
-  
+    
     inputDate.addEventListener("change", function() {
         const selectedDate = inputDate.value;
         // getweek(selectedDate);
         // loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
         
-        let dataInicio = new Date(document.getElementById('dataInicio').value);
-        let dataFim = new Date(document.getElementById('dataFim').value);
-        let dias = calcularDias(dataInicio, dataFim);
+        const dataInicio = new Date(dataInicioInput.value);
+        const dataFim = new Date(dataFimInput.value);
+        const weeks = calcularDias(dataInicio, dataFim);
         
         // Define dataInicio para o último domingo
         dataInicio.setDate(dataInicio.getDate() - dataInicio.getDay());
-        document.getElementById('dataInicio').value = formatarData(dataInicio);
+        dataInicioInput.value = formatarData(dataInicio);
         
         // Define dataFim para o próximo sábado
         dataFim.setDate(dataInicio.getDate() + 6);
-        document.getElementById('dataFim').value = formatarData(dataFim);
+        dataFimInput.value = formatarData(dataFim);
     });
-
+    
     const dias = [];
     generateBarChart(dias);
+    backDate.addEventListener("click", function() {
+        const startDate = new Date(dataInicioInput.value);
+        const endDate = new Date(dataFimInput.value);
+        navegar('-', startDate, endDate);
+    });
+    nextDate.addEventListener("click", function() {
+        const startDate = new Date(dataInicioInput.value);
+        const endDate = new Date(dataFimInput.value);
+        navegar('+', startDate, endDate);
+    });
+    
+    limitDate(inputDate);
     
     return div
+}
+
+async function getUserId(){
+    try {
+        const getUserId = await fetch("/api/login/", {
+            method: "GET",
+        });
+
+        if(!getUserId.ok){
+            throw new Error("Falha ao localizar o id do usuáiro")
+        }
+        const userIdResponse = await getUserId.json();
+        const userId = userIdResponse.user;
+        return userId;
+
+    } catch (error) {
+        
+    }
+}
+
+async function getUserName(userId){
+    try {
+        const getUsername = await fetch(`/api/users/${userId}`,{
+            method: "GET",
+        });
+
+        if(!getUsername.ok){
+            throw new Error("Erro ao localizar o nome do usuário pelo id"); 
+        }
+
+        const userData = await getUsername.json();
+
+        const username = userData.username;
+
+        return username;
+    } catch (error) {
+        
+    }
+}
+
+async function getWeekData(){
+    try {
+        const getWeek = await fetch("/api/week/", {
+            method: "GET",
+        });
+
+        if(!getWeek.ok){
+            throw new Error("Erro ao localizar os dados semanais");
+        }
+
+        const weekData = await getWeek.json();
+
+        return weekData;
+    } catch (error) {
+        
+    }
 }
 
 function formatarData(data) {
@@ -156,36 +225,38 @@ function formatarData(data) {
     return `${ano}-${mes}-${dia}`;
 }
 
-function navegar(direcao) {
+function navegar(direcao, startDate, endDate) {
+    const newStartDate = new Date (startDate);
+    const newEndDate = new Date (endDate);
     if (direcao === '-') {
-        dataInicio.setDate(dataInicio.getDate() - 7);
-        dataFim.setDate(dataFim.getDate() - 7);
+        newStartDate.setDate(newStartDate.getDate() - 7);
+        newEndDate.setDate(newEndDate.getDate() - 7);
     } else if (direcao === '+') {
-        dataInicio.setDate(dataInicio.getDate() + 7);
-        dataFim.setDate(dataFim.getDate() + 7);
+        newStartDate.setDate(newStartDate.getDate() + 7);
+        newEndDate.setDate(newEndDate.getDate() + 7);
     }
 
-    document.getElementById('dataInicio').value = formatarData(dataInicio);
-    document.getElementById('dataFim').value = formatarData(dataFim);
+    document.getElementById('dataInicio').value = formatarData(newStartDate);
+    document.getElementById('dataFim').value = formatarData(newEndDate);
 }
 
-// function calcularDias(dataInicio, dataFim) {
-//     const dataAtual = new Date(dataInicio);
+function calcularDias(dataInicio, dataFim) {
+    const dataAtual = new Date(dataInicio);
 
-//     while (dataAtual <= dataFim) {
-//         let dia = {
-//             data: formatarDataGrafico(dataAtual, 'ddd'),
-//             calorias: Math.floor(Math.random() * 1000),
-//             gordura: Math.floor(Math.random() * 100),
-//             proteina: Math.floor(Math.random() * 100),
-//             carboidrato: Math.floor(Math.random() * 200)
-//         };
-//         dias.push(dia);
-//         dataAtual.setDate(dataAtual.getDate() + 1);
-//     }
+    while (dataAtual <= dataFim) {
+        let dia = {
+            data: formatarDataGrafico(dataAtual, 'ddd'),
+            calorias: Math.floor(Math.random() * 1000),
+            gordura: Math.floor(Math.random() * 100),
+            proteina: Math.floor(Math.random() * 100),
+            carboidrato: Math.floor(Math.random() * 200)
+        };
+        // dias.push(dia);
+        dataAtual.setDate(dataAtual.getDate() + 1);
+    }
 
-//     return dias;
-// }
+    // return dias;
+}
 
 function formatarDataGrafico(data, formato) {
     const diaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -200,21 +271,20 @@ function formatarDataGrafico(data, formato) {
     return `${ano}-${mes}-${dia}`;
 }
 
-// Faz uma requisição para a rota /api/semana no backend
+// Requisição para a rota /api/semana no backend
 fetch('/api/week')
-  .then(response => {
+    .then(response => {
     if (!response.ok) {
       throw new Error('Erro ao obter os dados da semana');
     }
     return response.json();
-  })
-  .then(dadosDaSemana => {
-    // Manipule os dados da semana como desejar, por exemplo, passe-os para generateBarChart
+})
+    .then(dadosDaSemana => {
     generateBarChart(dadosDaSemana);
-  })
-  .catch(error => {
+})
+    .catch(error => {
     console.error('Erro ao obter os dados da semana:', error);
-  });
+});
 
 
 function createModalEvents() {
@@ -266,7 +336,7 @@ export function registerBtns() {
     const btnProfile = document.getElementById("btn_profile");
 
     if(btnHome){
-        register.addEventListener ("click",function(e){
+        btnHome.addEventListener ("click",function(e){
             e.preventDefault();
             const customEvent = createCustomEvent('/home');
             window.dispatchEvent(customEvent); 
@@ -274,7 +344,7 @@ export function registerBtns() {
     }
 
     if (btnProfile) {
-        btnBack.addEventListener("click", () => {
+        btnProfile.addEventListener("click", () => {
             const customEvent = createCustomEvent('/profile');
             window.dispatchEvent(customEvent);
         });
