@@ -474,8 +474,8 @@ async function openModalWithMeal(meal) {
   const datafood = modal.querySelector("#datafood");
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
-  datafoodContainer.classList.add("dataFoodScroll");
-  btnCreatefoodContainer.classList.add("dataFoodScroll");
+  datafoodContainer.classList.add("dataFoodScrool");
+  btnCreatefoodContainer.classList.add("dataFoodScrool");
   
 
   let userId;
@@ -623,8 +623,13 @@ async function openModalWithMeal(meal) {
               // Adiciona os alimentos à lista no modal
               myFoodList.forEach((myFoodItem) => {
                 const myFoodElement = document.createElement("div");
+                myFoodElement.classList.add("myFoodElementContainer");
                 const myFoodElementName =document.createElement("div");
                 myFoodElementName.textContent = escapeHtml(myFoodItem.name);
+
+                const btnEditDeleteMyFood = document.createElement("div");
+                btnEditDeleteMyFood.classList.add("btnsEditDeleteContainer");
+
 
                 const btnEditMyFoodElement = document.createElement("img");
                 btnEditMyFoodElement.src = "./img/edit.svg"; 
@@ -664,9 +669,10 @@ async function openModalWithMeal(meal) {
                 });
 
                 myFoodElement.appendChild(myFoodElementName);
+                myFoodElement.appendChild(btnEditDeleteMyFood);
                  // Adicionar botões ao elemento do alimento
-                myFoodElement.appendChild(btnEditMyFoodElement);
-                myFoodElement.appendChild(btnDeleteMyFoodElement);
+                 btnEditDeleteMyFood.appendChild(btnEditMyFoodElement);
+                 btnEditDeleteMyFood.appendChild(btnDeleteMyFoodElement);
 
                 listCreatefoodContainer.appendChild(myFoodElement);
                 btnCreatefoodContainer.appendChild(listCreatefoodContainer);
@@ -865,13 +871,19 @@ async function fetchAddedFoods(userId, dateCalendar){
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
       const divFoodElement = document.createElement("div");
       const btnsFoodElement = document.createElement("div");
+      btnsFoodElement.classList.add("btnsEditDeleteContainer");
       // console.log(food.id,"foodid");
       // console.log(food.meal,"foodmeal");
 
-      const btnEditFoodElement = document.createElement("button");
-      btnEditFoodElement.textContent = `Editar`;
-      const btnDeleteFoodElement = document.createElement("button");
-      btnDeleteFoodElement.textContent = `Deletar`;
+  
+      const btnEditFoodElement = document.createElement("img");
+      btnEditFoodElement.src = "./img/edit.svg"; 
+      btnEditFoodElement.alt = "Editar";
+      // btnEditFoodElement.classList.add("icone-editar");
+      const btnDeleteFoodElement = document.createElement("img");
+      btnDeleteFoodElement.src = "./img/trash.svg"; 
+      btnDeleteFoodElement.alt = "Deletar"; 
+      // btnDeleteFoodElement.classList.add("icone-deletar");
 
   // Event listener para o botão de editar
   btnEditFoodElement.addEventListener("click", async () => {
@@ -1138,11 +1150,13 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
   } else {
     filteredFoods.forEach(myFoodItem => {
       const myFoodElement = document.createElement("div");
-      const myFoodName = document.createElement("span");
+      const myFoodName = document.createElement("div");
       myFoodName.textContent = escapeHtml(myFoodItem.name);
 
-      const btnEdit = document.createElement("button");
-      btnEdit.textContent = "Editar";
+      const btnEdit = document.createElement("img");
+      btnEdit.src = "./img/edit.svg"; 
+      btnEdit.alt = "Editar";
+      // btnEditMyFoodElement.classList.add("icone-editar");
       btnEdit.addEventListener("click", async() => {
         try {
           console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
@@ -1154,8 +1168,12 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         }
       });
 
-      const btnDelete = document.createElement("button");
-      btnDelete.textContent = "Deletar";
+      const btnDelete = document.createElement("img");
+      btnDelete.src = "./img/trash.svg"; 
+      btnDelete.alt = "Deletar"; 
+      // btnDelete.classList.add("icone-deletar");
+
+
       btnDelete.addEventListener("click", async() => {
         try {
           // console.log("Botão Deletar clicado para o alimento:", food.id);
