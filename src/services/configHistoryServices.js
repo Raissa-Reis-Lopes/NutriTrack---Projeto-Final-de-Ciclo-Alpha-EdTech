@@ -23,7 +23,7 @@ const isValidDate = (dateString) => {
 
     // Tenta criar um objeto Date a partir da string de data
     const date = new Date(dateString);
-
+   
     // Verifica se o objeto Date é válido e se a data fornecida corresponde à data no objeto Date
     return date instanceof Date && !isNaN(date);
 };
@@ -64,30 +64,16 @@ const createOrUpdateConfigHistory = async(user_id, food_plan_id, activity_level,
         if (!validActivityLevels.includes(activity_level)) {
             throw new Error('Escolha um nível de atividade válido: "sedentary", "lightlyActive", "moderatelyActive", "veryActive", "extraActive"');
         }
-
-        // const currentDate = new Date().toLocaleDateString({
-        //     year: 'numeric',
-        //     month: '2-digit',
-        //     day: '2-digit'
-        // }).split('/').reverse().join('-');
-
         
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês é baseado em zero, então adicionamos 1 e padStart para garantir dois dígitos
-        const day = String(today.getDate()).padStart(2, '0'); // padStart para garantir dois dígitos
-        
-        const currentDate = `${year}-${month}-${day}`;
-        
-        const existingConfig = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, currentDate);
+        const existingConfig = await configHistoryRepository.getConfigHistoryByUserIdAndDate(user_id, date);
        
         if (existingConfig) {
             // Se existir uma configuração para o usuário na data atual, atualize-a
-            const config = await configHistoryRepository.updateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, currentDate);
+            const config = await configHistoryRepository.updateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date);
             return config;
         } else {
             // Se não existir, crie uma nova configuração
-            const config = await configHistoryRepository.insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, currentDate);
+            const config = await configHistoryRepository.insertConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date);
             return config;
         }
 
@@ -107,14 +93,16 @@ const findConfigByDate = async (userId, targetDate) => {
         for (let i = 0; i < configs.length; i++) {
             const config = configs[i];
 
+            const data = new Date(config.created_at);
+            const dataFormatada = data.toISOString().split('T')[0];
+
             // Se a data da configuração for menor ou igual à data desejada, retornamos essa configuração
-            if (new Date(config.created_at) <= new Date(targetDate)) {
+            if (dataFormatada <= targetDate) {
                 return config;
             }
-        }
-
-        // Se não encontrarmos nenhuma configuração válida, lançamos um erro
+        }  // Se não encontrarmos nenhuma configuração válida, lançamos um erro
         throw new Error('Nenhuma configuração válida encontrada para a data fornecida');
+
     } catch (error) {
         console.log(error);
         throw error;
@@ -164,17 +152,27 @@ const getConfigHistoryForPeriod = async (user_id, startDate, endDate) => {
 const getAllConfigHistory = async () =>{
     try {
         const configHistory = await configHistoryRepository.getAllConfigHistory();
-        return configHistory.rows;
+        return configHistory;
     } catch (error) {
         console.log(error);
         throw error;
     }
 }
 
+const getAllConfigHistoryByUserId = async (userId) =>{
+    try {
+        const configHistory = await configHistoryRepository.getConfigsByUserId(userId);
+        return configHistory;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 module.exports = {
     getAllConfigHistory,
     getLatestConfigHistoryByUserId,
+    getAllConfigHistoryByUserId,
     createOrUpdateConfigHistory,
     getConfigHistoryForPeriod,
     findConfigByDate

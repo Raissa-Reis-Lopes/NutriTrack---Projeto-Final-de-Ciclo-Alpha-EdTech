@@ -13,6 +13,32 @@ const getLatestConfigHistoryByUserId = async(req, res) => {
     }
 };
 
+const getAllConfigHistory = async(req, res) => {
+    try {
+        const config = await configHistoryServices.getAllConfigHistory();
+        if (!config) {
+            return res.status(404).json({ error: 'Configurações não localizadas' });
+        }
+        return res.status(200).json(config);
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao buscar todas as configurações dos usuários' });
+    }
+};
+
+const getAllConfigHistoryByUserId = async(req, res) => {
+    const { id } = req.params;
+    try {
+        const config = await configHistoryServices.getAllConfigHistoryByUserId(id);
+        if (!config) {
+            return res.status(404).json({ error: 'Configurações do usuário não encontradas' });
+        }
+        return res.status(200).json(config);
+    } catch (error) {
+        return res.status(500).json({ error: 'Configurações do usuário não encontradas' });
+    }
+};
+
+
 const createOrUpdateConfigHistory = async(req,res) => {   
     try {
         const { user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date} = req.body;
@@ -49,16 +75,8 @@ const createOrUpdateConfigHistory = async(req,res) => {
             throw new Error('A data é obrigatória')
         }
 
-        const formattedDate = new Date(date);
-        const year = formattedDate.getFullYear();
-        const month = String(formattedDate.getMonth() + 1).padStart(2, '0'); // Mês é baseado em zero, então adicionamos 1 e padStart para garantir dois dígitos
-        const day = String(formattedDate.getDate()).padStart(2, '0'); // padStart para garantir dois dígitos
-
-        const receivedDate = `${year}-${month}-${day}`;
-
-
-        const config = await configHistoryServices.createOrUpdateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, receivedDate);
-        return res.status(200).json({ success: true, message: "Configuração salva com sucesso!", data: config });
+        const config = await configHistoryServices.createOrUpdateConfigHistory(user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date);
+        return res.status(200).json({ success: true, message: "Configuração salva/atualizada com sucesso!", data: config });
     } catch (error) {
         return res.status(500).json({ error: error.message})
     }
@@ -66,5 +84,7 @@ const createOrUpdateConfigHistory = async(req,res) => {
 
 module.exports = {
     createOrUpdateConfigHistory,
-    getLatestConfigHistoryByUserId
+    getLatestConfigHistoryByUserId,
+    getAllConfigHistory,
+    getAllConfigHistoryByUserId
 }

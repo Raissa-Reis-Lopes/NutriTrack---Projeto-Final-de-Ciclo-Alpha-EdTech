@@ -29,12 +29,22 @@
     font-weight: 600;
 }
 
-.success{
+/* .success{
     background-color: lightgreen;
+} */
+
+/* .fail{
+    background-color: rgb(255, 99, 71);
+} */
+
+
+/* Testando outras cores */
+.success{
+    background-color: var(--cor-p0);
 }
 
 .fail{
-    background-color: rgb(255, 99, 71);
+    background-color: rgb(255, 41, 41);
 }
 
 .hidden{

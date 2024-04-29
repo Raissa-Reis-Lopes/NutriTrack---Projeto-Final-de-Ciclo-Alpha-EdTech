@@ -1,5 +1,6 @@
 import createCustomEvent from "./event.js";
 import { showMessage } from "../utils/message.js";
+import { messageError } from "../utils/messageError.js";
 
 
 export function Login() {
@@ -22,11 +23,13 @@ export function Login() {
                 <input type="email" name="email" id="email" class="input_email"> 
                 <div id="icon_email"></div>
                 </div>
+                <div id="message_email"></div>
                 <label for="password">Senha</label>
                 <div class="input_password_container">
                 <input type="password" name="password" id="password" class="input_pass">
                 <div id="icon"></div>
                 </div>
+                <div id="message_password"></div>
                 <div class="align_row"> 
                 <input type="checkbox" name="connect" id="connect" class="connect">
                 <label for="connect">Me manter conectado</label>
@@ -109,57 +112,72 @@ export function loginBtns(){
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password, rememberMe }),
-            });
-        
-            if (!response.ok) {
-                showMessage("fail", "Usuário e/ou senha inválidos!","-30px");
-                btnEnter.disabled = false;
-                throw new Error('Erro ao fazer login, usuário não localizado');
-            }
+        if(!email){
+            messageError("message_email","O email é obrigatório");
+            btnEnter.disabled = false;
+            return;
+        }
 
-            const userInfoResponse = await fetch("/api/login/", {
-                method: "GET",
-            });
+        if(!password){
+            messageError("message_password","A senha é obrigatória");
+            btnEnter.disabled = false;
+            return;
+        }
 
-            if (!userInfoResponse.ok) {
-                throw new Error('Erro ao localizar o id do usuário');
-            }
-
-            const userData = await userInfoResponse.json();
-            const userId = userData.user;
-
-
-
-            const checkConfig = await fetch(`/api/config/${userId}`, {
-                method: "GET",
-            });
-
-            if(!checkConfig.ok){
-                btnEnter.disabled = true;
-                showMessage("success","Você está a um passo de mudar a sua vida! Precisamos apenas completar o seu cadastro!","-60px")
-
-                setTimeout(() => {                   
-                    const customEvent = createCustomEvent('/config');
-                    window.dispatchEvent(customEvent); 
-                    btnEnter.disabled = false;
-                }, 4000);
-
-                return;
-            } else {
-                const customEvent = createCustomEvent('/home');
-                window.dispatchEvent(customEvent); 
-            }
+        if(email && password){
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password, rememberMe }),
+                });
             
+                if (!response.ok) {          
+                    showMessage("fail", "Usuário e/ou senha inválidos!","-8%");
+                    btnEnter.disabled = false;
+                    throw new Error('Erro ao fazer login, usuário não localizado');
+                }
+    
+                const userInfoResponse = await fetch("/api/login/", {
+                    method: "GET",
+                });
+    
+                if (!userInfoResponse.ok) {
+                    throw new Error('Erro ao localizar o id do usuário');
+                }
+    
+                const userData = await userInfoResponse.json();
+                const userId = userData.user;
+    
+    
+    
+                const checkConfig = await fetch(`/api/config/${userId}`, {
+                    method: "GET",
+                });
+    
+                if(!checkConfig.ok){
+                    btnEnter.disabled = true;
+                    showMessage("success","Bem-vindo de volta! Precisamos apenas completar o seu cadastro!","-8%")
+    
+                    setTimeout(() => {                   
+                        const customEvent = createCustomEvent('/config');
+                        window.dispatchEvent(customEvent); 
+                        btnEnter.disabled = false;
+                    }, 4000);
+    
+                    return;
+                } else {
+                    const customEvent = createCustomEvent('/home');
+                    window.dispatchEvent(customEvent); 
+                }
+                
+            
+            } catch (error) {
+                console.error('Erro ao fazer login:', error);
+            } 
+        }
         
-        } catch (error) {
-            console.error('Erro ao fazer login:', error);
-        }  
     });
 }

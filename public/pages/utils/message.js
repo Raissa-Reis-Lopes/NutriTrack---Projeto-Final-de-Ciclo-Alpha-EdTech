@@ -1,4 +1,4 @@
-export function showMessage(status, statusMessage, top, left){
+export function showMessage(status, statusMessage, top, left, zIndex){
 
     const messageContainer = document.getElementById('message');
     const messageContent = document.getElementById('message-content');
@@ -21,6 +21,12 @@ export function showMessage(status, statusMessage, top, left){
         messageContainer.style.top = "0px";
     }
 
+    if (zIndex !== undefined) {
+        messageContainer.style.zIndex = zIndex;
+    } else {
+        messageContainer.style.zIndex = "auto";
+    }
+
     setTimeout(() => {
         messageContent.classList.add("hidden");
         messageContainer.classList.add("hidden");
@@ -36,7 +42,7 @@ export function showMessage(status, statusMessage, top, left){
 
 E, tem que ter essa div no html:
 
- <div id="message" class="message-container">
+ <div id="message" class="message-container hidden">
      <div id="message-content" class="message-content hidden"></div>
  </div>
 

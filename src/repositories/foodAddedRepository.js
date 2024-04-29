@@ -64,12 +64,12 @@ async function insertFoodAdded(user_id, food_id, food_quantity, meal, date) {
     }
 }
 
-async function updateFoodAdded(user_id,food_id, date, food_quantity, meal){
-    const query = 'UPDATE food_added SET food_id=$2, food_quantity=$4, meal=$5 WHERE user_id=$1 AND created_at =$3 ';
+async function updateFoodAdded(user_id,food_id, date, food_quantity, meal, id){
+    const query = 'UPDATE food_added SET food_id=$2, food_quantity=$4, meal=$5 WHERE user_id=$1 AND created_at =$3 AND id =$6 ';
     try {
-        await pool.query(query,[user_id, food_id, date, food_quantity, meal]);
+        await pool.query(query,[user_id, food_id, date, food_quantity, meal,id]);
         console.log('Atualização de food_added realizada com sucesso!')
-        return { user_id, food_id,  date, food_quantity, meal }
+        return { user_id, food_id,  date, food_quantity, meal, id }
     } catch (error) {
         console.log('Falha ao atualizar o food_added');
         throw error;

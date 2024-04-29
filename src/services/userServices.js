@@ -19,7 +19,7 @@ const getAllUsers = async () => {
         return users;
     } catch (error) {
         console.log(error);
-        throw error;
+        throw new Error("Falha ao localizar os usuários cadastrados", error);
     }
 }
 
@@ -29,7 +29,7 @@ const getUserById = async(id) =>{
         return user;
     } catch (error) {
         console.log(error);
-        throw error;
+        throw new Error(`Falha ao buscar os dados do usuário pelo seu id`, error);
     }
 }
 

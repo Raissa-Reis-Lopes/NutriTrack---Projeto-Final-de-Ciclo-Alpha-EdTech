@@ -2,25 +2,25 @@ import createCustomEvent from "./event.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
+import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
+import { footerHistory } from "./footer.js";
 
 export function History() {
     const div = document.createElement("div");
 
     div.innerHTML=`
+    <div class="back_general"></div>
     <header>
-        <div class="back_general"></div>
         <div class="logo" id="logo">
-            <a>
-                <img src="../img/logo.svg" alt="NutriTrack">
-            </a>
+            <img src="./img/logo.svg" alt="NutriTrack">
         </div>
         <nav class="header_nav">
-            <div id="navToHome">Home</div>
+            <div id="navHome">Home</div>
             <div id="navProfile">Perfil</div>
-            <button class="btn_exit">Sair</button>
+            <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
         </nav>
     </header>
-    <main>
+    <main class="history_container">
         <div class="titles">
             <h1>Histórico</h1>
             <h5>Calorias consumidas:</h5>
@@ -38,12 +38,10 @@ export function History() {
                     <span class="span_green ">Gráfico Semanal</span>
                     <div>
                     <div class="chart" id="week-chart"></div>
-                    </div>
-                    <button class="btn_stroke" id="nextDate">Próxima Semana →</button>
-                    <button class="btn_stroke" id="backDate">← Semana Anterior</button>
                 </div>
             </div>
         </section>
+        </div>
     </main>
     <!-- Tags para o modal -->
         <section>
@@ -64,55 +62,18 @@ export function History() {
                 </div>
             </div>
         </section>
-        <section>
-            <div id="fade-terms" class="hide"></div>
-            <div id="modal-terms" class="hide">
-                <div class="modal-header">
-                    <h2>Termos de uso</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-terms">
-                </div>
-                <div class="modal-body">
-                    <p>Ao acessar e usar o site Nutri Track, você aceita e concorda em estar vinculado por estes Termos de uso.</p>
-                    <p>Vocẽ concorda em usar o site apenas para fins legais e de maneira que não infrinja os direitos ou restrinja ou iniba o uso e aproveitamento do site por qualquer terceiro.</p>
-                    <p>O conteúdo deste site, incluindo texto, gráficos, imagens e outros materiais, são protegidos por direitos autorais. Vocẽ não pode reproduzir, distribuir, modificar ou republicar materiais contidos neste site sem a permissão prévia por escrito do(s) responsável(is) legal(is) pelo Nutri Track.</p>
-                    <p>O site e seu conteúdo são fornecidos "como estão". Nós não oferecemos garantias ou representações de qualquer tipo, expressas ou implícitas, sobre a integridade, precisão confiabilidade, adequação ou disponibilidade do site ou seu conteúdo.</p>
-                    <p>Podemos alterar estes Termos de Uso periodicamente. Se fizermos alterações, notificaremos você.</p>
-                    <p>Se você tiver alguma dúvida sobre este Termo de Uso, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
-                </div>
-            </div>
-        </section>
-        <!-- Tags para o modal sac -->
-        <section>
-            <div id="fade-sac" class="hide"></div>
-            <div id="modal-sac" class="hide">
-                <div class="modal-header">
-                    <h2>Bem vindo a central de atendimento</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-sac"> 
-                </div>
-                <div class="modal-body">
-                    <h4>Como podemos ajudá-lo?</h4>
-                    <img src="../img/whatsapp.png" alt="whatsapp" />
-                    <p>WhatsApp: (11) 91234-5678</p>
-                    <img src="../img/o-email.png" alt="email" />
-                    <p>Email: contato@email.com</p>
-                </div>
-            </div>
-        </section>
-    <footer>
-        <div class="footer_history">
-            <span>all rights reserved</span>
-            <span id="open-modal-terms">termos de uso</span>
-            <span id="open-modal-privacy">política de privacidade</span>
-            <span id="open-modal-sac">posso ajudar?</span>
-        </div>
-    </footer>
+    </main>
+    <!-- Tags para o footer e modais -->
+        <section id="privacy_policy_container"></section>
+        <section id="terms_container"></section>
+        <section id="sac_container"></section>
+        <section id="footer_container"></section>
     `;
   
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-    registerBtns();
-    createModalEvents();
-    
+    // limitDate('input-date');
+
     const dataAtual = new Date();
     const dataInicioInput = document.getElementById('dataInicio');
     const dataFimInput = document.getElementById('dataFim');
@@ -145,6 +106,30 @@ export function History() {
     
     const dias = [];
     generateBarChart(dias);
+
+
+
+     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+     const privacyModalContainer = document.getElementById('privacy_policy_container');
+     const privacyModal = privacyPolicyModal();
+     privacyModalContainer.appendChild(privacyModal);
+     
+     const termsContainer = document.getElementById("terms_container");
+     const terms = termsModal();
+     termsContainer.appendChild(terms);
+     
+     const sacContainer = document.getElementById("sac_container");
+     const sac = sacModal();
+     sacContainer.appendChild(sac);
+     
+     const footerContainer = document.getElementById("footer_container");
+     const footer = footerHistory();
+     footerContainer.appendChild(footer);
+     
+     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+     createModalEventsDefault();
+
+     navRoutes();
     backDate.addEventListener("click", function() {
         const startDate = new Date(dataInicioInput.value);
         const endDate = new Date(dataFimInput.value);
@@ -287,6 +272,16 @@ fetch('/api/week')
 });
 
 
+export function navRoutes() {
+    const navProfile = document.getElementById("navProfile");
+    const navHome = document.getElementById("navHome");
+    const logo = document.getElementById("logo");
+    const btnExit = document.getElementById("btnExit");
+
+    logo.addEventListener("click", () => {
+        const customEvent = createCustomEvent("/home");
+        window.dispatchEvent(customEvent);
+    });
 function createModalEvents() {
     const openModalPrivacy = document.getElementById("open-modal-privacy");
     const openModalTerms = document.getElementById("open-modal-terms");
@@ -361,10 +356,12 @@ export function navRoutes() {
         window.dispatchEvent(customEvent);
     });
 
-    navHistory.addEventListener("click", () => {
+    navHome.addEventListener("click", () => {
         const customEvent = createCustomEvent("/home");
         window.dispatchEvent(customEvent);
     });
 
-    btnExit.addEventListener("click", logout);
+    btnExit.addEventListener("click", ()=>{
+        logout();
+      });
 }

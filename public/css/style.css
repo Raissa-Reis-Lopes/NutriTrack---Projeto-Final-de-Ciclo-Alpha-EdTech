@@ -10,9 +10,11 @@
 @import "./utilities/forms.css";
 @import "./utilities/message.css";
 @import "./utilities/loader.css";
+@import "./utilities/panAnimation.css";
+@import "./utilities/scroller.css";
+
 @import "./initial/history.css";
 @import "./initial/profile.css";
-
 @import "./initial/initial.css";
 @import "./initial/login.css";
 @import "./initial/register.css";

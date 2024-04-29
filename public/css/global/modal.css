@@ -1,3 +1,5 @@
+
+#open-modal-search-food,
 #open-modal-privacy {
     cursor: pointer;
 }
@@ -14,6 +16,7 @@
     cursor: pointer;
 }
 
+#close-modal-search-food,
 #close-modal-privacy {
     cursor: pointer;
 }
@@ -30,10 +33,12 @@
     cursor: pointer;
 }
 
+#fade-search-food,
 #fade-privacy,
 #fade-terms,
 #fade-sac,
 #fade-account,
+#modal-search-food,
 #modal-privacy,
 #modal-terms,
 #modal-sac,
@@ -43,6 +48,7 @@
     pointer-events: all;
 }
 
+#fade-search-food,
 #fade-privacy {
     position: fixed;
     top: 0;
@@ -124,6 +130,7 @@
     border-radius: 8px;
 }
 
+#modal-search-food,
 #modal-account {
     position: fixed;
     left: 50%;
@@ -154,6 +161,19 @@
     height: 90%;
 }
 
+.modal-body_sac{
+    padding-left: 20px;
+}
+
+.modal-body_sac h3, .modal-body_sac h4{
+    margin-bottom: 20px;
+}
+
+.align_row_modal{
+    display: flex;
+    align-items: center;
+}
+
 .modal-body p {
     margin: 16px;
 }
@@ -163,6 +183,7 @@
     opacity: 0;
     pointer-events: none;
 }
+
 
 #modal-terms.hide,
 #fade-terms.hide {
@@ -182,6 +203,13 @@
     pointer-events: none;
 }
 
+#modal-search-food.hide,
+#fade-search-food.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#modal-search-food.hide,
 #modal-privacy.hide,
 #modal-terms.hide,
 #modal-sac.hide,
@@ -191,4 +219,51 @@
 
 #body2 {
     display: none;
+}
+
+#body2 > h1 {
+    color: red;
+    font-size: x-large;
+}
+
+
+.delete_account_title{
+    color: red;
+    text-align: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-size: x-large;
+}
+
+.modal-body-account{
+    padding-left: 20px;
+}
+
+.modal-body-account h3{
+    color: red;
+    font-size: x-large;
+}
+
+.modal-body-account p {
+    margin: 20px 0;
+    font-size: x-large;
+    font-weight: 700;
+}
+
+#deleteAccount{
+    color: red;
+    border: 3px solid red;
+}
+
+.btn_delete_account{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#modal-header-delete{
+    display: flex;
+    justify-content: right;
+    align-items: center;
 }
