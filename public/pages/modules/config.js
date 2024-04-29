@@ -2,6 +2,7 @@ import createCustomEvent from "./event.js";
 import { heightValid, weightValid } from "./validation.js";
 import { showMessage } from "../utils/message.js";
 import { limitDate } from "../utils/limitDates.js";
+import { messageError } from "../utils/messageError.js";
 
 
 export function Config() {
@@ -21,15 +22,18 @@ export function Config() {
         <div class="align_row_register">
             <label for="weight">Peso</label>
             <input class="input_config" type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
-        </div>    
+        </div> 
+        <div id="message_weight"></div>   
         <div class="align_row_register">
             <label for="height">Altura</label>
             <input class="input_config"  type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
         </div>
+        <div id="message_height"></div>
         <div class="align_row_register">
             <label for="date">Data de nascimento</label>
             <input class="input_config"  type="date" name="date" id="birth_date" />
         </div>
+        <div id="message_birthdate"></div>
         <div class="align_row_register">
             <label for="gender">Sexo biológico</label>
             <select class="input_config"  name="gender" id="gender">
@@ -38,6 +42,7 @@ export function Config() {
                 <option value="F">Feminino</option>
             </select>
         </div>
+        <div id="message_gender"></div>
         <div class="align_row_register">
             <label for="activity">Nivel de atividade</label>
             <select class="input_config"  name="activity" id="activity">
@@ -49,6 +54,7 @@ export function Config() {
                 <option value="extraActive">Muito Ativo (atleta / esforço físico diário)</option>
             </select>
         </div>
+        <div id="message_activity"></div>
         <div id="message" class="message-container hidden">
         <div id="message-content" class="message-content hidden"></div>
         </div>
@@ -111,9 +117,10 @@ export function Config() {
                 </div>
             </div> 
         <div id="message" class="message-container hidden">
-        <div id="message-content" class="message-content hidden"></div>
+            <div id="message-content" class="message-content hidden"></div>
         </div>
         </div>
+        <div id="message_plan"></div>
         <div class="btns_index">
             <button id="btn_back_2" class="btn_stroke">Voltar</button>
             <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
@@ -198,16 +205,7 @@ export function configBtns() {
     });
 
         btnNext1.addEventListener('click', async(event) =>{
-            event.preventDefault();
-
-            
-
-            // const erroWeight = document.getElementById("erroWeight");
-            // const erroHeight = document.getElementById("erroHeight");
-            // erroWeight.innerText = ''; // Limpa mensagens antigas de erro
-            // erroHeight.innerText = ''; // Limpa mensagens antigas de erro
-            // // const message = document.getElementById ("message-content"); //Para testar o "pop-up" e ver como fica melhor
-    
+            event.preventDefault();   
 
             const weight = document.getElementById("weight").value;
             const height = document.getElementById("height").value;
@@ -217,31 +215,30 @@ export function configBtns() {
 
 
             if(!weightValid(weight)){
-                showMessage('fail',"Insira um peso válido", "30%","59%");
+                messageError("message_weight","Peso inválido, insira um valor entre 10kg e 500kg");
                 return;
             }
 
             if(!heightValid(height)){
-                showMessage('fail',"Insira uma altura válida, em centímetros", "35%","59%");
+                messageError("message_height","Insira uma altura válida, em centímetros");
                 return;
             }
 
             if(!birthDate){
-                showMessage('fail',"A data de nascimento é obrigatória", "40%","59%");
+                messageError("message_birthdate","A data de nascimento é obrigatória");
                 return;
             }
 
             if(!gender){
-                showMessage("fail","Selecione o sexo biológico", "50%","59%");
+                messageError("message_gender","Selecione o sexo biológico");
                 return;
             }
 
             if(!activityLevel){
-                showMessage("fail","Selecione o nível de atividade semanal","55%","59%");
+                messageError("message_activity","Selecione o nível de atividade semanal");
                 return;
             }
 
-            // currentForm++;
             showForm(2);
 
             btnNext2.addEventListener('click', async(event)=>{
@@ -261,6 +258,10 @@ export function configBtns() {
                         month: '2-digit',
                         day: '2-digit'
                     }).split('/').reverse().join('-');
+
+                    if(!selectedPlanId){
+                        messageError("message_plan","Escolha um plano alimentar");
+                    }
     
                     const configData = {
                         user_id: userId, 
@@ -272,9 +273,6 @@ export function configBtns() {
                         gender, 
                         date
                     }
-
-                    console.log(configData);
-
 
                     try {
                         const response = await fetch('/api/config', {
@@ -289,15 +287,15 @@ export function configBtns() {
                             const customEvent = createCustomEvent('/home');
                             window.dispatchEvent(customEvent);           
                         } else {
-                            showMessage("fail", "Erro ao finalizar o cadastro")
+                            showMessage("fail", "Falha ao finalizar o cadastro","-8%")
                             throw new Error("Erro ao finalizar o cadastro");
                         }                     
                        
                     } catch (error) {
-                        console.error('Erro ao se cadastrar:', error);
+                        console.error('Erro ao se cadastrar: ', error);
                     }
                 } else {
-                    console.log('Não foi possível obter informações do usuário');
+                    console.log('Não foi possível obter as informações do usuário');
                 }
             }) 
         })

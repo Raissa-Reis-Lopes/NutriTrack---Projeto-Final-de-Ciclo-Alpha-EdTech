@@ -96,16 +96,8 @@ const findConfigByDate = async (userId, targetDate) => {
             const data = new Date(config.created_at);
             const dataFormatada = data.toISOString().split('T')[0];
 
-
-            // console.log(`essa é a data resgatada do config_history: ${config.created_at}`)
-            // console.log(`essa é a data resgatada do config_history e passada pro newDate: ${data}`)
-            // console.log(`essa é a data resgatada e formatad do config_history: ${dataFormatada}`)
-            // console.log(`essa é a data sendo passada como referência para pesquisar: ${targetDate}`)
-
-
             // Se a data da configuração for menor ou igual à data desejada, retornamos essa configuração
             if (dataFormatada <= targetDate) {
-                console.log("Chegou aqui dentro do if de comparar datas")
                 return config;
             }
         }  // Se não encontrarmos nenhuma configuração válida, lançamos um erro

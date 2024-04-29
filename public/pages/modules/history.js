@@ -169,7 +169,13 @@ function formatarDataGrafico(data, formato) {
 export function navRoutes() {
     const navProfile = document.getElementById("navProfile");
     const navHome = document.getElementById("navHome");
+    const logo = document.getElementById("logo");
     const btnExit = document.getElementById("btnExit");
+
+    logo.addEventListener("click", () => {
+        const customEvent = createCustomEvent("/home");
+        window.dispatchEvent(customEvent);
+    });
 
     navProfile.addEventListener("click", () => {
         const customEvent = createCustomEvent("/profile");
