@@ -28,40 +28,22 @@ export function History() {
         </div>
         <div class="period">
             <div id="input-date">
+                <button class="btn_stroke" onclick="navegar('-')">← Anterior</button>
                 <input type="date" id="dataInicio">
                 <input type="date" id="dataFim">
+                <button class="btn_stroke" onclick="navegar('+')">Próximo →</button>
             </div>
         </div>
+        <div class="chart">
         <section>
-            <div class="chart">
-                <div class="chart-container">
-                    <span class="span_green ">Gráfico Semanal</span>
-                    <div>
+            <div class="chart-container">
+                <span class="span_green ">Gráfico Semanal</span>
+                <div>
                     <div class="chart" id="week-chart"></div>
                 </div>
             </div>
         </section>
         </div>
-    </main>
-    <!-- Tags para o modal -->
-        <section>
-            <div id="fade-privacy" class="hide"></div>
-            <div id="modal-privacy" class="hide">
-                <div class="modal-header">
-                    <h2>política de privacidade</h2>
-                    <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-privacy"> 
-                </div>
-                <div class="modal-body">
-                    <p>Bem vindo ao Nutri Track. Nós respeitamos sua privacidade e queremos proteger suas informações pessoais.</p>
-                    <p>Podemos coletar informações pessoais, como nome, e-mail, peso, altura, data de nascimento, sexo biológico e nível de atividade. Enquanto você usa nosso site podemos coletar informações sobre suas atividades online.</p>
-                    <p>Usamos suas informações para fornecer os serviços solicitados, para melhorar nosso site e para nos comunicarmos com vocẽ.</p>
-                    <p>Não vendemos ou alugamos suas informações pessoais com terceiros. Podemos compartilhar suas informações com parceiros de negócios ou fornecedores que nos ajudam a operar o site.</p>
-                    <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
-                    <p>Podemos atualizar esta política de privacidade periodicamente. Se fizermos alterações significativas, notificaremos você.</p>
-                    <p>Se você tiver alguma dúvida sobre esta política de privacidade, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
-                </div>
-            </div>
-        </section>
     </main>
     <!-- Tags para o footer e modais -->
         <section id="privacy_policy_container"></section>
@@ -258,16 +240,16 @@ function formatarDataGrafico(data, formato) {
 
 // Requisição para a rota /api/semana no backend
 fetch('/api/week')
-    .then(response => {
+.then(response => {
     if (!response.ok) {
-      throw new Error('Erro ao obter os dados da semana');
+        throw new Error('Erro ao obter os dados da semana');
     }
     return response.json();
 })
-    .then(dadosDaSemana => {
+.then(dadosDaSemana => {
     generateBarChart(dadosDaSemana);
 })
-    .catch(error => {
+.catch(error => {
     console.error('Erro ao obter os dados da semana:', error);
 });
 
@@ -277,11 +259,12 @@ export function navRoutes() {
     const navHome = document.getElementById("navHome");
     const logo = document.getElementById("logo");
     const btnExit = document.getElementById("btnExit");
-
+    
     logo.addEventListener("click", () => {
         const customEvent = createCustomEvent("/home");
         window.dispatchEvent(customEvent);
     });
+}
 function createModalEvents() {
     const openModalPrivacy = document.getElementById("open-modal-privacy");
     const openModalTerms = document.getElementById("open-modal-terms");
@@ -363,5 +346,5 @@ export function navRoutes() {
 
     btnExit.addEventListener("click", ()=>{
         logout();
-      });
+    });
 }
