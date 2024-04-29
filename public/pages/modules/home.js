@@ -308,10 +308,10 @@ async function loadUserDataForDate(date) {
 
             const userDailyGoal = await getDailyGoal.json();
 
-            const userTotalCalories = escapeHtml(userDailyGoal.data.total_calories);
-            const userTotalProtein = escapeHtml(userDailyGoal.data.total_protein);
-            const userTotalCarbo = escapeHtml(userDailyGoal.data.total_carb);
-            const userTotalLipid = escapeHtml(userDailyGoal.data.total_fat); 
+            const userTotalCalories = userDailyGoal.data.total_calories;
+            const userTotalProtein = userDailyGoal.data.total_protein;
+            const userTotalCarbo = userDailyGoal.data.total_carb;
+            const userTotalLipid = userDailyGoal.data.total_fat; 
 
             const totalCalorie = document.getElementById('total-calories');
             totalCalorie.innerText = userTotalCalories;
@@ -330,7 +330,7 @@ async function loadUserDataForDate(date) {
 
             const userDailyConsumed = await getDailyConsumed.json();     
                
-            const totalNutrition = escapeHtml(userDailyConsumed.data.totalNutrition);
+            const totalNutrition = userDailyConsumed.data.totalNutrition;
 
             const dailyCaloriesConsumed = Math.ceil(totalNutrition.calories) || 0;
             const dailyProteinConsumed = Math.ceil(totalNutrition.protein)  || 0; 
@@ -359,14 +359,14 @@ async function loadUserDataForDate(date) {
 
             // Atualizar a barra de progresso
             const progressBar = document.getElementById('calories-progress');
-            const totalCalories = escapeHtml(userTotalCalories);
+            const totalCalories = userTotalCalories;
             let consumedPercent = (dailyCaloriesConsumed / totalCalories) * 100;
 
             // Verifica se ultrapassou a quantidade total diária permitida
             if (dailyCaloriesConsumed > totalCalories) {
                 progressBar.style.backgroundColor = '#f44336'; 
                 consumedPercent = 100; 
-                const exceededCalories = escapeHtml(dailyCaloriesConsumed - totalCalories);
+                const exceededCalories = dailyCaloriesConsumed - totalCalories;
                 message = `Você ultrapassou ${exceededCalories} calorias`;
             } else {
                 progressBar.style.backgroundColor = '#4caf50'; 
