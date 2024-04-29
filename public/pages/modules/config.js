@@ -215,7 +215,7 @@ export function configBtns() {
 
 
             if(!weightValid(weight)){
-                messageError("message_weight","Peso inválido, insira um valor entre 10kg e 500kg")
+                messageError("message_weight","Peso inválido, insira um valor entre 10kg e 500kg");
                 return;
             }
 

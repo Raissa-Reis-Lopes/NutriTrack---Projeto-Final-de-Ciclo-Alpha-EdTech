@@ -1,4 +1,4 @@
-export function showMessage(status, statusMessage, top, left){
+export function showMessage(status, statusMessage, top, left, zIndex){
 
     const messageContainer = document.getElementById('message');
     const messageContent = document.getElementById('message-content');
@@ -19,6 +19,12 @@ export function showMessage(status, statusMessage, top, left){
         messageContainer.style.top = top;
     } else {
         messageContainer.style.top = "0px";
+    }
+
+    if (zIndex !== undefined) {
+        messageContainer.style.zIndex = zIndex;
+    } else {
+        messageContainer.style.zIndex = "auto";
     }
 
     setTimeout(() => {

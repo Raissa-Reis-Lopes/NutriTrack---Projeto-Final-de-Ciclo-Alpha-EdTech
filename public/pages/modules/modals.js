@@ -1,29 +1,29 @@
-// export function SearchFood(){
-//     const divModal = document.createElement("div");
-//     divModal.innerHTML=`  
-//     <div id="modalSearchFood" class="modal">
-//         <div class="modal_img">
-//             <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
-//         </div>
-//         <div class="container_modal">
+export function SearchFood(){
+    const divModal = document.createElement("div");
+    divModal.innerHTML=`  
+    <div id="modalSearchFood" class="modal">
+        <div class="modal_img">
+            <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
+        </div>
+        <div class="container_modal">
     
-//             <div id="showFoods" class="foodSearch">
-//                 Tudo
-//             </div>
-//             <div id="showMyFoods" class="foodSearch">
-//                 Meus produtos
-//             </div>
-//         </div>
-//         <div class="container_modal">
-//             <input type="text" name="search" id="search" placeholder="Procurar Produtos">
-//         </div>
-//         <div id="datafood" class="container_dataFood">
-//         </div>
-//     </div>
-//     `;
+            <div id="showFoods" class="foodSearch">
+                Tudo
+            </div>
+            <div id="showMyFoods" class="foodSearch">
+                Meus produtos
+            </div>
+        </div>
+        <div class="container_modal">
+            <input type="text" name="search" id="search" placeholder="Procurar Produtos">
+        </div>
+        <div id="datafood" class="container_dataFood">
+        </div>
+    </div>
+    `;
       
-//     return divModal
-// }
+    return divModal
+}
 
 export function AddFood(){
     const divModal = document.createElement("div");
@@ -360,41 +360,6 @@ export function createModalEventsDefault(){
 
 }
 
-
-
-//Só testando
-
-
-export function SearchFood(){
-    const divModal = document.createElement("div");
-    divModal.innerHTML=`  
-    <div id="fade-search-food" class="hide"></div>
-    <div id="modal-search-food" class="hide">
-        <div class="modal-header">
-            <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-search-food"> 
-        </div>
-        <div id="modal_body_search_food" class="modal-body hide">
-            <div id="modalSearchFood" class="modal">
-                <div class="container_modal">
-                    <div id="showFoods" class="foodSearch">
-                        Tudo
-                    </div>
-                    <div id="showMyFoods" class="foodSearch">
-                        Meus produtos
-                    </div>
-                </div>
-                <div class="container_modal">
-                    <input type="text" name="search" id="search" placeholder="Procurar Produtos">
-                </div>
-                <div id="datafood" class="container_dataFood">
-                </div>
-            </div>
-        </div>
-    </div>
-    `;      
-    return divModal
-}
-
 export function createModalEventsRegister(){
      
     const openModalPrivacy = document.getElementById("open-modal-privacy");
@@ -487,6 +452,44 @@ const foodSearchBody = document.getElementById("modal_body_search_food");
     });
 
 }
+
+
+
+
+
+//Só testando
+
+
+// export function SearchFood(){
+//     const divModal = document.createElement("div");
+//     divModal.innerHTML=`  
+//     <div id="fade-search-food" class="hide"></div>
+//     <div id="modal-search-food" class="hide">
+//         <div class="modal-header">
+//             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-search-food"> 
+//         </div>
+//         <div id="modal_body_search_food" class="modal-body hide">
+//             <div id="modalSearchFood" class="modal">
+//                 <div class="container_modal">
+//                     <div id="showFoods" class="foodSearch">
+//                         Tudo
+//                     </div>
+//                     <div id="showMyFoods" class="foodSearch">
+//                         Meus produtos
+//                     </div>
+//                 </div>
+//                 <div class="container_modal">
+//                     <input type="text" name="search" id="search" placeholder="Procurar Produtos">
+//                 </div>
+//                 <div id="datafood" class="container_dataFood">
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+//     `;      
+//     return divModal
+// }
+
 
 
 // export function AddFood(){

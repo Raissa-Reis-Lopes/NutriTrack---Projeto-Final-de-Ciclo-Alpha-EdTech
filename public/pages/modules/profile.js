@@ -5,6 +5,7 @@ import { logout } from "../utils/logout.js";
 import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEventsProfile } from "./modals.js";
 import { footerProfile } from "./footer.js";
+import { messageError } from "../utils/messageError.js"
 
 export function Profile() {
     const div = document.createElement("div");
@@ -27,7 +28,7 @@ export function Profile() {
         <div class="profile_picture">
             <input type="file" id="input-image" accept="image/*" style="display:none;" />
             <label for="input-image">
-            <div class="image-profile">
+            <div class="image-profile" style="cursor:pointer;">
                 <img id="img-user" src="" alt="Imagem do usuario" />
             </div>
             </label>
@@ -37,34 +38,42 @@ export function Profile() {
                 <span>Nome: </span>
                 <input id="input-name" type="text" value="" placeholder="Nome" readonly />
             </div>
+            <div id="message_name"></div>
             <div class="info_item" id="email">
                 <span>Email: </span>
                 <input id="input-email" type="email" value="" placeholder="email@example.com" readonly />
             </div>
+            <div id="message_email"></div>
             <div class="info_item" id="password">
                 <span>Senha Atual: </span>
                 <input id="input-password" type="password" value="" placeholder="*******" readonly />
             </div>
+            <div id="message_old_password"></div>
             <div class="info_item" id="new-password">
                 <span>Nova Senha: </span>
                 <input id="input-new-password" type="password" value="" placeholder="Nova Senha" readonly />
             </div>
+            <div id="message_new_password"></div>
             <div class="info_item" id="repeat-password">
                 <span>Repetir Senha: </span>
                 <input id="input-repeat-password" type="password" value="" placeholder="Repetir Senha" readonly />
             </div>
+            <div id="message_repeat_password"></div>
             <div class="info_item" id="weight">
                 <span>Peso (KG): </span>
                 <input id="input-weight" type="number" value="" placeholder="KG" readonly />
             </div>
+            <div id="message_weight"></div> 
             <div class="info_item" id="height">
                 <span>Altura (CM): </span>
                 <input id="input-height" type="number" value="" placeholder="CM" readonly />
             </div>
+            <div id="message_height"></div>
               <div class="info_item" id="birth">
                 <span>Nascimento: </span>
                 <input id="input-birth" type="date" value="" placeholder="" readonly />
             </div>
+            <div id="message_birthdate"></div>
             <div class="info_item select_profile" id="gender">
                 <label for="gender">Sexo biológico</label>
                 <select name="gender" id="select-gender">
@@ -72,6 +81,7 @@ export function Profile() {
                     <option value="F">Feminino</option>
                 </select>
             </div>
+            <div id="message_gender"></div>
             <div class="info_item select_profile" id="activity">
                <label for="activity">Nível de atividade</label>
                 <select name="activity" id="select-activity">
@@ -82,6 +92,7 @@ export function Profile() {
                     <option value="extraActive">Muito Ativo</option>
                 </select>
             </div>
+            <div id="message_activity"></div>
             <div class="info_item select_profile" id="plan">
                 <label for="plan">Plano Alimentar</label>
                 <select name="plan" id="select-plan">
@@ -90,6 +101,7 @@ export function Profile() {
                     <option value="3">Ganhar massa</option>
                 </select>
             </div>
+            <div id="message_plan"></div>
         </div>
     </div>
     <div class="btns_profile">
@@ -117,7 +129,7 @@ export function Profile() {
     inputImage.addEventListener("change", uploadImage);
     
     
-    // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+    // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal e adicionar ao container:
     const privacyModalContainer = document.getElementById('privacy_policy_container');
     const privacyModal = privacyPolicyModal();
     privacyModalContainer.appendChild(privacyModal);
@@ -146,13 +158,30 @@ export function Profile() {
     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
     createModalEventsProfile();
 
-    const btnSave = document.getElementById("btn-save-changes");
-    btnSave.addEventListener("click", saveChanges);
+    // const btnSave = document.getElementById("btn-save-changes");
+    // btnSave.addEventListener("click", saveChanges);
 
 
     return div
 }
 
+//Função para só ativar o botão quando houver uma mudança e desativar quando ele for clicado, para não pemritir o envio de múltiplas requisições
+document.addEventListener('DOMContentLoaded', function () {
+    const inputFields = document.querySelectorAll('.info_item input, .info_item select');
+    const btnSaveChanges = document.getElementById('btn-save-changes');
+
+    // Adicionar ouvinte de evento para cada campo de entrada e seleção
+    inputFields.forEach(function (input) {
+        input.addEventListener('input', function () {
+            // Quando houver uma alteração, ativa o botão de salvar alterações
+            btnSaveChanges.disabled = false;
+            btnSaveChanges.addEventListener("click", saveChanges);
+        });
+    });
+    btnSaveChanges.addEventListener('click', function () {
+        this.disabled = true;
+    });
+});
 
 async function getUserId(){
     try {
@@ -174,7 +203,7 @@ async function getUserId(){
 
 export async function uploadImage(){
         const inputImage = document.querySelector("#input-image");
-        const imgProfile = document.querySelector("#img-user"); 
+        const imgProfile = document.querySelector("#img-user");         
         
         const userId = await getUserId();
         const formData = new FormData();
@@ -295,12 +324,26 @@ function handleInputChange(event) {
 
     const newPassword = document.getElementById("input-new-password").value;
     const repeatPassword = document.getElementById("input-repeat-password").value;
+    const username = document.getElementById("input-name").value;
+
 
     switch (inputId) {
+        case 'input-name':
+            if(!username){
+                isValid =false;
+                messageError("message_name",`O nome não pode ser vazio`);
+            } else{
+                isValid = true;
+            }
+        break;
         case 'input-new-password':
             isValid = passwordValid(inputValue);
             if (!isValid) {
-                showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.","-5%");
+                messageError("message_password",
+                `Insira uma senha válida:
+                - mín. 8 e máx. 15 caracteres
+                - pelo menos um número, uma letra maiúscula e uma minúscula
+                - pelo menos um caractere especial`,5000,"0.8rem");
             }
             break;
         case 'input-repeat-password':
@@ -308,28 +351,32 @@ function handleInputChange(event) {
 
             if(!isValid){
                 if(newPassword !== repeatPassword){
-                    showMessage("fail","A nova senha não confere com a confirmação","-5%");
+                    messageError("message_repeat_password","As senhas não conferem")
                 } else {
-                    showMessage("fail","A senha deve ter entre 8 e 15 caracteres, contendo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.","-5%");
+                    messageError("message_repeat_password",
+                    `Insira uma senha válida:
+                    - mín. 8 e máx. 15 caracteres
+                    - pelo menos um número, uma letra maiúscula e uma minúscula
+                    - pelo menos um caractere especial`,5000,"0.8rem")
                 }
             }
             break;
         case 'input-email':
             isValid = emailValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Formato de e-mail inválido","-5%");
+                messageError("message_email","Por favor, insira um email válido") 
             }
             break;
         case 'input-weight':
             isValid = weightValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Peso inválido","-5%");
+                messageError("message_weight","Peso inválido, insira um valor entre 10kg e 500kg")
             }
             break; 
         case 'input-height':
             isValid = heightValid(inputValue);
             if (!isValid) {
-                showMessage("fail","Altura inválida","-5%");
+                messageError("message_height","Insira uma altura válida, em centímetros");
             }      
         default:
             break;
@@ -359,14 +406,7 @@ async function saveChanges(){
     const email = document.getElementById("input-email").value;
     const password = document.getElementById("input-password").value;
     const newPassword = document.getElementById("input-new-password").value;
-    const confirmPassword = document.getElementById("input-repeat-password").value;
-
-    console.log("Esse é o username no perfil", username);
-    console.log("Esse é o  email  no perfil", email);
-    console.log("Esse é o  password  no perfil", password);
-    console.log("Esse é o  newpassword  no perfil", newPassword);
-    console.log("Esse é o  confirmpassword  no perfil", confirmPassword);
-    
+    const confirmPassword = document.getElementById("input-repeat-password").value;   
  
     
     //Para o configHistory (user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date)
@@ -382,67 +422,75 @@ async function saveChanges(){
         day: '2-digit'
     }).split('/').reverse().join('-');
 
-    console.log(`Essa é a nova data do config:`,date)
-
-    console.log("Esse é o weight no perfil",weight );
-    console.log("Esse é o height no perfil", height);
-    console.log("Esse é o birthDate no perfil", birthDate);
-    console.log("Esse é o gender no perfil",gender );
-    console.log("Esse é o activityLevel no perfil", activityLevel);
-    console.log("Esse é o selectedPlanId no perfil", selectedPlanId);
-    console.log("Esse é o date no perfil", date);
-
     if(!username){
-        showMessage('fail',"O nome de usuário não pode ficar vazio!","-5%");
+        messageError("message_name","O nome não pode ser vazio") 
         return;
     }
 
     if (!emailValid(email)) {
-        showMessage('fail',"Formato de email inválido!","-5%");
+        messageError("message_email","Por favor, insira um email válido") 
         return;
     }
 
     //Essa validação das novas senhas só vai acontecer SE o usuário tiver optado por colocar uma nova senha ali, senão, essa validação será ignorada:
     if(newPassword || confirmPassword){
         if(!password){
-            showMessage('fail',"Informe a sua senha atual","-5%");
+            messageError("message_old_password","Informe a sua senha atual")
             return;
         }
 
-        if (!passwordValid(newPassword) || !passwordValid(confirmPassword)) {
-            showMessage('fail',"Insira uma senha válida com no mín. 8 e no máx 15 caracteres, sendo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial)","-5%");
+        if (!passwordValid(newPassword)) {
+            messageError("message_new_password",
+            `Insira uma senha válida:
+            - mín. 8 e máx. 15 caracteres
+            - pelo menos um número, uma letra maiúscula e uma minúscula
+            - pelo menos um caractere especial`,5000,"0.8rem");
             return;
         }
-    
+
+        if (!passwordValid(confirmPassword)) {
+            messageError("message_repeat_password",
+            `Insira uma senha válida:
+            - mín. 8 e máx. 15 caracteres
+            - pelo menos um número, uma letra maiúscula e uma minúscula
+            - pelo menos um caractere especial`,5000,"0.8rem");
+            return;
+        }
+
         if (newPassword !== confirmPassword){
-            showMessage('fail',"A nova senha informada não confere com a confirmação","-5%");
+            messageError("message_repeat_password","As senhas não conferem")
             return;
         }
     }
         
 
     if(!weightValid(weight)){
-        showMessage('fail',"Insira um peso válido","-5%");
+        messageError("message_weight","Peso inválido, insira um valor entre 10kg e 500kg");
         return;
     }
 
     if(!heightValid(height)){
-        showMessage('fail',"Insira uma altura válida, em centímetros","-5%");
+        messageError("message_height","Insira uma altura válida, em centímetros");
         return;
     }
 
     if(!birthDate){
-        showMessage('fail',"A data de nascimento é obrigatória","-5%");
+        messageError("message_birthdate","A data de nascimento não pode ser vazia");
         return;
     }
 
     if(!gender){
-        showMessage("fail","Selecione o sexo biológico","-5%");
+        messageError("message_gender","Selecione o sexo biológico");
         return;
     }
 
     if(!activityLevel){
-        showMessage("fail","Selecione o nível de atividade semanal","-5%");
+        messageError("message_activity","Selecione o nível de atividade semanal");
+        return;
+    }
+
+    if(!selectedPlanId){
+        messageError("message_plan","Escolha um plano alimentar");
         return;
     }
 
@@ -496,7 +544,7 @@ async function saveChanges(){
             });
     
             if (!userUpdateResponse.ok) {
-                showMessage('fail',"Falha ao atualizar os dados do usuário");
+                showMessage('fail',"Falha ao atualizar os dados do usuário","50%","5%");
                 throw new Error("Erro ao atualizar os dados do usuário");
             } 
 
@@ -509,12 +557,12 @@ async function saveChanges(){
             }); 
 
             if (!configUpdateResponse.ok) {
-                showMessage('fail',"Falha ao atualizar os dados do usuário");
+                showMessage('fail',"Falha ao atualizar os dados do usuário","50%","5%");
                 throw new Error("Erro ao atualizar o registro do usuário");         
             } 
 
             // Mostrar mensagem de sucesso se passar por todas as etapas acima
-            showMessage('success', "Dados atualizados com sucesso");
+            showMessage('success', "Dados atualizados com sucesso","80%","10%","2");
 
         } else{
             throw new Error("Falha ao obter ID do usuário");

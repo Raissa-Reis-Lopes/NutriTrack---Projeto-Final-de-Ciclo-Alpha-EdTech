@@ -221,6 +221,11 @@
     display: none;
 }
 
+#body2 > h1 {
+    color: red;
+    font-size: x-large;
+}
+
 
 .delete_account_title{
     color: red;
