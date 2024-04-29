@@ -38,6 +38,18 @@
 }
 
 .dataFoodScroll{
-    max-height: 100px;
+    max-height: 265px;
     overflow: scroll;
+    cursor: pointer;
+    padding-left: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.dataFoodScroll div:hover{
+    cursor: pointer;
+    color:var(--cor-p6) ;
 }

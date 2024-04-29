@@ -2,6 +2,18 @@
 #search{
   border: 2px solid var(--cor-p5);
   padding: 10px 15px;
+  width: 80%;
+}
+
+.foodSearch{
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--cor-p5);
+  border-radius: 10px;
+  background-color: transparent;
+  border: 2px solid var(--cor-p5);
+  padding: 10px 15px;
 }
 
 .foodSearch:hover{

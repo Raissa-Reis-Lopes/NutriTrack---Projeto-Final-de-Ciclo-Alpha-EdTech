@@ -1114,7 +1114,7 @@ function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodConta
   datafoodContainer.innerHTML =""; // Limpar o conteúdo atual do contêiner
 
   if (filteredFoods.length === 0) {
-    datafoodContainer.innerHTML = escapeHtml("<p>Nenhum resultado encontrado.</p>");
+    datafoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
   } else {
     filteredFoods.forEach(foodItem => {
       const foodElement = document.createElement("div");

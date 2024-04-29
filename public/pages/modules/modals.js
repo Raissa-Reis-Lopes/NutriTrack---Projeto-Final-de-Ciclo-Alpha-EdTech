@@ -6,7 +6,7 @@ export function SearchFood(){
         <div class="modal_img">
             <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
         </div>
-        <div class="container_modal">
+        <div class="container_modal btn_container_modal">
             <button id="showFoods" class="foodSearch">
                 Tudo
             </button>
@@ -14,7 +14,7 @@ export function SearchFood(){
                 Meus produtos
             </button>
         </div>
-        <div class="container_modal">
+        <div class="container_modal search_container_modal">
             <input type="text" name="search" id="search" placeholder="Procurar Produtos">
         </div>
         <div class="food_data_container">
