@@ -453,8 +453,7 @@ async function openModalWithMeal(meal) {
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
   const modalSearchFood = modal.querySelector("#modalSearchFood");
   const btnCreatefoodContainer = document.createElement("div");
-  // const datafoodContainer = document.createElement("div");
-  const datafoodContainer = document.getElementById("datafood");  
+  const datafoodContainer = document.createElement("div");
   
   let userId;
 
