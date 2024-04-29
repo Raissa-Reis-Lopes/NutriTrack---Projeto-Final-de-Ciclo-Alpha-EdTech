@@ -454,6 +454,8 @@ async function openModalWithMeal(meal) {
   const datafood = modal.querySelector("#datafood");
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
+  datafoodContainer.classList.add("dataFoodScrool");
+  btnCreatefoodContainer.classList.add("dataFoodScrool");
   
 
   let userId;
