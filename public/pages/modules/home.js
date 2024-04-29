@@ -604,10 +604,14 @@ async function openModalWithMeal(meal) {
                 const myFoodElementName =document.createElement("div");
                 myFoodElementName.textContent = escapeHtml(myFoodItem.name);
 
-                const btnEditMyFoodElement = document.createElement("button");
-                btnEditMyFoodElement.textContent = `Editar`;
-                const btnDeleteMyFoodElement = document.createElement("button");
-                btnDeleteMyFoodElement.textContent = `Deletar`;
+                const btnEditMyFoodElement = document.createElement("img");
+                btnEditMyFoodElement.src = "./img/edit.svg"; 
+                btnEditMyFoodElement.alt = "Editar";
+                // btnEditMyFoodElement.classList.add("icone-editar");
+                const btnDeleteMyFoodElement = document.createElement("img");
+                btnDeleteMyFoodElement.src = "./img/trash.svg"; 
+                btnDeleteMyFoodElement.alt = "Deletar"; 
+                // btnDeleteMyFoodElement.classList.add("icone-deletar");
           
                // Event listener para o botão de editar
                 btnEditMyFoodElement.addEventListener("click", async () => {
@@ -717,6 +721,10 @@ async function openModalWithMeal(meal) {
  
   datafood.appendChild(btnCreatefoodContainer);
   datafood.appendChild(datafoodContainer);
+
+  if (showFoods) {
+    showFoods.click();
+  }
  }
 
 function openAddFoodModal(userId,item,meal) {
