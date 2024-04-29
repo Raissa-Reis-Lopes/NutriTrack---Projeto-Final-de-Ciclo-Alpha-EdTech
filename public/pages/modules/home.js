@@ -136,9 +136,6 @@ export function Home() {
         <section id="terms_container"></section>
         <section id="sac_container"></section>
         <section id="footer_container"></section>
-
-        <!-- Tags para os modais da home -->
-        <section id="search_food_container"></section>
     `;
 
     document.getElementById("root").innerHTML = '';
@@ -187,10 +184,6 @@ export function Home() {
     const scrollerContainer = document.getElementById("scroller_container");
     const scroll = scroller();
     scrollerContainer.appendChild(scroll);
-
-    // const searchFoodContainer = document.getElementById("search_food_container");
-    // const searchFoodModal = SearchFood();
-    // searchFoodContainer.appendChild(searchFoodModal);
 
     return div
 }
@@ -287,7 +280,7 @@ async function loadUserDataForDate(date) {
             const username = await getUsername(userId);
 
             const usernameElement = document.getElementById('username');
-            usernameElement.innerText = escapeHtml(username);
+            usernameElement.innerText = username;
 
             const userAvatar = await getUserAvatar(userId);
 
@@ -405,6 +398,9 @@ function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstanc
     }
 }
 
+
+
+
 export function navRoutes() {
   const navProfile = document.getElementById("navProfile");
   const navHistory = document.getElementById("navHistory");
@@ -441,26 +437,11 @@ export function homeBtns() {
   const btnDinner = document.getElementById("btn_add_dinner");
   const btnSnack = document.getElementById("btn_add_snack");
 
-  btnBreakfast.addEventListener("click", () => {
-    const searchFoodContainer = document.getElementById("search_food_container");
-    const searchFoodModal = SearchFood();
-    searchFoodContainer.appendChild(searchFoodModal);
-  });
-  btnLunch.addEventListener("click", () => {
-    const searchFoodContainer = document.getElementById("search_food_container");
-    const searchFoodModal = SearchFood();
-    searchFoodContainer.appendChild(searchFoodModal);
-  });
-  btnDinner.addEventListener("click", () => {
-    const searchFoodContainer = document.getElementById("search_food_container");
-    const searchFoodModal = SearchFood();
-    searchFoodContainer.appendChild(searchFoodModal);
-  });
-  btnSnack.addEventListener("click", () => {
-    const searchFoodContainer = document.getElementById("search_food_container");
-    const searchFoodModal = SearchFood();
-    searchFoodContainer.appendChild(searchFoodModal);
-  });
+  btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
+  btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
+  btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
+  btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
+
   
 }
 
@@ -469,11 +450,7 @@ let selectedMealType = "";
 async function openModalWithMeal(meal) {
 
   selectedMealType = meal;
-
-  const searchFoodContainer = document.getElementById("search_food_container");
-  // const searchFoodModal = SearchFood();
   const modal = SearchFood(); // Cria o modal de pesquisa de comida
-  searchFoodContainer.appendChild(modal);
   const modalSearchFood = modal.querySelector("#modalSearchFood");
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
@@ -505,6 +482,7 @@ async function openModalWithMeal(meal) {
       
            foodList = await responseFood.json(); // Trata a resposta JSON
           userId = await getUserId();
+          // console.log(userId);
       
           // Adiciona os alimentos à lista no modal
           foodList.forEach((foodItem) => {
@@ -717,10 +695,9 @@ async function openModalWithMeal(meal) {
 
       };
 
-  
-  
   modal.querySelector("#back_modal_searchFood").addEventListener("click", () => {
     document.querySelector(".modal").remove();
+    document.querySelector(".modal_food_container").remove();
   });
   document.body.appendChild(modal); // Adiciona o modal ao body
  
@@ -753,7 +730,9 @@ function openAddFoodModal(userId,item,meal) {
       showMessage('fail',"Precisa ser um numero inteiro maior que 0");
       return;
     }
+    // console.log(dateCalendar);
     const foodId = item.id;
+    // console.log(userId);
 
     try {
       const response = await fetch("/api/foodAdded/", {
@@ -769,13 +748,16 @@ function openAddFoodModal(userId,item,meal) {
           meal: mealSelect,
           date: dateCalendar,
         }),
-      });    
+      });
+      // console.log(response);
+    
 
       if (!response.ok) {
         throw new Error("Erro ao salvar alimento");
       }
 
       loadUserDataForDate(dateCalendar);
+      // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       updateMealSection(userId,dateCalendar);
     } catch (error) {
@@ -808,6 +790,7 @@ async function loadAddedFoods() {
   // console.log(userId, "carregando")
 
 }
+
 
 async function fetchAddedFoods(userId, dateCalendar){
   try {
@@ -887,6 +870,7 @@ function clearMealSections() {
   });
 }
 
+
 async function deleteFoodItem(foodId) {
   if (!confirm("Tem certeza que deseja deletar este alimento?")) {
     return;
@@ -908,6 +892,7 @@ async function deleteFoodItem(foodId) {
     console.error("Erro ao deletar alimento:", error);
   }
 }
+
 
 async function editFoodItem(foodId,foodName,meal,id_food) {
   const modalEditFoodAdded = EditFoodAdded();
@@ -1148,5 +1133,3 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
     });
   }
 }
-
-

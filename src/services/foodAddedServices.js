@@ -7,7 +7,7 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
     
         // Buscar todos os alimentos adicionados pelo usuário na data especificada
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserByDate(user_id, date);
-        console.log(foodsAdded)
+        // console.log(foodsAdded)
 
         if (!foodsAdded || foodsAdded.length === 0) {
             return {

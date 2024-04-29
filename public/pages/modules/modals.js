@@ -1,12 +1,12 @@
 export function SearchFood(){
     const divModal = document.createElement("div");
+    divModal.classList.add("modal_food_container")
     divModal.innerHTML=`  
     <div id="modalSearchFood" class="modal">
         <div class="modal_img">
             <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
         </div>
         <div class="container_modal">
-    
             <div id="showFoods" class="foodSearch">
                 Tudo
             </div>
@@ -17,7 +17,9 @@ export function SearchFood(){
         <div class="container_modal">
             <input type="text" name="search" id="search" placeholder="Procurar Produtos">
         </div>
+        <div class="food_data_container">
         <div id="datafood" class="container_dataFood">
+        </div>
         </div>
     </div>
     `;
@@ -27,6 +29,7 @@ export function SearchFood(){
 
 export function AddFood(){
     const divModal = document.createElement("div");
+    divModal.classList.add("modal_food_container");
     divModal.innerHTML=`  
     <div class="modal">
         <div class="modal_img">
@@ -82,6 +85,7 @@ export function AddFood(){
 
 export function CreateMyFoodbtn(){
     const divModal = document.createElement("div");
+    divModal.classList.add("modal_food_container");
     divModal.innerHTML=`  
     <div class="modal container_modal_create" id="modalCreateFood">
         <h2>Tabela Nutricional</h2>
@@ -121,6 +125,7 @@ export function CreateMyFoodbtn(){
 
 export function EditFoodAdded(){
     const divModal = document.createElement("div");
+    divModal.classList.add("modal_food_container");
     divModal.innerHTML=`  
     <div class="modal">
         <div class="modal_img">
@@ -134,7 +139,7 @@ export function EditFoodAdded(){
         <div class="container_grams">
             <div class="grams_input">
                 <span>Modifique a quantidade consumida em gramas</span>
-                <input type="text" name="newGrams" id="newGrams">
+                <input type="number" name="newGrams" id="newGrams">
             </div>
             <div class="grams_select">
                 <span>Selecione a refeição</span>
