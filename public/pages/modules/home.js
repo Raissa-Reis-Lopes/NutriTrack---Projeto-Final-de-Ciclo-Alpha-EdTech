@@ -262,7 +262,7 @@ async function getUserAvatar(userId){
 
         const userData = await getUserAvatar.json();
 
-        const avatar = userData.avatar_img;
+        const avatar = escapeHtml(userData.avatar_img);
 
         return avatar;
     } catch (error) {
@@ -308,10 +308,10 @@ async function loadUserDataForDate(date) {
 
             const userDailyGoal = await getDailyGoal.json();
 
-            const userTotalCalories = userDailyGoal.data.total_calories;
-            const userTotalProtein = userDailyGoal.data.total_protein;
-            const userTotalCarbo = userDailyGoal.data.total_carb;
-            const userTotalLipid = userDailyGoal.data.total_fat; 
+            const userTotalCalories = escapeHtml(userDailyGoal.data.total_calories);
+            const userTotalProtein = escapeHtml(userDailyGoal.data.total_protein);
+            const userTotalCarbo = escapeHtml(userDailyGoal.data.total_carb);
+            const userTotalLipid = escapeHtml(userDailyGoal.data.total_fat); 
 
             const totalCalorie = document.getElementById('total-calories');
             totalCalorie.innerText = userTotalCalories;
@@ -330,7 +330,7 @@ async function loadUserDataForDate(date) {
 
             const userDailyConsumed = await getDailyConsumed.json();     
                
-            const totalNutrition = userDailyConsumed.data.totalNutrition;
+            const totalNutrition = escapeHtml(userDailyConsumed.data.totalNutrition);
 
             const dailyCaloriesConsumed = Math.ceil(totalNutrition.calories) || 0;
             const dailyProteinConsumed = Math.ceil(totalNutrition.protein)  || 0; 
@@ -359,14 +359,14 @@ async function loadUserDataForDate(date) {
 
             // Atualizar a barra de progresso
             const progressBar = document.getElementById('calories-progress');
-            const totalCalories = userTotalCalories;
+            const totalCalories = escapeHtml(userTotalCalories);
             let consumedPercent = (dailyCaloriesConsumed / totalCalories) * 100;
 
             // Verifica se ultrapassou a quantidade total diária permitida
             if (dailyCaloriesConsumed > totalCalories) {
                 progressBar.style.backgroundColor = '#f44336'; 
                 consumedPercent = 100; 
-                const exceededCalories = dailyCaloriesConsumed - totalCalories;
+                const exceededCalories = escapeHtml(dailyCaloriesConsumed - totalCalories);
                 message = `Você ultrapassou ${exceededCalories} calorias`;
             } else {
                 progressBar.style.backgroundColor = '#4caf50'; 
@@ -487,7 +487,7 @@ async function openModalWithMeal(meal) {
           // Adiciona os alimentos à lista no modal
           foodList.forEach((foodItem) => {
             const foodElement = document.createElement("div");
-            foodElement.textContent = foodItem.name;
+            foodElement.textContent = escapeHtml(foodItem.name);
             foodElement.addEventListener("click", async () => {
               await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
               modal.remove(); // Remove o modal após clicar em um elemento do foodlist
@@ -543,11 +543,11 @@ async function openModalWithMeal(meal) {
           btnCancelCreate.addEventListener("click", ()=> modalCreate.remove());
 
           btnCreateNew.addEventListener("click", async()=>{
-            const nameCreate = modalCreate.querySelector("#nameCreate").value;
-            const caloriesCreate = modalCreate.querySelector("#caloriesCreate").value;
-            const carbCreate = modalCreate.querySelector("#carbCreate").value;
-            const proteinCreate = modalCreate.querySelector("#proteinCreate").value;
-            const fatCreate = modalCreate.querySelector("#fatCreate").value;
+            const nameCreate = escapeHtml(modalCreate.querySelector("#nameCreate").value);
+            const caloriesCreate = escapeHtml(modalCreate.querySelector("#caloriesCreate").value);
+            const carbCreate = escapeHtml(modalCreate.querySelector("#carbCreate").value);
+            const proteinCreate = escapeHtml(modalCreate.querySelector("#proteinCreate").value);
+            const fatCreate = escapeHtml(modalCreate.querySelector("#fatCreate").value);
 
           if (!nameValid(nameCreate)) {
               showMessage('fail',"Formato de nome inválido!");
@@ -588,7 +588,7 @@ async function openModalWithMeal(meal) {
               myFoodList.forEach((myFoodItem) => {
                 const myFoodElement = document.createElement("div");
                 const myFoodElementName =document.createElement("div");
-                myFoodElementName.textContent = myFoodItem.name;
+                myFoodElementName.textContent = escapeHtml(myFoodItem.name);
 
                 const btnEditMyFoodElement = document.createElement("button");
                 btnEditMyFoodElement.textContent = `Editar`;
@@ -708,15 +708,16 @@ async function openModalWithMeal(meal) {
 
 function openAddFoodModal(userId,item,meal) {
   
+  
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
-  modal.querySelector("#nameFood").textContent = item.name;
-  modal.querySelector("#quantity_calories").textContent = Number(item.calorie).toFixed(2);
-  modal.querySelector("#quantity_carb").textContent = Number(item.carbohydrate_g).toFixed(2);
-  modal.querySelector("#quantity_proteins").textContent = Number(item.protein_g).toFixed(2);
-  modal.querySelector("#quantity_fat").textContent = Number(item.lipid_g).toFixed(2);
+  modal.querySelector("#nameFood").textContent = escapeHtml(item.name);
+  modal.querySelector("#quantity_calories").textContent = escapeHtml(Number(item.calorie).toFixed(2));
+  modal.querySelector("#quantity_carb").textContent = escapeHtml(Number(item.carbohydrate_g).toFixed(2));
+  modal.querySelector("#quantity_proteins").textContent = escapeHtml(Number(item.protein_g).toFixed(2));
+  modal.querySelector("#quantity_fat").textContent = escapeHtml(Number(item.lipid_g).toFixed(2));
   // Define a opção do select com base no meal
-  modal.querySelector("#meal").value = meal;
+  modal.querySelector("#meal").value = escapeHtml(meal);
   
 
   const btnCancel = modal.querySelector("#btn_cancel_addFood");
@@ -724,9 +725,9 @@ function openAddFoodModal(userId,item,meal) {
 
   const btnSave = modal.querySelector("#btn_save_addFood");
   btnSave.addEventListener("click", async () => {
-    const gramsInput = modal.querySelector("#grams").value;
-    const mealSelect = modal.querySelector("#meal").value;
-    const dateCalendar = document.getElementById('input-date').value;
+    const gramsInput = escapeHtml(modal.querySelector("#grams").value);
+    const mealSelect = escapeHtml(modal.querySelector("#meal").value);
+    const dateCalendar = escapeHtml(document.getElementById('input-date').value);
     if (!numberValid(gramsInput)) {
       showMessage('fail',"Precisa ser um numero inteiro maior que 0");
       return;
@@ -782,7 +783,7 @@ async function updateMealSection(userId,dateCalendar) {
 }
 
 async function loadAddedFoods() {
-  const dateCalendar = document.getElementById('input-date').value;
+  const dateCalendar = escapeHtml(document.getElementById('input-date').value);
   // console.log(dateCalendar, "carregando")
   const userId = await getUserId();
   clearMealSections();
@@ -897,7 +898,7 @@ async function deleteFoodItem(foodId) {
 
 async function editFoodItem(foodId,foodName,meal,id_food) {
   const modalEditFoodAdded = EditFoodAdded();
-  modalEditFoodAdded.querySelector("#nameEditFood").textContent = foodName;
+  modalEditFoodAdded.querySelector("#nameEditFood").textContent = escapeHtml(foodName);
 
   const btnCancelEdit = modalEditFoodAdded.querySelector("#btn_cancel_editFood");
   btnCancelEdit.addEventListener("click", ()=> modalEditFoodAdded.remove());
@@ -905,13 +906,13 @@ async function editFoodItem(foodId,foodName,meal,id_food) {
   const backModalEditFoodAdded = modalEditFoodAdded.querySelector("#back_modal_editFoodAdded");
   backModalEditFoodAdded.addEventListener("click", ()=> modalEditFoodAdded.remove());
 
-  modalEditFoodAdded.querySelector("#newMeal").value = meal;
+  modalEditFoodAdded.querySelector("#newMeal").value = escapeHtml(meal);
 
   console.log(foodId,"teste");
   const btnSaveEdit = modalEditFoodAdded.querySelector("#btn_save_editFood");
   btnSaveEdit.addEventListener("click", async () => {
-    const newGrams = modalEditFoodAdded.querySelector("#newGrams").value;
-    const newMeal = modalEditFoodAdded.querySelector("#newMeal").value;
+    const newGrams = escapeHtml(modalEditFoodAdded.querySelector("#newGrams").value);
+    const newMeal = escapeHtml(modalEditFoodAdded.querySelector("#newMeal").value);
 
     
     if (!newGrams || !newMeal) {
@@ -970,20 +971,20 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
   console.log(myFoodItemId,"teste");
 
 
-  modalEditMyFood.querySelector("#nameCreate").value = nameCreate;
-  modalEditMyFood.querySelector("#caloriesCreate").value = caloriesCreate;
-  modalEditMyFood.querySelector("#carbCreate").value = carbCreate;
-  modalEditMyFood.querySelector("#proteinCreate").value = proteinCreate;
-  modalEditMyFood.querySelector("#fatCreate").value = fatCreate;
+  modalEditMyFood.querySelector("#nameCreate").value = escapeHtml(nameCreate);
+  modalEditMyFood.querySelector("#caloriesCreate").value = escapeHtml(caloriesCreate);
+  modalEditMyFood.querySelector("#carbCreate").value = escapeHtml(carbCreate);
+  modalEditMyFood.querySelector("#proteinCreate").value = escapeHtml(proteinCreate);
+  modalEditMyFood.querySelector("#fatCreate").value = escapeHtml(fatCreate);
 
 
   const btnSaveEdit = modalEditMyFood.querySelector("#btn_create_new");
   btnSaveEdit.addEventListener("click", async () => {
-    const newNameCreate = modalEditMyFood.querySelector("#nameCreate").value;
-    const newCaloriesCreate = modalEditMyFood.querySelector("#caloriesCreate").value;
-    const newCarbCreate = modalEditMyFood.querySelector("#carbCreate").value;
-    const newProteinCreate = modalEditMyFood.querySelector("#proteinCreate").value;
-    const newFatCreate = modalEditMyFood.querySelector("#fatCreate").value;
+    const newNameCreate = escapeHtml(modalEditMyFood.querySelector("#nameCreate").value);
+    const newCaloriesCreate = escapeHtml(modalEditMyFood.querySelector("#caloriesCreate").value);
+    const newCarbCreate = escapeHtml(modalEditMyFood.querySelector("#carbCreate").value);
+    const newProteinCreate = escapeHtml(modalEditMyFood.querySelector("#proteinCreate").value);
+    const newFatCreate = escapeHtml(modalEditMyFood.querySelector("#fatCreate").value);
 
     
     if (!newNameCreate || !newCaloriesCreate || !newCarbCreate || !newProteinCreate || !newFatCreate) {
@@ -1071,11 +1072,11 @@ function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodConta
   datafoodContainer.innerHTML =""; // Limpar o conteúdo atual do contêiner
 
   if (filteredFoods.length === 0) {
-    datafoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+    datafoodContainer.innerHTML = escapeHtml("<p>Nenhum resultado encontrado.</p>");
   } else {
     filteredFoods.forEach(foodItem => {
       const foodElement = document.createElement("div");
-      foodElement.textContent = foodItem.name;
+      foodElement.textContent = escapeHtml(foodItem.name);
       foodElement.addEventListener("click", async () => {
         await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
         modal.remove(); // Remove o modal após clicar em um elemento do foodlist
@@ -1096,7 +1097,7 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
     filteredFoods.forEach(myFoodItem => {
       const myFoodElement = document.createElement("div");
       const myFoodName = document.createElement("span");
-      myFoodName.textContent = myFoodItem.name;
+      myFoodName.textContent = escapeHtml(myFoodItem.name);
 
       const btnEdit = document.createElement("button");
       btnEdit.textContent = "Editar";
