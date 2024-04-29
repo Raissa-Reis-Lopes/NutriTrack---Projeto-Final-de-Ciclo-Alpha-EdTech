@@ -5,7 +5,8 @@ import { logout } from "../utils/logout.js";
 import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml, validateImageFormat } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEventsProfile } from "./modals.js";
 import { footerProfile } from "./footer.js";
-import { messageError } from "../utils/messageError.js"
+import { messageError } from "../utils/messageError.js";
+import { loader } from "../utils/loader.js";
 
 export function Profile() {
     const div = document.createElement("div");
@@ -31,6 +32,8 @@ export function Profile() {
             <div class="image-profile" style="cursor:pointer;">
                 <img id="img-user" src="" alt="Imagem do usuario" />
                 <div id="change-image-overlay" class="change-image-overlay">Alterar imagem</div>
+                <!-- Loader -->
+                <div id="loader-container"></div>
             </div>
             </label>
             </div>
@@ -168,10 +171,21 @@ export function Profile() {
     return div
 }
 
+   // Função para mostrar o loader
+function showLoader() {
+    const loaderContainer = document.getElementById("loader-container");
+    loaderContainer.appendChild(loader());
+}
+
+// Função para ocultar o loader
+function hideLoader() {
+    const loaderContainer = document.getElementById("loader-container");
+    loaderContainer.innerHTML = ''; // Limpa o conteúdo do container do loader
+}
 
 function changeImageOverlay(){
-    const imageProfile = div.querySelector(".image-profile");
-    const changeImageOverlay = div.querySelector("#change-image-overlay");
+    const imageProfile = document.querySelector(".image-profile");
+    const changeImageOverlay = document.querySelector("#change-image-overlay");
 
     imageProfile.addEventListener("mouseenter", () => {
         changeImageOverlay.style.display = "flex";
@@ -220,6 +234,7 @@ async function getUserId(){
 }
 
 export async function uploadImage(){
+        showLoader();
         const inputImage = document.querySelector("#input-image");
         const imgProfile = document.querySelector("#img-user");         
         const userId = await getUserId();
@@ -259,6 +274,9 @@ export async function uploadImage(){
             } else {
                 console.log("Falha ao atualizar a imagem");
             }
+
+             // Após o fetch ser concluído, esconda o loader
+            hideLoader();
           
         } catch (error) {
             throw new Error("Falha ao carregar a imagem do usuário")

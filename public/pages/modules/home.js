@@ -31,7 +31,7 @@ export function Home() {
                 <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
             </nav>
         </header>
-        <div id="message" class="message-container">
+        <div id="message" class="message-container hidden">
         <div id="message-content" class="message-content hidden"></div>
         </div>
         <div class="container_home">
@@ -55,13 +55,10 @@ export function Home() {
             <div class="calories_bar">
                 <div class="calories_progress" id="calories-progress"></div>
             </div>
-            <p><span id="consumed-calories"></span> calorias ingeridas</p>
+            <p class="container_calories"><span id="consumed-calories"></span> calorias ingeridas</p>
         </div>
-
                 <div id="date">
-
                     <input type="date" name="date" id="input-date">
-
                 </div>
             </section>
             <section class="section_home">
@@ -158,6 +155,12 @@ export function Home() {
         loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
     });
 
+
+    //Para poder clicar em qualquer ponto do calendário e ele abrir
+    const divDate = document.getElementById("date");
+    divDate.addEventListener("click", function() {
+        inputDate.click();
+    });
         
         
     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
@@ -184,6 +187,9 @@ export function Home() {
     const scrollerContainer = document.getElementById("scroller_container");
     const scroll = scroller();
     scrollerContainer.appendChild(scroll);
+
+
+    
 
     return div
 }
@@ -339,6 +345,7 @@ async function loadUserDataForDate(date) {
 
             const consumedProtein = document.getElementById("consumed-protein");
             consumedProtein.innerText = dailyProteinConsumed;
+            consumedProtein.style.color ="orangered"
             
             const consumedCarbo = document.getElementById("consumed-carbo");
             consumedCarbo.innerText = dailyCarbohydrateConsumed;
@@ -354,8 +361,9 @@ async function loadUserDataForDate(date) {
             const remainingCaloriesValue = userTotalCalories - dailyCaloriesConsumed;
 
             const remainingCalories = document.getElementById("remaining-calories");
-            let message = `Você ainda pode ingerir ${remainingCaloriesValue} calorias!`;
-            remainingCalories.innerText = message;
+            let message = `Você ainda pode ingerir <span class="remaining_calories_value">${remainingCaloriesValue}</span> calorias!`;
+            remainingCalories.innerHTML = message;
+            remainingCalories.classList.add("container_calories");
 
             // Atualizar a barra de progresso
             const progressBar = document.getElementById('calories-progress');
@@ -367,19 +375,27 @@ async function loadUserDataForDate(date) {
                 progressBar.style.backgroundColor = '#f44336'; 
                 consumedPercent = 100; 
                 const exceededCalories = dailyCaloriesConsumed - totalCalories;
-                message = `Você ultrapassou ${exceededCalories} calorias`;
+                message = `Você ultrapassou <span class="exceeded_calories_value"> ${exceededCalories} </span> calorias`;
             } else {
                 progressBar.style.backgroundColor = '#4caf50'; 
             }
 
             progressBar.style.width = consumedPercent + '%';
-            remainingCalories.innerText = message;
+            remainingCalories.innerHTML = message;
 
 
-            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', "#E96001", "#F5D8C4");
-            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', "#FF0DE5", "#FACFF6");
-            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', "#1E1BFF", "#D9D8F7");
+            //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
+            const computedStyle = getComputedStyle(document.documentElement);
+            const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
+            const corBgProtein = computedStyle.getPropertyValue('--cor-bg-protein').trim(); 
+            const corCarbo = computedStyle.getPropertyValue('--cor-carbo').trim(); 
+            const corBgCarbo = computedStyle.getPropertyValue('--cor-bg-carbo').trim(); 
+            const corLipid = computedStyle.getPropertyValue('--cor-lipid').trim(); 
+            const corBgLipid = computedStyle.getPropertyValue('--cor-bg-lipid').trim(); 
 
+            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
         }
     } catch(error) {
        console.log(error.message)
