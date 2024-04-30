@@ -76,9 +76,57 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
     }
 }
 
+// const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) => {
+//     try {
+
+//         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserInPeriod(user_id, start_date, end_date);
+
+//         // Objeto para armazenar os totais de nutrientes por dia
+//         const nutritionSummary = {};
+
+//         // Calcular totais de nutrientes para cada dia
+//         for (const food of foodsAdded) {
+//             const { created_at, food_id, food_quantity } = food;
+
+//             // Verificar se o dia já está no objeto nutritionSummary
+//             const day = created_at.toISOString().split('T')[0]; // Obtém a data no formato 'YYYY-MM-DD'
+
+//             if (!nutritionSummary[day]) {
+//                 nutritionSummary[day] = {
+//                     totalNutrition: {
+//                         calories: 0,
+//                         protein: 0,
+//                         carbohydrate: 0,
+//                         lipid: 0
+//                     }
+//                 };
+//             }
+
+//             // Buscar detalhes do alimento pelo food_id
+//             const foodInfo = await foodRepository.getFoodById(food_id);
+
+//             if (!foodInfo) {
+//                 throw new Error(`Alimento não encontrado para o food_id ${food_id}`);
+//             }
+
+//             const { calorie, protein_g, carbohydrate_g, lipid_g } = foodInfo;
+
+//             // Calcular nutrientes para este alimento e adicioná-los aos totais do dia
+//             nutritionSummary[day].totalNutrition.calories += (calorie / 100) * food_quantity;
+//             nutritionSummary[day].totalNutrition.protein += (protein_g / 100) * food_quantity;
+//             nutritionSummary[day].totalNutrition.carbohydrate += (carbohydrate_g / 100) * food_quantity;
+//             nutritionSummary[day].totalNutrition.lipid += (lipid_g / 100) * food_quantity;
+//         }
+
+//         return nutritionSummary;
+//     } catch (error) {
+//         console.log(error);
+//         throw new Error('Erro ao calcular os valores nutricionais consumidos no período');
+//     }
+// }
+
 const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) => {
     try {
-
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserInPeriod(user_id, start_date, end_date);
 
         // Objeto para armazenar os totais de nutrientes por dia
@@ -118,7 +166,16 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
             nutritionSummary[day].totalNutrition.lipid += (lipid_g / 100) * food_quantity;
         }
 
-        return nutritionSummary;
+        // Converter as chaves do objeto para strings no formato 'Dom', 'Seg', etc.
+        const formattedNutritionSummary = {};
+        Object.keys(nutritionSummary).forEach(date => {
+            const dayOfWeekIndex = new Date(date).getDay(); // Índice do dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
+            const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
+            const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+            formattedNutritionSummary[dayOfWeek] = nutritionSummary[date];
+        });
+
+        return formattedNutritionSummary;
     } catch (error) {
         console.log(error);
         throw new Error('Erro ao calcular os valores nutricionais consumidos no período');
