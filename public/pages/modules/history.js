@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-// import { limitDate } from "../utils/limitDates.js";
+import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 import { generateBarChart } from '../utils/barchart.js';
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
@@ -67,7 +67,7 @@ export function History() {
     
     const inputDate = document.getElementById('input-date');
     
-    inputDate.addEventListener("change", function() {
+    inputDate.addEventListener("change", async function() {
         const selectedDate = inputDate.value;
         // getweek(selectedDate);
         // loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
@@ -83,6 +83,7 @@ export function History() {
         // Define dataFim para o próximo sábado
         endDate.setDate(startDate.getDate() + 6);
         endDateInput.value = formatarData(endDate);
+        await fetchWeekData();
     });
     
     const days = [];
@@ -108,78 +109,104 @@ export function History() {
     const terms = termsModal();
     termsContainer.appendChild(terms);
     
-     const sacContainer = document.getElementById("sac_container");
-     const sac = sacModal();
-     sacContainer.appendChild(sac);
+    const sacContainer = document.getElementById("sac_container");
+    const sac = sacModal();
+    sacContainer.appendChild(sac);
      
-     const footerContainer = document.getElementById("footer_container");
-     const footer = footerHistory();
-     footerContainer.appendChild(footer);
+    const footerContainer = document.getElementById("footer_container");
+    const footer = footerHistory();
+    footerContainer.appendChild(footer);
      
-     //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
-     createModalEventsDefault();
+    //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
+    createModalEventsDefault();
      
-     navRoutes();
-    //  limitDate(inputDate);
+    navRoutes();
+    limitDate('input-date');
      
      return div
     }
     
-    async function getUserId(){
-        try {
-            const getUserId = await fetch("/api/login/", {
-                method: "GET",
-        });
-
-        if(!getUserId.ok){
-            throw new Error("Falha ao localizar o id do usuáiro")
-        }
-        const userIdResponse = await getUserId.json();
-        const userId = userIdResponse.user;
-        return userId;
-
-    } catch (error) {
-        
-    }
-}
-
-async function getUserName(userId){
+async function getUserId(){
     try {
-        const getUsername = await fetch(`/api/users/${userId}`,{
-            method: "GET",
-        });
+    const getUserId = await fetch("/api/login/", {
+        method: "GET",
+    });
 
-        if(!getUsername.ok){
-            throw new Error("Erro ao localizar o nome do usuário pelo id"); 
-        }
+    if(!getUserId.ok){
+        throw new Error("Falha ao localizar o id do usuáiro")
+    }
+    const userIdResponse = await getUserId.json();
+    const userId = userIdResponse.user;
+    return userId;
 
-        const userData = await getUsername.json();
-
-        const username = userData.username;
-
-        return username;
     } catch (error) {
         
     }
 }
 
-async function getWeekData(){
+// async function getUserName(userId){
+//     try {
+//     const getUsername = await fetch(`/api/users/${userId}`,{
+//         method: "GET",
+//     });
+
+//     if(!getUsername.ok){
+//         throw new Error("Erro ao localizar o nome do usuário pelo id"); 
+//     }
+
+//     const userData = await getUsername.json();
+
+//     const username = userData.username;
+
+//     return username;
+//     } catch (error) {
+        
+//     }
+// }
+
+async function fetchWeekData() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const userId = await getUserId()
+
     try {
-        const getWeek = await fetch("/api/week/", {
-            method: "GET",
+        const response = await fetch('/api/week', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: userId, startDate, endDate })
         });
-
-        if(!getWeek.ok){
-            throw new Error("Erro ao localizar os dados semanais");
-        }
-
-        const weekData = await getWeek.json();
-
-        return weekData;
-    } catch (error) {
         
+        if (!response.ok) {
+            throw new Error('Erro ao obter os dados da semana');
+        }
+        
+        const dataWeek = await response.json();
+        console.log(dataWeek);
+        generateBarChart(dataWeek.data); // Assumindo que 'data' contém os dados nutricionais para o gráfico
+    } catch (error) {
+        console.error('Erro ao obter os dados da semana:', error);
     }
 }
+
+// async function getWeekData(){
+//     try {
+//         const getWeek = await fetch("/api/week/", {
+//             method: "GET",
+//         });
+
+//         if(!getWeek.ok){
+//             throw new Error("Erro ao localizar os dados semanais");
+//         }
+
+//         const weekData = await getWeek.json();
+
+//         return weekData;
+//     } catch (error) {
+        
+//     }
+// }
 
 function formatarData(data) {
     const ano = data.getFullYear();

@@ -8,11 +8,7 @@ const getWeekData = async(req,res) => {
         throw new Error("o id do usuário é obrigatório");
     }
 
-    if(!startDate){
-        throw new Error('A data é obrigatória');
-    }
-
-    if(!endDate){
+    if(!startDate || !endDate){
         throw new Error('A data é obrigatória');
     }
 
@@ -34,6 +30,6 @@ function weekData (req, res) {
     }
 };
   
-module.exports = { 
+module.exports = {
   weekData 
 };
