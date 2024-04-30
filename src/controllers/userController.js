@@ -10,9 +10,9 @@ const getAllUsers = async(req, res) => {
 }
 
 const getUserById = async(req, res) => {
-    const { id } = req.params;
+    const user_id = req.user;
     try {
-        const user = await userServices.getUserById(id);
+        const user = await userServices.getUserById(user_id);
         return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao buscar dados do usuário' });
@@ -48,10 +48,10 @@ const createUser = async(req, res) => {
 
 const updateUser = async(req, res) => {
     try {
-        const { id } = req.params;
+        const user_id = req.user;
         const {username , email , newPassword, currentPassword  } = req.body;
 
-        if(!id){
+        if(!user_id){
             throw new Error("O id do usuário é obrigatório")
         }
 
@@ -65,15 +65,15 @@ const updateUser = async(req, res) => {
 
         if (newPassword && currentPassword) {
             // Validar senha atual
-            await userServices.validateCurrentPassword(id, currentPassword);
+            await userServices.validateCurrentPassword(user_id, currentPassword);
         }
 
         let result;
 
         if (newPassword) {
-            result = await userServices.updateUser(id, username, email, newPassword);
+            result = await userServices.updateUser(user_id, username, email, newPassword);
         } else {
-            result = await userServices.updateUserWithoutPassword(id, username, email);
+            result = await userServices.updateUserWithoutPassword(user_id, username, email);
         }
 
         return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso', data: result});
@@ -84,14 +84,14 @@ const updateUser = async(req, res) => {
 }
 
 const deleteUser = async(req, res) => {
-    const { id } = req.params;
+    const user_id = req.user;
     try {
         const user = await userServices.getUserById(id);
         
         if(!user){
             throw new Error('Usuário não cadastrado');
         }
-        await userServices.deleteUser(id);
+        await userServices.deleteUser(user_id);
         return res.status(200).json({ success: true, message: 'Usuário deletado com sucesso!'})
 
     } catch (error) {

@@ -3,7 +3,8 @@ const calculateServices = require('../services/calculateServices')
 
 const calculateDailyNutrition = async(req,res) => {
     try {
-        const { user_id, date} = req.body;
+        const {date} = req.query;
+        const user_id = req.user;
 
         if(!user_id){
             throw new Error("o id do usuário é obrigatório");

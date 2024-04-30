@@ -135,6 +135,7 @@ export function Config() {
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
     configBtns();
+    navConfig();
     limitDate('birth_date');
     addEventListenerToPlans();
     return div
@@ -177,8 +178,8 @@ document.getElementById('plan2').addEventListener('click', () => selectPlan('pla
 document.getElementById('plan3').addEventListener('click', () => selectPlan('plan3'));
 }
 
-export function configBtns() {
 
+function navConfig(){
     const logo = document.getElementById("logo");
  
 
@@ -186,6 +187,9 @@ export function configBtns() {
         const customEvent = createCustomEvent('/');
         window.dispatchEvent(customEvent); 
     })
+}
+
+function configBtns() {
 
     // let currentForm = 1;
     showForm(1);
@@ -244,15 +248,6 @@ export function configBtns() {
             btnNext2.addEventListener('click', async(event)=>{
                 event.preventDefault();
 
-                const getUserId = await fetch("/api/login/", {
-                    method: "GET",
-                });
-
-                if(getUserId){
-                    const userData = await getUserId.json();
-                    const userId = userData.user;
-
-
                     const date = new Date().toLocaleDateString({
                         year: 'numeric',
                         month: '2-digit',
@@ -264,7 +259,6 @@ export function configBtns() {
                     }
     
                     const configData = {
-                        user_id: userId, 
                         food_plan_id: selectedPlanId, 
                         activity_level: activityLevel, 
                         weight, 
@@ -294,9 +288,6 @@ export function configBtns() {
                     } catch (error) {
                         console.error('Erro ao se cadastrar: ', error);
                     }
-                } else {
-                    console.log('Não foi possível obter as informações do usuário');
-                }
             }) 
         })
 }
