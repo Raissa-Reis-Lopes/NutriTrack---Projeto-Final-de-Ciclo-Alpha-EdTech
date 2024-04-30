@@ -49,6 +49,17 @@ async function getFoodsAddedByUserByDate(user_id, date){
     }
 }
 
+async function getFoodsAddedByUserByDateRange(user_id, startDate, endDate) {
+    const query = 'SELECT * FROM food_added WHERE user_id=$1 AND created_at::date >= $2 AND created_at::date <= $3';
+    try {
+        const result = await pool.query(query, [user_id, startDate, endDate]);
+        return result.rows;
+    } catch (error) {
+        console.error("Falha ao buscar os dados de alimentos adicionados do usuário na semana");
+        throw error;
+    }
+}
+
 
 //Não estava funcionando, coloquei o RETURNING * para ver o retorno
 async function insertFoodAdded(user_id, food_id, food_quantity, meal, date) {
@@ -92,6 +103,7 @@ module.exports = {
     getFoodAddedById,
     getFoodsAddedByUserId,
     getFoodsAddedByUserByDate,
+    getFoodsAddedByUserByDateRange,
     insertFoodAdded,
     updateFoodAdded,
     deleteFoodAdded

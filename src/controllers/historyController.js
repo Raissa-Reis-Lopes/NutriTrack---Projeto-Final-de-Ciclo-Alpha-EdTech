@@ -1,4 +1,4 @@
-const configHistoryServices = require('./configHistoryServices');
+const foodAddedServices = require('../services/foodAddedServices')
 
 const getWeekData = async(req,res) => {
     try {
@@ -16,8 +16,8 @@ const getWeekData = async(req,res) => {
         throw new Error('A data é obrigatória');
     }
 
-        const weekNutrition = await configHistoryServices.getConfigHistoryForPeriod(user_id, startDate, endDate);
-        return res.status(200).json({success: true, message:"Dados nutricionais semanais calculado com sucesso", data: weekNutrition });
+        const weekNutrition = await foodAddedServices.calculateWeekNutritionWithDetails(user_id, startDate, endDate);
+        return res.status(200).json({success: true, message:"Dados nutricionais semanais calculados com sucesso", data: weekNutrition });
     } catch (error) {
         return res.status(500).json({ error: error.message})
     }

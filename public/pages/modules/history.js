@@ -28,10 +28,8 @@ export function History() {
         </div>
         <div class="period">
             <div id="input-date">
-                <button class="btn_stroke" onclick="navegar('-')">← Anterior</button>
-                <input type="date" id="dataInicio">
-                <input type="date" id="dataFim">
-                <button class="btn_stroke" onclick="navegar('+')">Próximo →</button>
+                <input type="date" id="startDate">
+                <input type="date" id="endDate" readonly>
             </div>
         </div>
         <div class="chart">
@@ -41,6 +39,8 @@ export function History() {
                 <div>
                     <div class="chart" id="week-chart"></div>
                 </div>
+                <button class="btn_stroke" id="nextDate">Próxima Semana →</button>
+                <button class="btn_stroke" id="backDate">← Semana Anterior</button>
             </div>
         </section>
         </div>
@@ -54,18 +54,17 @@ export function History() {
   
     document.getElementById("root").innerHTML = '';
     document.getElementById("root").appendChild(div);
-    // limitDate('input-date');
-
-    const dataAtual = new Date();
-    const dataInicioInput = document.getElementById('dataInicio');
-    const dataFimInput = document.getElementById('dataFim');
+    
+    const currentDate = new Date();
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
     const backDate = document.getElementById('backDate');
     const nextDate = document.getElementById('nextDate');
     
     // Define a data atual como o valor inicial dos elementos de entrada de data
-    dataInicioInput.value = formatarData(dataAtual);
-    dataFimInput.value = formatarData(new Date(dataAtual.getTime() - (7 * 24 * 60 * 60 * 1000))); // Adiciona uma semana à data atual
-
+    startDateInput.value = formatarData(currentDate);
+    endDateInput.value = formatarData(new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000))); // Adiciona uma semana à data atual
+    
     const inputDate = document.getElementById('input-date');
     
     inputDate.addEventListener("change", function() {
@@ -73,33 +72,42 @@ export function History() {
         // getweek(selectedDate);
         // loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
         
-        const dataInicio = new Date(dataInicioInput.value);
-        const dataFim = new Date(dataFimInput.value);
-        const weeks = calcularDias(dataInicio, dataFim);
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const weeks = calcularDias(currentDate, endDate);
         
         // Define dataInicio para o último domingo
-        dataInicio.setDate(dataInicio.getDate() - dataInicio.getDay());
-        dataInicioInput.value = formatarData(dataInicio);
+        startDate.setDate(startDate.getDate() - startDate.getDay());
+        startDateInput.value = formatarData(startDate);
         
         // Define dataFim para o próximo sábado
-        dataFim.setDate(dataInicio.getDate() + 6);
-        dataFimInput.value = formatarData(dataFim);
+        endDate.setDate(startDate.getDate() + 6);
+        endDateInput.value = formatarData(endDate);
     });
     
-    const dias = [];
-    generateBarChart(dias);
-
-
-
-     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
-     const privacyModalContainer = document.getElementById('privacy_policy_container');
-     const privacyModal = privacyPolicyModal();
-     privacyModalContainer.appendChild(privacyModal);
-     
-     const termsContainer = document.getElementById("terms_container");
-     const terms = termsModal();
-     termsContainer.appendChild(terms);
-     
+    const days = [];
+    generateBarChart(days);
+    
+    backDate.addEventListener("click", function() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        navegar('-', startDate, endDate);
+    });
+    nextDate.addEventListener("click", function() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        navegar('+', startDate, endDate);
+    });
+    
+    // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
+    const privacyModalContainer = document.getElementById('privacy_policy_container');
+    const privacyModal = privacyPolicyModal();
+    privacyModalContainer.appendChild(privacyModal);
+    
+    const termsContainer = document.getElementById("terms_container");
+    const terms = termsModal();
+    termsContainer.appendChild(terms);
+    
      const sacContainer = document.getElementById("sac_container");
      const sac = sacModal();
      sacContainer.appendChild(sac);
@@ -110,16 +118,17 @@ export function History() {
      
      //OBSERVAÇÃO, ESSE FUNCÃO TEM QUE VIR SÓ DEPOIS QUE PEGAR TODOS OS MODAIS
      createModalEventsDefault();
-
+     
      navRoutes();
+    //  limitDate(inputDate);
+     
+     return div
+    }
     
-    return div
-}
-
-async function getUserId(){
-    try {
-        const getUserId = await fetch("/api/login/", {
-            method: "GET",
+    async function getUserId(){
+        try {
+            const getUserId = await fetch("/api/login/", {
+                method: "GET",
         });
 
         if(!getUserId.ok){
@@ -191,8 +200,8 @@ function navegar(direcao, startDate, endDate) {
         newEndDate.setDate(newEndDate.getDate() + 7);
     }
 
-    document.getElementById('dataInicio').value = formatarData(newStartDate);
-    document.getElementById('dataFim').value = formatarData(newEndDate);
+    document.getElementById('startDate').value = formatarData(newStartDate);
+    document.getElementById('endDate').value = formatarData(newEndDate);
 }
 
 function calcularDias(dataInicio, dataFim) {
@@ -227,32 +236,19 @@ function formatarDataGrafico(data, formato) {
 }
 
 // Requisição para a rota /api/semana no backend
-fetch('/api/week')
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Erro ao obter os dados da semana');
-    }
-    return response.json();
-})
-.then(dadosDaSemana => {
-    generateBarChart(dadosDaSemana);
-})
-.catch(error => {
-    console.error('Erro ao obter os dados da semana:', error);
-});
-
-
-export function navRoutes() {
-    const navProfile = document.getElementById("navProfile");
-    const navHome = document.getElementById("navHome");
-    const logo = document.getElementById("logo");
-    const btnExit = document.getElementById("btnExit");
-    
-    logo.addEventListener("click", () => {
-        const customEvent = createCustomEvent("/home");
-        window.dispatchEvent(customEvent);
-    });
-}
+// fetch('/api/week')
+// .then(response => {
+//     if (!response.ok) {
+//         throw new Error('Erro ao obter os dados da semana');
+//     }
+//     return response.json();
+// })
+// .then(dadosDaSemana => {
+//     generateBarChart(dadosDaSemana);
+// })
+// .catch(error => {
+//     console.error('Erro ao obter os dados da semana:', error);
+// });
 
 export function registerBtns() {
     const btnHome = document.getElementById("btn_home");

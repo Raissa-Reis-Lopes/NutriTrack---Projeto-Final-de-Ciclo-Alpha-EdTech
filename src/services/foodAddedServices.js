@@ -79,6 +79,83 @@ const calculateDailyNutritionWithDetails = async (user_id, date) => {
     }
 }
 
+const calculateWeekNutritionWithDetails = async (user_id, startDate, endDate) => {
+    try {
+    
+        // Buscar todos os alimentos adicionados pelo usuário na semana especificada
+        const foodsAdded = await foodAddedRepository.getFoodsAddedByUserByDate(user_id, startDate, endDate);
+        // console.log(foodsAdded)
+
+        if (!foodsAdded || foodsAdded.length === 0) {
+            return {
+                totalNutrition: {
+                    calories: 0,
+                    protein: 0,
+                    carbohydrate: 0,
+                    lipid: 0
+                },
+                details: [] // Aqui você pode retornar os detalhes como um array vazio ou null, dependendo da sua implementação
+            };
+        }
+
+        let totalNutrition = {
+            calories: 0,
+            protein: 0,
+            carbohydrate: 0,
+            lipid: 0
+        };
+
+        let foodDetails = [];
+
+        // Calcular o total de nutrientes para o dia e coletar detalhes dos alimentos
+        for (const food of foodsAdded) {
+            const { id, food_id, food_quantity, meal } = food;
+
+            // Buscar detalhes do alimento pelo food_id
+            const foodInfo = await foodRepository.getFoodById(food_id);
+
+            if(!foodInfo){
+                throw new Error(`Alimento não encontrado para o food_id ${food_id}`);
+            }
+
+            const { calorie, protein_g, carbohydrate_g, lipid_g, name } = foodInfo;
+
+
+            const nutrition = {
+                calorie: (calorie / 100) * food_quantity,
+                protein: (protein_g / 100) * food_quantity,
+                carbohydrate: (carbohydrate_g / 100) * food_quantity,
+                lipid: (lipid_g / 100) * food_quantity
+            };
+
+            totalNutrition.calories += nutrition.calorie;
+            totalNutrition.protein += nutrition.protein;
+            totalNutrition.carbohydrate += nutrition.carbohydrate;
+            totalNutrition.lipid += nutrition.lipid;
+
+            const foodDetail = {
+                id,
+                food_id,
+                food_name: name,
+                food_quantity,
+                user_id,
+                meal
+            };
+
+            foodDetails.push({ ...nutrition, ...foodDetail });
+        }
+
+        return {
+            totalNutrition,
+            foodDetails
+        };
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Erro ao calcular os valores nutricionais consumidos no dia e verificar os detalhes');
+    }
+}
+
 const getAllFoodsAdded = async() => {
     try {
         const foodsAdded = await foodAddedRepository.getAllFoodsAdded();
@@ -150,6 +227,7 @@ module.exports = {
     getFoodAddedById,
     getFoodsAddedByUserId,
     calculateDailyNutritionWithDetails,
+    calculateWeekNutritionWithDetails,
     newFoodAdded,
     updateFoodAdded,
     deleteFoodAdded
