@@ -2,10 +2,11 @@ import { showMessage } from "../utils/message.js";
 import createCustomEvent from "./event.js";
 import { limitDate } from"../utils/limitDates.js"
 import { logout } from "../utils/logout.js";
-import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml } from "./validation.js";
+import {  emailValid, passwordValid, heightValid, weightValid, escapeHtml, validateImageFormat } from "./validation.js";
 import { privacyPolicyModal, termsModal, sacModal, deleteAccountModal, createModalEventsProfile } from "./modals.js";
 import { footerProfile } from "./footer.js";
-import { messageError } from "../utils/messageError.js"
+import { messageError } from "../utils/messageError.js";
+import { loader } from "../utils/loader.js";
 
 export function Profile() {
     const div = document.createElement("div");
@@ -30,9 +31,13 @@ export function Profile() {
             <label for="input-image">
             <div class="image-profile" style="cursor:pointer;">
                 <img id="img-user" src="" alt="Imagem do usuario" />
+                <div id="change-image-overlay" class="change-image-overlay">Alterar imagem</div>
+                <!-- Loader -->
+                <div id="loader-container"></div>
             </div>
             </label>
-        </div>
+            </div>
+        <div id="message_picture"></div>
         <div class="profile_info">
             <div class="info_item" id="name">
                 <span>Nome: </span>
@@ -70,7 +75,7 @@ export function Profile() {
             </div>
             <div id="message_height"></div>
               <div class="info_item" id="birth">
-                <span>Nascimento: </span>
+                <span>Data de Nascimento: </span>
                 <input id="input-birth" type="date" value="" placeholder="" readonly />
             </div>
             <div id="message_birthdate"></div>
@@ -161,9 +166,36 @@ export function Profile() {
     // const btnSave = document.getElementById("btn-save-changes");
     // btnSave.addEventListener("click", saveChanges);
     activateSaveBtn();
+    changeImageOverlay();
 
     return div
 }
+
+   // Função para mostrar o loader
+function showLoader() {
+    const loaderContainer = document.getElementById("loader-container");
+    loaderContainer.appendChild(loader());
+}
+
+// Função para ocultar o loader
+function hideLoader() {
+    const loaderContainer = document.getElementById("loader-container");
+    loaderContainer.innerHTML = ''; // Limpa o conteúdo do container do loader
+}
+
+function changeImageOverlay(){
+    const imageProfile = document.querySelector(".image-profile");
+    const changeImageOverlay = document.querySelector("#change-image-overlay");
+
+    imageProfile.addEventListener("mouseenter", () => {
+        changeImageOverlay.style.display = "flex";
+    });
+
+    imageProfile.addEventListener("mouseleave", () => {
+        changeImageOverlay.style.display = "none";
+    });
+}
+
 
 //Função para só ativar o botão quando houver uma mudança e desativar quando ele for clicado, para não pemritir o envio de múltiplas requisições
 export function activateSaveBtn() {
@@ -202,18 +234,32 @@ async function getUserId(){
 }
 
 export async function uploadImage(){
+        showLoader();
         const inputImage = document.querySelector("#input-image");
         const imgProfile = document.querySelector("#img-user");         
-        
         const userId = await getUserId();
         const formData = new FormData();
-        formData.append('avatar', inputImage.files[0]);
+
         
         if (inputImage.files.length === 0) {
             console.log('Por favor, selecione uma imagem.');
             return;
         }
+    
+        const imageFile = inputImage.files[0];
+        const imageName = imageFile.name;
+    
+        if (!validateImageFormat(imageName)) {
+            messageError("message_picture","Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif")
+            console.log('Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif.');
+            return;
+        }
+        
 
+        formData.append('avatar', inputImage.files[0]);
+        
+        
+        
         try {
             const response = await fetch(`/api/upload/${userId}`, {
                 method: 'POST',
@@ -228,6 +274,9 @@ export async function uploadImage(){
             } else {
                 console.log("Falha ao atualizar a imagem");
             }
+
+             // Após o fetch ser concluído, esconda o loader
+            hideLoader();
           
         } catch (error) {
             throw new Error("Falha ao carregar a imagem do usuário")
