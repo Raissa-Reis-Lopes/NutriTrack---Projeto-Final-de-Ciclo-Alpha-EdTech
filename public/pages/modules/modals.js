@@ -6,20 +6,19 @@ export function SearchFood(){
         <div class="modal_img">
             <img src="../img/go_back.svg" alt="Voltar" id="back_modal_searchFood">
         </div>
-        <div class="container_modal">
-            <div id="showFoods" class="foodSearch">
+        <div class="container_modal btn_container_modal">
+            <button id="showFoods" class="foodSearch">
                 Tudo
-            </div>
-            <div id="showMyFoods" class="foodSearch">
+            </button>
+            <button id="showMyFoods" class="foodSearch">
                 Meus produtos
-            </div>
+            </button>
         </div>
-        <div class="container_modal">
+        <div class="container_modal search_container_modal">
             <input type="text" name="search" id="search" placeholder="Procurar Produtos">
         </div>
         <div class="food_data_container">
-        <div id="datafood" class="container_dataFood">
-        </div>
+            <div id="datafood" class="container_dataFood"></div>
         </div>
     </div>
     `;
@@ -459,114 +458,3 @@ const foodSearchBody = document.getElementById("modal_body_search_food");
     });
 
 }
-
-
-
-
-
-//Só testando
-
-
-// export function SearchFood(){
-//     const divModal = document.createElement("div");
-//     divModal.innerHTML=`  
-//     <div id="fade-search-food" class="hide"></div>
-//     <div id="modal-search-food" class="hide">
-//         <div class="modal-header">
-//             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-search-food"> 
-//         </div>
-//         <div id="modal_body_search_food" class="modal-body hide">
-//             <div id="modalSearchFood" class="modal">
-//                 <div class="container_modal">
-//                     <div id="showFoods" class="foodSearch">
-//                         Tudo
-//                     </div>
-//                     <div id="showMyFoods" class="foodSearch">
-//                         Meus produtos
-//                     </div>
-//                 </div>
-//                 <div class="container_modal">
-//                     <input type="text" name="search" id="search" placeholder="Procurar Produtos">
-//                 </div>
-//                 <div id="datafood" class="container_dataFood">
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-//     `;      
-//     return divModal
-// }
-
-
-
-// export function AddFood(){
-//     const divModal = document.createElement("div");
-//     divModal.innerHTML=`  
-
-//     <div id="fade-add-food" class="hide"></div>
-//     <div id="modal-add-food" class="hide">
-//         <div class="modal-header">
-//             <div class="modal_img">
-//                 <img src="../img/go_back.svg" alt="Voltar" id="back_modal_addFood">
-//             </div>
-//             <div class="container_modal">
-//                 <h2 id="nameFood" class="foodName">
-                    
-//                 </h2>
-//             </div>
-//             <img src="../img/botao-excluir.png" alt="botão fechar" id="close-modal-add-food"> 
-//         </div>
-//         <div class="modal-body">
-//             <div class="modal">
-//                 <div class="container_modal quantity_nutri">
-//                     <div class="calories">
-//                         <div id="quantity_calories"></div>
-//                         <span>Calorias</span>
-//                     </div>
-//                     <div class="carb">
-//                         <div id="quantity_carb"></div>
-//                         <span>Carboidratos</span>
-//                     </div>
-//                     <div class="proteins">
-//                         <div id="quantity_proteins"></div>
-//                         <span>Proteínas</span>
-//                     </div>
-//                     <div class="fat">
-//                         <div id="quantity_fat"></div>
-//                         <span>Gorduras</span>
-//                     </div>
-//                 </div>
-//                 <div class="container_grams">
-//                     <div class="grams_input">
-//                         <span>Digite a quantidade consumida em gramas</span>
-//                         <input type="text" name="grams" id="grams">
-//                     </div>
-//                     <div class="grams_select">
-//                         <span>Selecione a refeição</span>
-//                         <select name="meal" id="meal">
-//                             <option selected disabled>Escolha uma opção</option>
-//                             <option value="breakfast">Café da manhã</option>
-//                             <option value="lunch">Almoço</option>
-//                             <option value="dinner">Jantar</option>
-//                             <option value="snack">Lanche</option>
-//                         </select>
-//                     </div>
-//                 </div>
-//                 <div class="btns_addFood">
-//                     <button id="btn_cancel_addFood" class="btn_stroke">Cancelar</button>
-//                     <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-//     `;
-//     return divModal
-// }
-
-
-// const openModalAddFood = document.getElementById("open-modal-add-food");
-// const closeAddFood = document.getElementById("close-modal-add-food");
-// const modalAddFood = document.querySelector("#modal-add-food");
-// const fadeAddFood = document.querySelector("#fade-add-food");
-
-

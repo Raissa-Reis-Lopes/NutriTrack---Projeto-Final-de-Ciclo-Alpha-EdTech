@@ -31,7 +31,7 @@ export function Home() {
                 <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
             </nav>
         </header>
-        <div id="message" class="message-container">
+        <div id="message" class="message-container hidden">
         <div id="message-content" class="message-content hidden"></div>
         </div>
         <div class="container_home">
@@ -55,13 +55,11 @@ export function Home() {
             <div class="calories_bar">
                 <div class="calories_progress" id="calories-progress"></div>
             </div>
-            <p><span id="consumed-calories"></span> calorias ingeridas</p>
-        </div>
-
+              <p class="container_calories"><span id="consumed-calories"></span> calorias ingeridas</p>
+           </div>
+           <div id="no_config" class="no_config"></div>
                 <div id="date">
-
                     <input type="date" name="date" id="input-date">
-
                 </div>
             </section>
             <section class="section_home">
@@ -158,6 +156,12 @@ export function Home() {
         loadUserDataForDate(selectedDate); // Carrega os dados para a data selecionada
     });
 
+
+    //Para poder clicar em qualquer ponto do calendário e ele abrir
+    const divDate = document.getElementById("date");
+    divDate.addEventListener("click", function() {
+        inputDate.click();
+    });
         
         
     // Para os modais: Pegar a seção onde ele fica, chamar a função para obter o modal, adicionar ao container:
@@ -184,6 +188,9 @@ export function Home() {
     const scrollerContainer = document.getElementById("scroller_container");
     const scroll = scroller();
     scrollerContainer.appendChild(scroll);
+
+
+    
 
     return div
 }
@@ -270,7 +277,21 @@ async function getUserAvatar(userId){
     }
 }
 
+
+
+ //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
+ const computedStyle = getComputedStyle(document.documentElement);
+ const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
+ const corBgProtein = computedStyle.getPropertyValue('--cor-bg-protein').trim(); 
+ const corCarbo = computedStyle.getPropertyValue('--cor-carbo').trim(); 
+ const corBgCarbo = computedStyle.getPropertyValue('--cor-bg-carbo').trim(); 
+ const corLipid = computedStyle.getPropertyValue('--cor-lipid').trim(); 
+ const corBgLipid = computedStyle.getPropertyValue('--cor-bg-lipid').trim(); 
+
 async function loadUserDataForDate(date) {
+    const noConfig = document.getElementById("no_config");
+    noConfig.innerText = "";
+
     clearScreenValues(); // Limpa os valores da tela
     try { 
          const userId = await getUserId();
@@ -339,6 +360,7 @@ async function loadUserDataForDate(date) {
 
             const consumedProtein = document.getElementById("consumed-protein");
             consumedProtein.innerText = dailyProteinConsumed;
+            consumedProtein.style.color ="orangered"
             
             const consumedCarbo = document.getElementById("consumed-carbo");
             consumedCarbo.innerText = dailyCarbohydrateConsumed;
@@ -354,8 +376,9 @@ async function loadUserDataForDate(date) {
             const remainingCaloriesValue = userTotalCalories - dailyCaloriesConsumed;
 
             const remainingCalories = document.getElementById("remaining-calories");
-            let message = `Você ainda pode ingerir ${remainingCaloriesValue} calorias!`;
-            remainingCalories.innerText = message;
+            let message = `Você ainda pode ingerir <span class="remaining_calories_value">${remainingCaloriesValue}</span> calorias!`;
+            remainingCalories.innerHTML = message;
+            remainingCalories.classList.add("container_calories");
 
             // Atualizar a barra de progresso
             const progressBar = document.getElementById('calories-progress');
@@ -367,22 +390,24 @@ async function loadUserDataForDate(date) {
                 progressBar.style.backgroundColor = '#f44336'; 
                 consumedPercent = 100; 
                 const exceededCalories = dailyCaloriesConsumed - totalCalories;
-                message = `Você ultrapassou ${exceededCalories} calorias`;
+                message = `Você ultrapassou <span class="exceeded_calories_value"> ${exceededCalories} </span> calorias`;
             } else {
                 progressBar.style.backgroundColor = '#4caf50'; 
             }
 
             progressBar.style.width = consumedPercent + '%';
-            remainingCalories.innerText = message;
+            remainingCalories.innerHTML = message;
 
-
-            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', "#E96001", "#F5D8C4");
-            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', "#FF0DE5", "#FACFF6");
-            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', "#1E1BFF", "#D9D8F7");
-
+            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
         }
     } catch(error) {
-       console.log(error.message)
+      proteinChartInstance = updateOrCreateDonutChart('Proteínas', 0, 0, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+      carboChartInstance = updateOrCreateDonutChart('Carboidratos', 0, 0, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+      lipidChartInstance = updateOrCreateDonutChart('Gorduras', 0, 0, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
+      noConfig.innerText = "Não há dados cadastrados para o usuário nesta data!"
+      console.log(error.message)
     }
     loadAddedFoods();
 }
@@ -397,9 +422,6 @@ function updateOrCreateDonutChart(title, totalValue, consumedValue, chartInstanc
         return chartInstance;  
     }
 }
-
-
-
 
 export function navRoutes() {
   const navProfile = document.getElementById("navProfile");
@@ -440,9 +462,7 @@ export function homeBtns() {
   btnBreakfast.addEventListener("click", () => openModalWithMeal("breakfast"));
   btnLunch.addEventListener("click", () => openModalWithMeal("lunch"));
   btnDinner.addEventListener("click", () => openModalWithMeal("dinner"));
-  btnSnack.addEventListener("click", () => openModalWithMeal("snack"));
-
-  
+  btnSnack.addEventListener("click", () => openModalWithMeal("snack")); 
 }
 
 let selectedMealType = "";
@@ -454,6 +474,8 @@ async function openModalWithMeal(meal) {
   const datafood = modal.querySelector("#datafood");
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
+  datafoodContainer.classList.add("dataFoodScroll");
+  btnCreatefoodContainer.classList.add("dataFoodScroll");
   
 
   let userId;
@@ -601,13 +623,22 @@ async function openModalWithMeal(meal) {
               // Adiciona os alimentos à lista no modal
               myFoodList.forEach((myFoodItem) => {
                 const myFoodElement = document.createElement("div");
+                myFoodElement.classList.add("myFoodElementContainer");
                 const myFoodElementName =document.createElement("div");
                 myFoodElementName.textContent = escapeHtml(myFoodItem.name);
 
-                const btnEditMyFoodElement = document.createElement("button");
-                btnEditMyFoodElement.textContent = `Editar`;
-                const btnDeleteMyFoodElement = document.createElement("button");
-                btnDeleteMyFoodElement.textContent = `Deletar`;
+                const btnEditDeleteMyFood = document.createElement("div");
+                btnEditDeleteMyFood.classList.add("btnsEditDeleteContainer");
+
+
+                const btnEditMyFoodElement = document.createElement("img");
+                btnEditMyFoodElement.src = "./img/edit.svg"; 
+                btnEditMyFoodElement.alt = "Editar";
+                // btnEditMyFoodElement.classList.add("icone-editar");
+                const btnDeleteMyFoodElement = document.createElement("img");
+                btnDeleteMyFoodElement.src = "./img/trash.svg"; 
+                btnDeleteMyFoodElement.alt = "Deletar"; 
+                // btnDeleteMyFoodElement.classList.add("icone-deletar");
           
                // Event listener para o botão de editar
                 btnEditMyFoodElement.addEventListener("click", async () => {
@@ -638,9 +669,10 @@ async function openModalWithMeal(meal) {
                 });
 
                 myFoodElement.appendChild(myFoodElementName);
+                myFoodElement.appendChild(btnEditDeleteMyFood);
                  // Adicionar botões ao elemento do alimento
-                myFoodElement.appendChild(btnEditMyFoodElement);
-                myFoodElement.appendChild(btnDeleteMyFoodElement);
+                 btnEditDeleteMyFood.appendChild(btnEditMyFoodElement);
+                 btnEditDeleteMyFood.appendChild(btnDeleteMyFoodElement);
 
                 listCreatefoodContainer.appendChild(myFoodElement);
                 btnCreatefoodContainer.appendChild(listCreatefoodContainer);
@@ -717,6 +749,10 @@ async function openModalWithMeal(meal) {
  
   datafood.appendChild(btnCreatefoodContainer);
   datafood.appendChild(datafoodContainer);
+
+  if (showFoods) {
+    showFoods.click();
+  }
  }
 
 function openAddFoodModal(userId,item,meal) {
@@ -822,8 +858,6 @@ async function fetchAddedFoods(userId, dateCalendar){
 
     const responseData = await response.json();
     const addedFoods = responseData.data.foodDetails; 
-    // console.log(addedFoods);
-    // console.log(dateCalendar);
 
     if (addedFoods.length === 0) {
       const noFoodsMessage = document.createElement("div");
@@ -833,15 +867,21 @@ async function fetchAddedFoods(userId, dateCalendar){
     } else {
     addedFoods.forEach((food) => {
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+      mealSection.classList.add("mealSection");
       const divFoodElement = document.createElement("div");
+      divFoodElement.classList.add("divFoodElement");
       const btnsFoodElement = document.createElement("div");
-      // console.log(food.id,"foodid");
-      // console.log(food.meal,"foodmeal");
+      btnsFoodElement.classList.add("btnsEditDeleteContainer");
+ 
 
-      const btnEditFoodElement = document.createElement("button");
-      btnEditFoodElement.textContent = `Editar`;
-      const btnDeleteFoodElement = document.createElement("button");
-      btnDeleteFoodElement.textContent = `Deletar`;
+      const btnEditFoodElement = document.createElement("img");
+      btnEditFoodElement.src = "./img/edit.svg"; 
+      btnEditFoodElement.alt = "Editar";
+      // btnEditFoodElement.classList.add("icone-editar");
+      const btnDeleteFoodElement = document.createElement("img");
+      btnDeleteFoodElement.src = "./img/trash.svg"; 
+      btnDeleteFoodElement.alt = "Deletar"; 
+      // btnDeleteFoodElement.classList.add("icone-deletar");
 
   // Event listener para o botão de editar
   btnEditFoodElement.addEventListener("click", async () => {
@@ -864,10 +904,24 @@ async function fetchAddedFoods(userId, dateCalendar){
     }
   });
       
-      const newFoodElement = document.createElement("div");
-      newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
+      const newFoodElementName = document.createElement("div");
+      newFoodElementName.classList.add("newFoodElementName");
+      newFoodElementName.textContent = escapeHtml(`${food.food_name}`);
 
-      divFoodElement.appendChild(newFoodElement);
+      const newFoodElementQuantity = document.createElement("div");
+      newFoodElementQuantity.classList.add("newFoodElementQuantity");
+      newFoodElementQuantity.textContent = escapeHtml(`Porção de ${food.food_quantity}g`);
+      
+      const newFoodElementcalorie = document.createElement("div");
+      newFoodElementcalorie.classList.add("newFoodElementcalorie");
+      newFoodElementcalorie.textContent = escapeHtml(`${Number(food.calorie).toFixed(2)} Kcal`);
+    
+
+       
+
+      divFoodElement.appendChild(newFoodElementQuantity);
+      divFoodElement.appendChild(newFoodElementName);
+      divFoodElement.appendChild(newFoodElementcalorie);
       btnsFoodElement.appendChild(btnEditFoodElement);
       btnsFoodElement.appendChild(btnDeleteFoodElement);
       divFoodElement.appendChild(btnsFoodElement);
@@ -1053,9 +1107,6 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
   document.body.appendChild(modalEditMyFood);
 }
 
-
-
-
 async function deleteMyFoodItem(userId, myFoodItemId){
   console.log(myFoodItemId);
   if (!confirm("Tem certeza que deseja deletar este alimento?")) {
@@ -1081,15 +1132,13 @@ async function deleteMyFoodItem(userId, myFoodItemId){
   }
 }
 
-
-
 // Função para renderizar os alimentos filtrados no modal
 function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {
   btnCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
   datafoodContainer.innerHTML =""; // Limpar o conteúdo atual do contêiner
 
   if (filteredFoods.length === 0) {
-    datafoodContainer.innerHTML = escapeHtml("<p>Nenhum resultado encontrado.</p>");
+    datafoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
   } else {
     filteredFoods.forEach(foodItem => {
       const foodElement = document.createElement("div");
@@ -1113,11 +1162,17 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
   } else {
     filteredFoods.forEach(myFoodItem => {
       const myFoodElement = document.createElement("div");
-      const myFoodName = document.createElement("span");
+      const myFoodName = document.createElement("div");
       myFoodName.textContent = escapeHtml(myFoodItem.name);
+      myFoodElement.classList.add("myFoodElementContainer");
+      
+      const btnEditDeleteMySearch = document.createElement("div");
+      btnEditDeleteMySearch.classList.add("btnsEditDeleteContainer");
 
-      const btnEdit = document.createElement("button");
-      btnEdit.textContent = "Editar";
+      const btnEdit = document.createElement("img");
+      btnEdit.src = "./img/edit.svg"; 
+      btnEdit.alt = "Editar";
+      // btnEditMyFoodElement.classList.add("icone-editar");
       btnEdit.addEventListener("click", async() => {
         try {
           console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
@@ -1129,8 +1184,12 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         }
       });
 
-      const btnDelete = document.createElement("button");
-      btnDelete.textContent = "Deletar";
+      const btnDelete = document.createElement("img");
+      btnDelete.src = "./img/trash.svg"; 
+      btnDelete.alt = "Deletar"; 
+      // btnDelete.classList.add("icone-deletar");
+
+
       btnDelete.addEventListener("click", async() => {
         try {
           // console.log("Botão Deletar clicado para o alimento:", food.id);
@@ -1145,8 +1204,9 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       });
 
       myFoodElement.appendChild(myFoodName);
-      myFoodElement.appendChild(btnEdit);
-      myFoodElement.appendChild(btnDelete);
+      myFoodElement.appendChild(btnEditDeleteMySearch);
+      btnEditDeleteMySearch.appendChild(btnEdit);
+      btnEditDeleteMySearch.appendChild(btnDelete);
 
       btnCreatefoodContainer.appendChild(myFoodElement);
     });

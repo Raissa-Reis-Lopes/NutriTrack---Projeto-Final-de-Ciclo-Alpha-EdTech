@@ -49,13 +49,13 @@ async function getFoodsAddedByUserByDate(user_id, date){
     }
 }
 
-async function getFoodsAddedByUserByDateRange(user_id, startDate, endDate) {
-    const query = 'SELECT * FROM food_added WHERE user_id=$1 AND created_at::date >= $2 AND created_at::date <= $3';
+async function getFoodsAddedByUserInPeriod(user_id, start_date, end_date) {
+    const query = 'SELECT * FROM food_added WHERE user_id = $1 AND created_at::date >= $2 AND created_at::date <= $3 ORDER BY created_at ASC';
     try {
-        const result = await pool.query(query, [user_id, startDate, endDate]);
+        const result = await pool.query(query, [user_id, start_date, end_date]);
         return result.rows;
     } catch (error) {
-        console.error("Falha ao buscar os dados de alimentos adicionados do usuário na semana");
+        console.log("Falha ao buscar os dados de alimentos adicionados do usuário neste período");
         throw error;
     }
 }
@@ -103,7 +103,7 @@ module.exports = {
     getFoodAddedById,
     getFoodsAddedByUserId,
     getFoodsAddedByUserByDate,
-    getFoodsAddedByUserByDateRange,
+    getFoodsAddedByUserInPeriod,
     insertFoodAdded,
     updateFoodAdded,
     deleteFoodAdded
