@@ -8,7 +8,6 @@ const configHistoryRoutes = require('./configHistoryRoutes');
 const calculateRoutes = require('./calculateRoutes');
 const foodAddedRoutes = require('./foodAddedRoutes');
 const uploadRoutes = require('./uploadRoutes');
-const historyRoutes = require('./historyRoutes');
 
 //Aqui serão criadas as rotas da aplicação
 
@@ -20,7 +19,6 @@ router.use('/config', configHistoryRoutes);  //Need update due to changes in "da
 router.use('/calculate', calculateRoutes);   //Need update due to changes in "date"
 router.use('/foodAdded', foodAddedRoutes);   //Need update due to changes in "date"
 router.use('/upload', uploadRoutes);
-router.use('/week', historyRoutes);
 
 
 module.exports = router;
