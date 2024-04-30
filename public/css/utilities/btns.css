@@ -47,7 +47,14 @@
     z-index: 2;
     background-color: transparent;
 }
-
+.btn_exit_light{
+    color: var(--cor-1);
+    border-color: var(--cor-1);
+}
+.btn_exit_light:hover{
+    color: var(--cor-p3);
+    border-color: var(--cor-p3);
+}
 .btn_add{
     font-size: 1rem;
     padding: 5px 10px;
@@ -60,4 +67,19 @@
   .btn_cancel:hover{
     border: 3px solid rgb(134, 30, 30);
     color: rgb(134, 30, 30);
+  }
+
+  .createMyFoodbtn{
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    color: var(--cor-p6);
+  }
+
+  .createMyFoodbtn:hover{
+    color: var(--cor-p7);
+  }
+
+  .btn_create{
+    padding: 5px 10px;
+    font-size: 0.90rem;
   }
