@@ -1,125 +1,78 @@
+// Função para criar e renderizar o gráfico de barras
+export function renderBarChart(responseData, container) {
+ 
+  // Dias da semana
+  const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
-export function generateBarChart(dias){
-  const canvas = document.createElement("canvas");
-  canvas.width = 300;
-  canvas.height = 300;
-  
-  const ctx = canvas.getContext('2d');
-  
-  let labels = dias.map(dia => dia.data);
-  let dados = {
-      calorias: dias.map(dia => dia.calorias),
-      gordura: dias.map(dia => dia.gordura),
-      proteina: dias.map(dia => dia.proteina),
-      carboidrato: dias.map(dia => dia.carboidrato)
-  };
-  
-  let chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-          datasets: [
-              {
-                label: 'Calorias',
-                backgroundColor: '#FDFD96',
-                borderColor: '#C8CA66',
-                borderWidth: 1,
-                data: dados.calorias
-              },
-              {
-                  label: 'Gordura',
-                  backgroundColor: '#D9D8F7',
-                  borderColor: '#1E1BFF',
-                  borderWidth: 1,
-                  data: dados.gordura
-                },
-              {
-                  label: 'Proteína',
-                  backgroundColor: '#F5D8C4',
-                  borderColor: '#E96001',
-                  borderWidth: 1,
-                  data: dados.proteina
-                },
-                {
-                  label: 'Carboidrato',
-                  backgroundColor: '#FACFF6',
-                  borderColor: '#FF0DE5',
-                  borderWidth: 1,
-                  data: dados.carboidrato
-                }
-              ]
-            },
-      options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
+  console.log(`Esse é o responseData no barchart: ${responseData}`)
+  console.log(responseData)
+  console.log(responseData.data)
+
+
+  // Preparar os dados para o gráfico
+  const chartData = {
+      labels: daysOfWeek,
+      datasets: [
+          {
+              label: 'Calorias',
+              backgroundColor: '#216B1F',
+              data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.calories) : 0)
+          },
+          {
+              label: 'Proteína',
+              backgroundColor: '#E96001',
+              data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.protein) : 0)
+          },
+          {
+              label: 'Carboidrato',
+              backgroundColor: '#FF0DE5 ',
+              data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.carbohydrate) : 0)
+          },
+          {
+              label: 'Gordura',
+              backgroundColor: '#1E1BFF',
+              data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.lipid) : 0)
           }
-      }
-    });
-    const chartContainer = document.getElementById("week-chart");
-    chartContainer.appendChild(canvas);
+      ]
+  };
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+        y: {
+            beginAtZero: true, // Começar o eixo y em zero
+            title: {
+                display: true,
+                text: 'Valor Nutricional'
+            }
+        },
+        x: {
+            stacked: false,
+            title: {
+                display: true,
+                text: 'Dias da Semana',
+                ticks: {
+                  color: 'rgba(0, 0, 0, 0.8)' // Definir a cor dos rótulos
+              }
+            }
+        }
+    }
 };
 
-// export function generateBarChart(title, totalValue, consumedValue, chartId, color, backgroundColor) {
-//     const canvas = document.createElement("canvas");
-//     canvas.width = 300;
-//     canvas.height = 300;
-    
-//     const ctx = canvas.getContext('2d');
-  
-//     const chartInstance = new Chart(ctx, {
-//       type: 'bar',
-//       data: {
-//         labels: ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'],
-//         datasets: [{
-//           label: title,
-//           data: [consumedValue, totalValue - consumedValue],
-//           backgroundColor: [
-//             color,
-//             backgroundColor
-//           ],
-//           borderColor: [
-//             color,
-//             backgroundColor
-//           ],
-//           borderWidth: 1
-//         }]
-//       },
-//       options: {
-//         responsive: true,
-//         plugins: {
-//           title: {
-//             display: true,
-//             text: title,
-//             position: 'top'
-//           },
-//           legend: {
-//             display: false,
-//           }
-//         }
-//       }
-//     });
-  
-//     console.log(`Esse é o totalValue na função da barra ${totalValue}`)
-//     console.log(`Esse é o consumedValue na função da barra ${consumedValue}`)
-  
-//     // Retornar a instância do gráfico para armazenamento
-//     return { chartInstance, canvas };
-  
-//     //   // Armazenar a instância do gráfico para atualizações futuras
-//     //   if (title === 'Proteína') proteinChartInstance = chartInstance;
-//     //   if (title === 'Carboidrato') carboChartInstance = chartInstance;
-//     //   if (title === 'Gordura') lipidChartInstance = chartInstance;
-    
-//     // const chartContainer = document.getElementById(chartId);
-//     // chartContainer.appendChild(canvas);
-// }
-  
-// export function updateChart(chart, title, totalValue, consumedValue, color, backgroundColor) {
-//     chart.data.datasets[0].data = [consumedValue, totalValue - consumedValue];
-//     chart.data.datasets[0].backgroundColor = [color, backgroundColor];
-//     chart.data.datasets[0].borderColor = [color, backgroundColor];
-//     chart.options.plugins.title.text = title;
-//     chart.update();
-// }
+const ctx = container.getContext('2d'); // Usando o contexto do contêiner passado como parâmetro
+
+// Verificar se um gráfico já existe no elemento canvas
+if (window.myChart instanceof Chart) {
+    window.myChart.destroy(); // Destruir o gráfico anterior
+}
+
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+});
+
+// Armazenar uma referência ao gráfico atual para futuras verificações
+window.myChart = myChart;
+}
+

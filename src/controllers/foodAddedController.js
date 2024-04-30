@@ -40,6 +40,30 @@ const calculateDailyNutritionWithDetails = async(req, res) => {
     }
 }
 
+const calculatePeriodNutritionSummary = async (req, res) => {
+    try {
+        const { user_id, start_date, end_date } = req.query;
+
+        if(!user_id){
+            throw new Error('O id do usuário é obrigatório');
+        }
+
+        if(!start_date){
+            throw new Error('A data inicial é obrigatória');
+        }
+
+        if(!end_date){
+            throw new Error('A data final é obrigatória');
+        }
+
+        const result = await foodAddedServices.calculatePeriodNutritionSummary(user_id, start_date, end_date);
+        return res.status(200).json({ success: true, data: result });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Erro ao calcular os valores nutricionais consumidos no período' });
+    }
+}
+
 
 const newFoodAdded = async(req, res) =>{
     try {
@@ -128,6 +152,7 @@ module.exports = {
     getFoodAddedById,
     getFoodsAddedByUserId,
     calculateDailyNutritionWithDetails,
+    calculatePeriodNutritionSummary,
     newFoodAdded,
     updateFoodAdded,
     deleteFoodAdded
