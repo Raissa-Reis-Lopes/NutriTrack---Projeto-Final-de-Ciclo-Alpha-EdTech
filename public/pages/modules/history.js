@@ -21,16 +21,16 @@ export function History() {
         <nav class="header_nav">
             <div id="navHome">Home</div>
             <div id="navProfile">Perfil</div>
-            <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
+            <button id="btnExit" class="btn_stroke btn_exit btn_exit_light">Sair</button>
         </nav>
     </header>
     <main class="history_container">
        
-        <div id="dateDisplay"></div>
+        <div id="dateDisplay" class="date_display"></div>
         <div class="chart_history">
         <section>
             <div class="chart-container">
-                <span class="span_green ">Gráfico Semanal</span>
+                <span class="chart_title">Gráfico Semanal</span>
                 <div>
                   <canvas class="chart_canvas" id="week-chart"></canvas>
                 </div>

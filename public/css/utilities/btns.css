@@ -47,7 +47,14 @@
     z-index: 2;
     background-color: transparent;
 }
-
+.btn_exit_light{
+    color: var(--cor-1);
+    border-color: var(--cor-1);
+}
+.btn_exit_light:hover{
+    color: var(--cor-p3);
+    border-color: var(--cor-p3);
+}
 .btn_add{
     font-size: 1rem;
     padding: 5px 10px;

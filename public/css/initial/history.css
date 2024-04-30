@@ -23,7 +23,11 @@
 .history_container{  
     height: calc(100vh - 143px);
     display: flex;
-    align-items: center;
+    gap: 25px;
+    padding-top: 40px;
+    padding-left: 200px;
+    align-items: flex-start;
+    justify-content: center;
     flex-direction: column;
 }
 
@@ -54,4 +58,23 @@
     font-size: 0.8rem;
     color: var(--cor-p5);
     border-radius: 10px;
+    border: 2px solid var(--cor-p5);
+    background-color: var(--cor-p1);
+}
+
+.btn_history:hover{
+ cursor: pointer;
+ border: 2px solid var(--cor-p3);
+ background-color: transparent;
+}
+
+.date_display{
+    font-weight: 500;
+}
+
+.chart_title{
+    padding-bottom: 40px;
+    font-weight:600;
+    font-size: 1.5rem;
+    color: var(--cor-p6);
 }
