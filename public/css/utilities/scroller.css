@@ -3,7 +3,7 @@
   }
   
   .scroller__inner {
-    padding-block: 1rem;
+    /* padding-block: 1rem; */
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -55,7 +55,16 @@
     background-color: transparent;
     border: 1px solid #eceff133;
     border-radius: 0.5rem;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: cursive;
+    font-size: 1.3rem;
+    color: var(--cor-p6);
   }
-
+/* 
+  .tag-list li:nth-child(odd) {
+    color: var(--cor-p6);
+  }
   
+  .tag-list li:nth-child(even) {
+    color: var(--cor-p7);
+  } */

@@ -11,6 +11,8 @@
 .img_profile{
   max-width: 125px;
   max-height: 125px;
+  min-width: 125px;
+  min-height: 125px;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -66,6 +68,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
+  font-weight: 600;
 }
 
 .span_green {
@@ -90,4 +94,42 @@
   max-width: 100%;
   background-color: #4caf50; /* Cor da barra de progresso */
   border-radius: 10px; /* Bordas arredondadas */
+}
+
+.container_calories{
+  font-weight: 600;
+}
+
+.remaining_calories_value{
+  color: var(--cor-p4);
+}
+
+.exceeded_calories_value{
+  color: red;
+}
+
+#consumed-calories{
+  color: var(--cor-p4);
+}
+
+#consumed-protein{
+  color: var(--cor-protein);
+}
+
+#consumed-carbo{
+  color: var(--cor-carbo);
+}
+
+#consumed-lipid{
+  color: var(--cor-lipid);
+}
+
+#date input{
+  cursor: pointer;
+}
+
+.no_config{
+  color: red;
+  font-weight: 800;
+  font-size: larger;
 }
