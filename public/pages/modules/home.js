@@ -1161,10 +1161,11 @@ async function editFoodItem(foodId, foodName, meal, id_food) {
       // Atualizar a página para refletir as mudanças
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
-      
+
     } catch (error) {
       console.error("Erro ao editar alimento:", error);
     }
+    modalEditFoodAdded.remove()
   });
 
   document.body.appendChild(modalEditFoodAdded);
