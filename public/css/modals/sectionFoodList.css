@@ -1,0 +1,32 @@
+.mealSection{
+    overflow: scroll;
+}
+
+
+.divFoodElement{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 220px;
+    min-width: 220px;
+
+    border: 2px solid var(--cor-p5);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.newFoodElementName{
+    font-weight: 800;
+    color: var(--cor-p5);
+    text-align: center;
+}
+.newFoodElementQuantity, .newFoodElementcalorie{
+    font-size: 0.85rem;
+}
+
+.newFoodElementcalorie{
+    font-weight: 500;
+
+}
+      

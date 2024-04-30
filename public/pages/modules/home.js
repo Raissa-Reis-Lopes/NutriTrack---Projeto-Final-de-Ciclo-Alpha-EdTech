@@ -838,8 +838,6 @@ async function fetchAddedFoods(userId, dateCalendar){
 
     const responseData = await response.json();
     const addedFoods = responseData.data.foodDetails; 
-    // console.log(addedFoods);
-    // console.log(dateCalendar);
 
     if (addedFoods.length === 0) {
       const noFoodsMessage = document.createElement("div");
@@ -849,13 +847,13 @@ async function fetchAddedFoods(userId, dateCalendar){
     } else {
     addedFoods.forEach((food) => {
       const mealSection = document.querySelector(`#meal_add_${food.meal}`);
+      mealSection.classList.add("mealSection");
       const divFoodElement = document.createElement("div");
+      divFoodElement.classList.add("divFoodElement");
       const btnsFoodElement = document.createElement("div");
       btnsFoodElement.classList.add("btnsEditDeleteContainer");
-      // console.log(food.id,"foodid");
-      // console.log(food.meal,"foodmeal");
+ 
 
-  
       const btnEditFoodElement = document.createElement("img");
       btnEditFoodElement.src = "./img/edit.svg"; 
       btnEditFoodElement.alt = "Editar";
@@ -886,10 +884,24 @@ async function fetchAddedFoods(userId, dateCalendar){
     }
   });
       
-      const newFoodElement = document.createElement("div");
-      newFoodElement.textContent = `${food.food_name} - ${food.food_quantity}g`;
+      const newFoodElementName = document.createElement("div");
+      newFoodElementName.classList.add("newFoodElementName");
+      newFoodElementName.textContent = escapeHtml(`${food.food_name}`);
 
-      divFoodElement.appendChild(newFoodElement);
+      const newFoodElementQuantity = document.createElement("div");
+      newFoodElementQuantity.classList.add("newFoodElementQuantity");
+      newFoodElementQuantity.textContent = escapeHtml(`Porção de ${food.food_quantity}g`);
+      
+      const newFoodElementcalorie = document.createElement("div");
+      newFoodElementcalorie.classList.add("newFoodElementcalorie");
+      newFoodElementcalorie.textContent = escapeHtml(`${Number(food.calorie).toFixed(2)} Kcal`);
+    
+
+       
+
+      divFoodElement.appendChild(newFoodElementQuantity);
+      divFoodElement.appendChild(newFoodElementName);
+      divFoodElement.appendChild(newFoodElementcalorie);
       btnsFoodElement.appendChild(btnEditFoodElement);
       btnsFoodElement.appendChild(btnDeleteFoodElement);
       divFoodElement.appendChild(btnsFoodElement);
@@ -1137,6 +1149,10 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       const myFoodElement = document.createElement("div");
       const myFoodName = document.createElement("div");
       myFoodName.textContent = escapeHtml(myFoodItem.name);
+      myFoodElement.classList.add("myFoodElementContainer");
+      
+      const btnEditDeleteMySearch = document.createElement("div");
+      btnEditDeleteMySearch.classList.add("btnsEditDeleteContainer");
 
       const btnEdit = document.createElement("img");
       btnEdit.src = "./img/edit.svg"; 
@@ -1173,8 +1189,9 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       });
 
       myFoodElement.appendChild(myFoodName);
-      myFoodElement.appendChild(btnEdit);
-      myFoodElement.appendChild(btnDelete);
+      myFoodElement.appendChild(btnEditDeleteMySearch);
+      btnEditDeleteMySearch.appendChild(btnEdit);
+      btnEditDeleteMySearch.appendChild(btnDelete);
 
       btnCreatefoodContainer.appendChild(myFoodElement);
     });
