@@ -41,7 +41,7 @@
     justify-content: center;
 }
 .container_modal{
-    gap: 50px;
+    gap: 20px;
     font-size: 1.2rem;
     color: var(--cor-p5);
     font-weight: 600;
@@ -50,7 +50,7 @@
 }
 .container_modal_create{
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .search_container_modal{
@@ -69,4 +69,9 @@
     gap: 10px;
     align-items: end;
     justify-content: space-around;
+}
+
+.container_grams_edit{
+    padding-top: 30px;
+    padding-bottom: 60px;
 }

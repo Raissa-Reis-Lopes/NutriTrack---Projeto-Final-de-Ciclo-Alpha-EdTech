@@ -75,7 +75,7 @@ export function AddFood(){
         </div>
         <div id="errorMessage"></div>
         <div class="btns_addFood" id ="btnsAddFood">
-            <button id="btn_cancel_addFood" class="btn_stroke">Cancelar</button>
+            <button id="btn_cancel_addFood" class="btn_stroke btn_cancel">Cancelar</button>
             <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
         </div>
     </div>
@@ -112,8 +112,8 @@ export function CreateMyFoodbtn(){
                 <input type="text" id="fatCreate">
             </div>
             <div id="btnsCreateFood">
-                <button id="btn_cancel_create" class="btn_stroke btn_cancel">Cancelar</button>
-                <button id="btn_create_new" class="btn_stroke">Salvar alimento</button>
+                <button id="btn_cancel_create" class="btn_stroke btn_cancel btn_create">Cancelar</button>
+                <button id="btn_create_new" class="btn_stroke btn_create">Salvar alimento</button>
              </div>
              <div id="errorMessageCreateEdit"></div>
         </div> 
@@ -128,16 +128,16 @@ export function EditFoodAdded(){
     const divModal = document.createElement("div");
     divModal.classList.add("modal_food_container");
     divModal.innerHTML=`  
-    <div class="modal">
+    <div class="modal modalEditFoodAdded">
         <div class="modal_img">
             <img src="../img/go_back.svg" alt="Voltar" id="back_modal_editFoodAdded">
         </div>
-        <div class="container_modal">
+        <div class="container_modal EditFoodAddedTitle">
             <div>Editar</div>
             <h2 id="nameEditFood" class="foodName"></h2>
         </div>
        
-        <div class="container_grams">
+        <div class="container_grams container_grams_edit">
             <div class="grams_input">
                 <span>Modifique a quantidade consumida em gramas</span>
                 <input type="number" name="newGrams" id="newGrams">
@@ -154,7 +154,7 @@ export function EditFoodAdded(){
             </div>
         </div>
         <div class="btns_addFood">
-            <button id="btn_cancel_editFood" class="btn_stroke">Cancelar</button>
+            <button id="btn_cancel_editFood" class="btn_stroke btn_cancel">Cancelar</button>
             <button id="btn_save_editFood" class="btn_stroke">Salvar</button>
         </div>
     </div>

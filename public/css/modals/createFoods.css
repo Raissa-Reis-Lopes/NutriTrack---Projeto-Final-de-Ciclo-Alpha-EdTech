@@ -12,6 +12,8 @@
 }
 .input_create_food label{
     max-width: 10ch;
+    font-weight: 600;
+    font-size: 0.90rem;
 }
 
 .form_create_food{
@@ -26,3 +28,10 @@
     font-size: 0.75rem;
 }
 
+.container_modal_create h2{
+    font-size: 1.2rem;
+}
+
+.container_modal_create span{
+    font-size: 0.85rem;
+}

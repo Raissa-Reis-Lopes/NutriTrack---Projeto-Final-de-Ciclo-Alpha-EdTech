@@ -71,3 +71,8 @@
   .createMyFoodbtn:hover{
     color: var(--cor-p7);
   }
+
+  .btn_create{
+    padding: 5px 10px;
+    font-size: 0.90rem;
+  }

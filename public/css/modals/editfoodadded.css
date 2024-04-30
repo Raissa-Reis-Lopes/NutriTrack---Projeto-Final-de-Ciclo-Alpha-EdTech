@@ -1,0 +1,12 @@
+.EditFoodAddedTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.EditFoodAddedTitle div{
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
