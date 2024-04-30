@@ -1,5 +1,5 @@
 // Função para criar e renderizar o gráfico de barras
-export function renderBarChart(responseData, container) {
+export function renderBarChart(responseData, container, colorCalorie, colorProtein, colorCarbo, colorLipid) {
  
   // Dias da semana
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
@@ -15,22 +15,22 @@ export function renderBarChart(responseData, container) {
       datasets: [
           {
               label: 'Calorias',
-              backgroundColor: '#216B1F',
+              backgroundColor: colorCalorie,
               data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.calories) : 0)
           },
           {
               label: 'Proteína',
-              backgroundColor: '#E96001',
+              backgroundColor: colorProtein,
               data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.protein) : 0)
           },
           {
               label: 'Carboidrato',
-              backgroundColor: '#FF0DE5 ',
+              backgroundColor: colorCarbo,
               data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.carbohydrate) : 0)
           },
           {
               label: 'Gordura',
-              backgroundColor: '#1E1BFF',
+              backgroundColor: colorLipid,
               data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.lipid) : 0)
           }
       ]
@@ -40,11 +40,23 @@ export function renderBarChart(responseData, container) {
     responsive: true,
     scales: {
         y: {
-            beginAtZero: true, // Começar o eixo y em zero
+            beginAtZero: true,
             title: {
                 display: true,
-                text: 'Valor Nutricional'
-            }
+                text: 'Calorias',
+            },
+            position: 'left', // Posição do eixo y para as calorias
+        },
+        y1: {
+            beginAtZero: true,
+            title: {
+                display: true,
+                text: 'Proteína, Gordura e Carboidrato',
+            },
+            position: 'right', // Posição do segundo eixo y
+            grid: {
+                drawOnChartArea: false, // Não desenhar a grade no espaço do gráfico
+            },
         },
         x: {
             stacked: false,

@@ -138,34 +138,21 @@ export function loginBtns(){
                     showMessage("fail", "Usuário e/ou senha inválidos!","-8%");
                     btnEnter.disabled = false;
                     throw new Error('Erro ao fazer login, usuário não localizado');
-                }
-    
-                const userInfoResponse = await fetch("/api/login/", {
-                    method: "GET",
-                });
-    
-                if (!userInfoResponse.ok) {
-                    throw new Error('Erro ao localizar o id do usuário');
-                }
-    
-                const userData = await userInfoResponse.json();
-                const userId = userData.user;
+                }    
     
     
-    
-                const checkConfig = await fetch(`/api/config/${userId}`, {
+                const checkConfig = await fetch(`/api/config/lastConfig`, {
                     method: "GET",
                 });
     
                 if(!checkConfig.ok){
-                    btnEnter.disabled = true;
-                    showMessage("success","Bem-vindo de volta! Precisamos apenas completar o seu cadastro!","-8%")
+                   
+                    const customEvent = createCustomEvent('/config');
+                    window.dispatchEvent(customEvent); 
     
-                    setTimeout(() => {                   
-                        const customEvent = createCustomEvent('/config');
-                        window.dispatchEvent(customEvent); 
-                        btnEnter.disabled = false;
-                    }, 4000);
+                    setTimeout(() => { 
+                        showMessage("success","Bem-vindo de volta! Precisamos apenas completar o seu cadastro!","-8%")                  
+                    }, 0);
     
                     return;
                 } else {

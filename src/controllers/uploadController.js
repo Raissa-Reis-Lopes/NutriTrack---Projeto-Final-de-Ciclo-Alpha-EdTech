@@ -64,7 +64,7 @@ const uploadAvatar = async (req, res) => {
             return res.status(400).json({ message: 'Nenhum arquivo enviado' });
         }
 
-        const { user_id } = req.params;
+        const user_id = req.user;
         const new_avatar = req.file.filename;
 
         // Busca e apaga a imagem atual do avatar
@@ -90,7 +90,7 @@ const uploadAvatar = async (req, res) => {
 
 const removeAvatar = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.user;
         const default_avatar = 'default-avatar.png';
         
         // Busca a imagem atual do avatar

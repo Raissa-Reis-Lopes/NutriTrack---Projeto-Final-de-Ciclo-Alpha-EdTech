@@ -10,7 +10,7 @@ const getFoods = async(req, res) => {
 }
 
 const getUserFoods = async(req, res) => {
-    const { user_id } = req.params;
+    const user_id = req.user;
     try {
         const foods = await foodServices.getUserFoods(user_id);
 
@@ -56,7 +56,8 @@ const getFoodNameById = async(req, res) => {
 
 const createUserFood = async(req, res) => {
     try {
-        const { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
+        const { name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
+        const user_id = req.user;
 
         if(!user_id){
             throw new Error ('O user_id é obrigatório');
@@ -101,7 +102,9 @@ const updateUserFood = async(req, res) => {
         return res.status(405).json({ error: 'Este alimento não pode ser alterado!' })
     }
 
-    const { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
+    const { name, calorie, carbohydrate_g, protein_g, lipid_g } = req.body;
+    const user_id = req.user;
+
     try {
         if(!user_id){
             throw new Error ('O user_id é obrigatório');

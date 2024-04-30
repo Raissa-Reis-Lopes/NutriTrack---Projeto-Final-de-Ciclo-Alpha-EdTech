@@ -1,9 +1,9 @@
 const configHistoryServices = require("../services/configHistoryServices")
 
 const getLatestConfigHistoryByUserId = async(req, res) => {
-    const { id } = req.params;
+    const user_id = req.user;
     try {
-        const config = await configHistoryServices.getLatestConfigHistoryByUserId(id);
+        const config = await configHistoryServices.getLatestConfigHistoryByUserId(user_id);
         if (!config) {
             return res.status(404).json({ error: 'Configuração mais recente não encontrada' });
         }
@@ -26,9 +26,9 @@ const getAllConfigHistory = async(req, res) => {
 };
 
 const getAllConfigHistoryByUserId = async(req, res) => {
-    const { id } = req.params;
+    const user_id = req.user;
     try {
-        const config = await configHistoryServices.getAllConfigHistoryByUserId(id);
+        const config = await configHistoryServices.getAllConfigHistoryByUserId(user_id);
         if (!config) {
             return res.status(404).json({ error: 'Configurações do usuário não encontradas' });
         }
@@ -41,7 +41,8 @@ const getAllConfigHistoryByUserId = async(req, res) => {
 
 const createOrUpdateConfigHistory = async(req,res) => {   
     try {
-        const { user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date} = req.body;
+        const { food_plan_id, activity_level, weight, height, birth_date, gender, date} = req.body;
+        const user_id = req.user;
 
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
