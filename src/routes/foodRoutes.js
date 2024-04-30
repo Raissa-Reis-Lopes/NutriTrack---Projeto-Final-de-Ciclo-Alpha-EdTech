@@ -9,7 +9,7 @@ router.use(permissionVerify);
 router.get('/', foodController.getFoods);
 
 // Pega os alimentos personalizados do usuário a partir do id do mesmo
-router.get('/user/:user_id', foodController.getUserFoods);
+router.get('/user', foodController.getUserFoods);
 
 // Pega um alimento pelo seu id
 router.get('/:id', foodController.getFoodById);

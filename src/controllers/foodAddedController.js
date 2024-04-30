@@ -20,9 +20,12 @@ const getFoodAddedById = async(req, res) => {
 }
 
 const getFoodsAddedByUserId =  async(req, res) => {
-    const { id } = req.params;
+    console.log("Chegou aqui no foodAddedByUserId")
+    const user_id = req.user;
+    console.log("User_id no controller do foodAdded By user Id")
+    console.log(user_id)
     try {
-        const foods = await foodAddedServices.getFoodsAddedByUserId(id);
+        const foods = await foodAddedServices.getFoodsAddedByUserId(user_id);
         return res.status(200).json(foods);
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao buscar dados dos alimentos adicionados pelo usuário' });
@@ -31,7 +34,8 @@ const getFoodsAddedByUserId =  async(req, res) => {
 
 const calculateDailyNutritionWithDetails = async(req, res) => {
     try {
-        const { user_id, date } = req.query;
+        const { date } = req.query;
+        const user_id = req.user;
         const result = await foodAddedServices.calculateDailyNutritionWithDetails(user_id, date);
         return res.status(200).json({success: true, data: result})
     } catch (error) {
@@ -42,7 +46,8 @@ const calculateDailyNutritionWithDetails = async(req, res) => {
 
 const calculatePeriodNutritionSummary = async (req, res) => {
     try {
-        const { user_id, start_date, end_date } = req.query;
+        const { start_date, end_date } = req.query;
+        const user_id = req.user;
 
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
@@ -68,7 +73,8 @@ const calculatePeriodNutritionSummary = async (req, res) => {
 const newFoodAdded = async(req, res) =>{
     try {
         
-        const { user_id, food_id, food_quantity, meal, date } = req.body;
+        const { food_id, food_quantity, meal, date } = req.body;
+        const user_id = req.user;
 
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
@@ -100,8 +106,9 @@ const newFoodAdded = async(req, res) =>{
 
 const updateFoodAdded = async (req, res) => {
     try {
-        const { id } = req.params; // Obtém o ID serial do alimento da URL
-        const { user_id, food_id, date, food_quantity, meal } = req.body;
+        const { id } = req.params; // Obtém o ID serial da refeição Adicionada da URL
+        const { food_id, date, food_quantity, meal } = req.body;
+        const user_id = req.user;
 
         if (!id) {
             throw new Error('O ID do alimento adicionado é obrigatório');

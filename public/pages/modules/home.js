@@ -16,6 +16,9 @@ let carboChartInstance = null;
 let lipidChartInstance = null;
 
 export function Home() {
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
     const div = document.createElement("div");
     div.innerHTML=`  
     <div id="modal_container_home" class="modal_container_home hidden"></div>
@@ -219,27 +222,9 @@ function clearScreenValues() {
     progressBar.style.width = '0%';
 }
 
-async function getUserId(){
+async function getUsername(){
     try {
-        const getUserId = await fetch("/api/login/", {
-            method: "GET",
-        });
-
-        if(!getUserId.ok){
-            throw new Error("Falha ao localizar o id do usuáiro")
-        }
-        const userIdResponse = await getUserId.json();
-        const userId = userIdResponse.user;
-        return userId;
-
-    } catch (error) {
-        
-    }
-}
-
-async function getUsername(userId){
-    try {
-        const getUsername = await fetch(`/api/users/${userId}`,{
+        const getUsername = await fetch(`/api/users/byId`,{
             method: "GET",
         });
 
@@ -257,9 +242,9 @@ async function getUsername(userId){
     }
 }
 
-async function getUserAvatar(userId){
+async function getUserAvatar(){
     try {
-        const getUserAvatar = await fetch(`/api/users/${userId}`,{
+        const getUserAvatar = await fetch(`/api/users/byId`,{
             method: "GET",
         });
 
@@ -277,8 +262,6 @@ async function getUserAvatar(userId){
     }
 }
 
-
-
  //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
  const computedStyle = getComputedStyle(document.documentElement);
  const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
@@ -294,33 +277,18 @@ async function loadUserDataForDate(date) {
 
     clearScreenValues(); // Limpa os valores da tela
     try { 
-         const userId = await getUserId();
-
-        if(userId){
-
-            const username = await getUsername(userId);
+            const username = await getUsername();
 
             const usernameElement = document.getElementById('username');
             usernameElement.innerText = username;
 
-            const userAvatar = await getUserAvatar(userId);
+            const userAvatar = await getUserAvatar();
 
-           // Pegar o local onde está a imagem do usuário na home
             const imgHome = document.querySelector("#img-user");
             imgHome.src = `/assets/${userAvatar}`;
-
-            const userAndDate = {
-                user_id: userId,
-                date: date
-            }
-
           
-            const getDailyGoal = await fetch('/api/calculate',{
-                method:"POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userAndDate),
+            const getDailyGoal = await fetch(`/api/calculate?date=${date}`,{
+                method:"GET",
             });
 
             if (!getDailyGoal.ok) {
@@ -345,7 +313,7 @@ async function loadUserDataForDate(date) {
             totalLipidSpan.innerText = userTotalLipid;
 
 
-            const getDailyConsumed = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${date}`,{
+            const getDailyConsumed = await fetch(`/api/foodAdded/dailyConsumedWithDetail?date=${date}`,{
                 method: "GET",
             });
 
@@ -360,7 +328,6 @@ async function loadUserDataForDate(date) {
 
             const consumedProtein = document.getElementById("consumed-protein");
             consumedProtein.innerText = dailyProteinConsumed;
-            consumedProtein.style.color ="orangered"
             
             const consumedCarbo = document.getElementById("consumed-carbo");
             consumedCarbo.innerText = dailyCarbohydrateConsumed;
@@ -401,12 +368,12 @@ async function loadUserDataForDate(date) {
             proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
             carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
             lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
-        }
+        
     } catch(error) {
       proteinChartInstance = updateOrCreateDonutChart('Proteínas', 0, 0, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
       carboChartInstance = updateOrCreateDonutChart('Carboidratos', 0, 0, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
       lipidChartInstance = updateOrCreateDonutChart('Gorduras', 0, 0, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
-      noConfig.innerText = "Não há dados cadastrados para o usuário nesta data!"
+      noConfig.innerText = "Você não tem dados cadastrados para esta data!"
       console.log(error.message)
     }
     loadAddedFoods();
@@ -430,24 +397,15 @@ export function navRoutes() {
 
   navProfile.addEventListener("click", () => {
     const customEvent = createCustomEvent("/profile");
-    proteinChartInstance = null;
-    carboChartInstance = null;
-    lipidChartInstance = null;
     window.dispatchEvent(customEvent);
   });
 
   navHistory.addEventListener("click", () => {
-    proteinChartInstance = null;
-    carboChartInstance = null;
-    lipidChartInstance = null;
     const customEvent = createCustomEvent("/history");
     window.dispatchEvent(customEvent);
   });
 
   btnExit.addEventListener("click", ()=>{
-    proteinChartInstance = null;
-    carboChartInstance = null;
-    lipidChartInstance = null;
     logout();
   });
 }
@@ -478,7 +436,6 @@ async function openModalWithMeal(meal) {
   btnCreatefoodContainer.classList.add("dataFoodScroll");
   
 
-  let userId;
 
     // variavel para o inputSearch
 
@@ -504,15 +461,13 @@ async function openModalWithMeal(meal) {
           }
       
           foodList = await responseFood.json(); // Trata a resposta JSON
-          userId = await getUserId();
-          // console.log(userId);
       
           // Adiciona os alimentos à lista no modal
           foodList.forEach((foodItem) => {
             const foodElement = document.createElement("div");
             foodElement.textContent = escapeHtml(foodItem.name);
             foodElement.addEventListener("click", async () => {
-              await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
+              await openAddFoodModal(foodItem, meal); // Abre o modal de adicionar comida
               modal.remove(); // Remove o modal após clicar em um elemento do foodlist
             });
             datafoodContainer.appendChild(foodElement);
@@ -538,7 +493,7 @@ async function openModalWithMeal(meal) {
           });
       
           // Atualizar a lista de alimentos filtrados
-          renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal);
+          renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, meal,modal);
         });
       
       });
@@ -554,10 +509,8 @@ async function openModalWithMeal(meal) {
         createMyFoodbtn.innerText="criar alimento"
         btnCreatefoodContainer.appendChild(createMyFoodbtn);
         const listCreatefoodContainer = document.createElement("div");
-        userId = await getUserId();
 
         createMyFoodbtn.addEventListener("click", ()=>{
-          console.log(userId,"create");
           const modalCreate = CreateMyFoodbtn();
           
 
@@ -594,7 +547,7 @@ async function openModalWithMeal(meal) {
 
         
             // função para salvar o alimento no banco de dados
-            createNewFood(userId,nameCreate,caloriesCreate,carbCreate,proteinCreate,fatCreate);
+            createNewFood(nameCreate,caloriesCreate,carbCreate,proteinCreate,fatCreate);
             
             modalCreate.remove();
           });
@@ -603,11 +556,11 @@ async function openModalWithMeal(meal) {
          document.body.appendChild(modalCreate);
           });
 
-          refreshFoodList(userId);
+          refreshFoodList();
           // função para listar os alimentos da tabela food que contenham o userID
-          async function refreshFoodList(userId) {
+          async function refreshFoodList() {
             try {
-              const responseFood = await fetch(`/api/food/user/${userId}`, {
+              const responseFood = await fetch(`/api/food/user`, {
                 method: "GET",
               });
           
@@ -645,7 +598,7 @@ async function openModalWithMeal(meal) {
               
                   try {
                     console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
-                    await editMyFoodItem(userId, myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
+                    await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
                     
                     
                   } catch (error) {
@@ -657,14 +610,16 @@ async function openModalWithMeal(meal) {
                 btnDeleteMyFoodElement.addEventListener("click", async () => {
                   try {
                     // console.log("Botão Deletar clicado para o alimento:", food.id);
-                    await deleteMyFoodItem(userId, myFoodItem.id);
+                    await deleteMyFoodItem(myFoodItem.id);
+                    const customEvent = createCustomEvent("/home");
+                    window.dispatchEvent(customEvent);
                   } catch (error) {
                     console.error("Erro ao deletar alimento:", error);
                   }
                 });
 
                 myFoodElementName.addEventListener("click", async () => {
-                  await openAddFoodModal(userId, myFoodItem, meal); // Abre o modal de adicionar comida
+                  await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
                   modal.remove(); // Remove o modal após clicar em um elemento do foodlist
                 });
 
@@ -684,9 +639,8 @@ async function openModalWithMeal(meal) {
           }
 
           // função para criar um novo alimento no banco de dados food
-          async function createNewFood(userId, nameCreate, caloriesCreate, carbCreate, proteinCreate, fatCreate) {
+          async function createNewFood(nameCreate, caloriesCreate, carbCreate, proteinCreate, fatCreate) {
             const foodData = {
-              user_id: userId,
               name: nameCreate,
               calorie: caloriesCreate,
               carbohydrate_g: carbCreate,
@@ -708,7 +662,7 @@ async function openModalWithMeal(meal) {
               }
 
               const newFood = await responseFood.json(); 
-              refreshFoodList(userId);
+              refreshFoodList();
 
               console.log("Alimento criado com sucesso:", newFood);
             } catch (error) {
@@ -734,7 +688,7 @@ async function openModalWithMeal(meal) {
             });
         
             // Atualizar a lista de alimentos filtrados
-            renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal)
+            renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, meal,modal)
           });
         })
        
@@ -755,7 +709,7 @@ async function openModalWithMeal(meal) {
   }
  }
 
-function openAddFoodModal(userId,item,meal) {
+function openAddFoodModal(item,meal) {
   
   
   const modal = AddFood(); // Cria o modal de adicionar comida
@@ -786,7 +740,6 @@ function openAddFoodModal(userId,item,meal) {
     }
     // console.log(dateCalendar);
     const foodId = item.id;
-    // console.log(userId);
 
     try {
       const response = await fetch("/api/foodAdded/", {
@@ -796,7 +749,6 @@ function openAddFoodModal(userId,item,meal) {
       },
 
         body: JSON.stringify({
-          user_id: userId,
           food_id: foodId,
           food_quantity: gramsInput,
           meal: mealSelect,
@@ -813,7 +765,7 @@ function openAddFoodModal(userId,item,meal) {
       loadUserDataForDate(dateCalendar);
       // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
-      updateMealSection(userId,dateCalendar);
+      updateMealSection(dateCalendar);
     } catch (error) {
       console.error("Erro ao salvar alimento:", error);
     }
@@ -828,27 +780,25 @@ function openAddFoodModal(userId,item,meal) {
   document.body.appendChild(modal); // Adiciona o modal ao body
 }
 
-async function updateMealSection(userId,dateCalendar) {
+async function updateMealSection(dateCalendar) {
  
   clearMealSections();
-  fetchAddedFoods(userId,dateCalendar);
+  fetchAddedFoods(dateCalendar);
 }
 
 async function loadAddedFoods() {
   const dateCalendar = escapeHtml(document.getElementById('input-date').value);
   // console.log(dateCalendar, "carregando")
-  const userId = await getUserId();
   clearMealSections();
 
-  fetchAddedFoods(userId,dateCalendar)
-  // console.log(userId, "carregando")
+  fetchAddedFoods(dateCalendar)
 
 }
 
 
-async function fetchAddedFoods(userId, dateCalendar){
+async function fetchAddedFoods(dateCalendar){
   try {
-    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`, {
+    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?date=${dateCalendar}`, {
       method: "GET",
     });
 
@@ -958,8 +908,9 @@ async function deleteFoodItem(foodId) {
     }
 
     console.log("Alimento deletado com sucesso!");
-    location.reload();
+    // location.reload();
    
+
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);
   }
@@ -991,7 +942,6 @@ async function editFoodItem(foodId,foodName,meal,id_food) {
     }
 
     try {
-      const userId = await getUserId();
       const dateCalendar = document.getElementById('input-date').value;
       
 
@@ -1001,7 +951,6 @@ async function editFoodItem(foodId,foodName,meal,id_food) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: userId,
           food_id: id_food,
           date: dateCalendar,
           food_quantity: newGrams,
@@ -1030,7 +979,7 @@ async function editFoodItem(foodId,foodName,meal,id_food) {
 }
 
 
-async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,carbCreate, proteinCreate,fatCreate ){
+async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate, proteinCreate,fatCreate ){
   const modalEditMyFood = CreateMyFoodbtn();
   
 
@@ -1079,7 +1028,6 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: userId, 
           name: newNameCreate, 
           calorie: newCaloriesCreate, 
           carbohydrate_g: newCarbCreate, 
@@ -1094,8 +1042,6 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
 
       console.log("Alimento editado com sucesso!");
 
-      // Atualizar a página para refletir as mudanças
-      // refreshFoodList(userId);
       location.reload();
       
 
@@ -1107,7 +1053,7 @@ async function editMyFoodItem(userId, myFoodItemId, nameCreate,caloriesCreate,ca
   document.body.appendChild(modalEditMyFood);
 }
 
-async function deleteMyFoodItem(userId, myFoodItemId){
+async function deleteMyFoodItem(myFoodItemId){
   console.log(myFoodItemId);
   if (!confirm("Tem certeza que deseja deletar este alimento?")) {
     return;
@@ -1124,7 +1070,7 @@ async function deleteMyFoodItem(userId, myFoodItemId){
 
     console.log("Alimento deletado com sucesso!");
      // Atualizar a lista de alimentos após a exclusão
-     refreshFoodList(userId);
+     refreshFoodList(); 
      location.reload();
    
   } catch (error) {
@@ -1133,7 +1079,7 @@ async function deleteMyFoodItem(userId, myFoodItemId){
 }
 
 // Função para renderizar os alimentos filtrados no modal
-function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {
+function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, meal,modal) {
   btnCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
   datafoodContainer.innerHTML =""; // Limpar o conteúdo atual do contêiner
 
@@ -1144,7 +1090,7 @@ function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodConta
       const foodElement = document.createElement("div");
       foodElement.textContent = escapeHtml(foodItem.name);
       foodElement.addEventListener("click", async () => {
-        await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
+        await openAddFoodModal(foodItem, meal); // Abre o modal de adicionar comida
         modal.remove(); // Remove o modal após clicar em um elemento do foodlist
       });
       datafoodContainer.appendChild(foodElement);
@@ -1152,7 +1098,7 @@ function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodConta
   }
 }
 
-function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {
+function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, meal,modal) {
   btnCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
  datafoodContainer.innerHTML ="";
 
@@ -1176,7 +1122,7 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       btnEdit.addEventListener("click", async() => {
         try {
           console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
-          await editMyFoodItem(userId, myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
+          await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
           
           
         } catch (error) {
@@ -1193,13 +1139,13 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       btnDelete.addEventListener("click", async() => {
         try {
           // console.log("Botão Deletar clicado para o alimento:", food.id);
-          await deleteMyFoodItem(userId, myFoodItem.id);
+          await deleteMyFoodItem(myFoodItem.id);
         } catch (error) {
           console.error("Erro ao deletar alimento:", error);
         }
       });
       myFoodName.addEventListener("click", async () => {
-        await openAddFoodModal(userId, myFoodItem, meal); // Abre o modal de adicionar comida
+        await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
         modal.remove(); // Remove o modal após clicar em um elemento do foodlist
       });
 
