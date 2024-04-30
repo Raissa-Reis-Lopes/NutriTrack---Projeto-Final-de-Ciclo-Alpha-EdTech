@@ -38,7 +38,7 @@
 }
 
 .dataFoodScroll{
-    max-height: 265px;
+    max-height: 260px;
     overflow: scroll;
     cursor: pointer;
     padding-left: 10px;

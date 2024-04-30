@@ -61,3 +61,13 @@
     border: 3px solid rgb(134, 30, 30);
     color: rgb(134, 30, 30);
   }
+
+  .createMyFoodbtn{
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    color: var(--cor-p6);
+  }
+
+  .createMyFoodbtn:hover{
+    color: var(--cor-p7);
+  }
