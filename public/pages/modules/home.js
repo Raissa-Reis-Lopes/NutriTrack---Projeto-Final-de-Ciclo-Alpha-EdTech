@@ -475,8 +475,10 @@ async function openModalWithMeal(meal) {
   const btnCreatefoodContainer = document.createElement("div");
   const datafoodContainer = document.createElement("div");
   datafoodContainer.classList.add("dataFoodScroll");
-  btnCreatefoodContainer.classList.add("dataFoodScroll");
   
+  // div criada para ser o conteiner dos alimentos criados que fica dentro do btnCreatefoodContainer
+  const listCreatefoodContainer = document.createElement("div");
+  listCreatefoodContainer.classList.add("dataFoodScroll");
 
   let userId;
 
@@ -538,7 +540,7 @@ async function openModalWithMeal(meal) {
           });
       
           // Atualizar a lista de alimentos filtrados
-          renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal);
+          renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer,listCreatefoodContainer, userId, meal,modal);
         });
       
       });
@@ -551,9 +553,10 @@ async function openModalWithMeal(meal) {
         let myFoodList;
 
         const createMyFoodbtn = document.createElement("button");
+        createMyFoodbtn.classList.add("btn_stroke", "createMyFoodbtn");
         createMyFoodbtn.innerText="criar alimento"
         btnCreatefoodContainer.appendChild(createMyFoodbtn);
-        const listCreatefoodContainer = document.createElement("div");
+        
         userId = await getUserId();
 
         createMyFoodbtn.addEventListener("click", ()=>{
@@ -668,6 +671,7 @@ async function openModalWithMeal(meal) {
                   modal.remove(); // Remove o modal após clicar em um elemento do foodlist
                 });
 
+              
                 myFoodElement.appendChild(myFoodElementName);
                 myFoodElement.appendChild(btnEditDeleteMyFood);
                  // Adicionar botões ao elemento do alimento
@@ -734,7 +738,7 @@ async function openModalWithMeal(meal) {
             });
         
             // Atualizar a lista de alimentos filtrados
-            renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal)
+            renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer,listCreatefoodContainer, userId, meal,modal)
           });
         })
        
@@ -1133,8 +1137,8 @@ async function deleteMyFoodItem(userId, myFoodItemId){
 }
 
 // Função para renderizar os alimentos filtrados no modal
-function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {
-  btnCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
+function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer,listCreatefoodContainer, userId, meal,modal) {
+  listCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
   datafoodContainer.innerHTML =""; // Limpar o conteúdo atual do contêiner
 
   if (filteredFoods.length === 0) {
@@ -1152,13 +1156,13 @@ function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodConta
   }
 }
 
-function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, userId, meal,modal) {
-  btnCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
- datafoodContainer.innerHTML ="";
+function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer, datafoodContainer,listCreatefoodContainer, userId, meal,modal) {
+listCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
+datafoodContainer.innerHTML ="";
 
 
   if (filteredFoods.length === 0) {
-    btnCreatefoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+    listCreatefoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
   } else {
     filteredFoods.forEach(myFoodItem => {
       const myFoodElement = document.createElement("div");
@@ -1208,7 +1212,8 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       btnEditDeleteMySearch.appendChild(btnEdit);
       btnEditDeleteMySearch.appendChild(btnDelete);
 
-      btnCreatefoodContainer.appendChild(myFoodElement);
+      listCreatefoodContainer.appendChild(myFoodElement);
+      btnCreatefoodContainer.appendChild(listCreatefoodContainer);
     });
   }
 }
