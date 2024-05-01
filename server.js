@@ -1,10 +1,17 @@
 const config = require('./src/config');
 const express = require("express");
-const app = express();
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
 const port = config.PORT;
 const routes = require('./src/routes');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+
+const app = express();
+
+app.use(redirectToHTTPS());
 
 // Define o caminho do diretório onde os arquivos estáticos estão localizados
 const publicPath = path.join(__dirname, 'public');
@@ -31,8 +38,19 @@ app.get('/*', (req, res)=>{
     res.sendFile(path.resolve('public', 'index.html'));
 })
 
+// Carrega as opções de certificado SSL
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/chain.pem', 'utf8');
+
+const credentials = {
+  key: privateKey,
+  cert: certificate,
+  ca: ca
+};
 
 
-app.listen(port, ()=>{
+
+app.listen(port, (credentials, app)=>{
     console.log(`Server running on http://localhost:${port}`);
 });

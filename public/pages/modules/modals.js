@@ -178,6 +178,7 @@ export function privacyPolicyModal(){
             <p>Não vendemos ou alugamos suas informações pessoais com terceiros. Podemos compartilhar suas informações com parceiros de negócios ou fornecedores que nos ajudam a operar o site.</p>
             <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
             <p>Podemos atualizar esta política de privacidade periodicamente. Se fizermos alterações significativas, notificaremos você.</p>
+            <p>É importante notar que as proporções dos planos são diretrizes gerais e podem precisar ser ajustadas com base nas necessidades individuais e na resposta do corpo a determinadas dietas. Consultar um nutricionista ou profissional de saúde é sempre recomendado para obter um plano alimentar adequado às suas necessidades específicas.</p>
             <p>Se você tiver alguma dúvida sobre esta política de privacidade, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
         </div>
     </div>
