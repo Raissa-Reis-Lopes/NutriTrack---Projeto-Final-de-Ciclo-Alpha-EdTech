@@ -13,7 +13,6 @@ export async function logout() {
         const data = await response.json();
 
         if (data.success) {
-            console.log("Usuário desconectado com sucesso")
             const customEvent = createCustomEvent('/');
             window.dispatchEvent(customEvent); 
         } else {

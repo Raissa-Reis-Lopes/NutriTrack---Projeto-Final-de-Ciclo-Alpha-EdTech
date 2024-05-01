@@ -1,5 +1,4 @@
 require('dotenv').config();
-// console.log('Senha do banco de dados:', process.env.DB_PASSWORD);
 const { Pool } = require('pg');
 
 const pool = new Pool({

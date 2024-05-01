@@ -279,8 +279,8 @@ export function deleteConfirmation(){
     <div  class="modal">
         <div id="body1" class="modal-body modal-body-account">
             <h1 class="delete_account_title">ATENÇÃO!</h1>
-            <h3>Tem certeza que deseja apagar esse alimento?</h3>
-            <p>Esta ação é irreversível e você perderá todos os dados e histórico desse alimento.</p>
+            <h3 id="delete_h3">Tem certeza que deseja apagar esse alimento?</h3>
+            <p id="delete_warning">Esta ação é irreversível e você perderá todos os dados e histórico desse alimento.</p>
             <div class="btn_delete_confirmation">
             <button id= "cancelConfirmDelete" class="btn_stroke">Cancelar</button>
             <button id="confirmDelete" class="btn_stroke">Deletar</button>

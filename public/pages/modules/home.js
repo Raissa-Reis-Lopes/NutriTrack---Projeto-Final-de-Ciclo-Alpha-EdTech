@@ -718,8 +718,6 @@ async function openModalWithMeal(meal) {
                 btnEditMyFoodElement.addEventListener("click", async () => {
               
                   try {
-                    console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
-
                    await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
 
                     
@@ -733,7 +731,6 @@ async function openModalWithMeal(meal) {
                 // Event listener para o botão de deletar
                 btnDeleteMyFoodElement.addEventListener("click", async () => {
                   try {
-                    // console.log("Botão Deletar clicado para o alimento:", food.id);
                     await deleteMyFoodItem(myFoodItem.id);
 
                   } catch (error) {
@@ -790,7 +787,6 @@ async function openModalWithMeal(meal) {
               refreshFoodList();
 
 
-          console.log("Alimento criado com sucesso:", newFood);
         } catch (error) {
           console.error("Erro ao criar alimento:", error);
         }
@@ -867,7 +863,6 @@ function openAddFoodModal(item,meal) {
       return;
     }
 
-    // console.log(dateCalendar);
     const foodId = item.id;
 
     try {
@@ -891,7 +886,6 @@ function openAddFoodModal(item,meal) {
       }
 
       loadUserDataForDate(dateCalendar);
-      // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
       updateMealSection(dateCalendar);
     } catch (error) {
@@ -915,7 +909,6 @@ async function updateMealSection(dateCalendar) {
 
 async function loadAddedFoods() {
   const dateCalendar = escapeHtml(document.getElementById("input-date").value);
-  // console.log(dateCalendar, "carregando")
   clearMealSections();
 
   fetchAddedFoods(dateCalendar)
@@ -962,7 +955,6 @@ async function fetchAddedFoods(dateCalendar){
         // Event listener para o botão de editar
         btnEditFoodElement.addEventListener("click", async () => {
           try {
-            console.log("Botão Editar clicado para o alimento:", food.id);
             await editFoodItem(
               food.id,
               food.food_name,
@@ -978,7 +970,6 @@ async function fetchAddedFoods(dateCalendar){
         // Event listener para o botão de deletar
         btnDeleteFoodElement.addEventListener("click", async () => {
           try {
-            // console.log("Botão Deletar clicado para o alimento:", food.id);
             await deleteFoodItem(food.id);
           } catch (error) {
             console.error("Erro ao deletar alimento:", error);
@@ -1011,7 +1002,6 @@ async function fetchAddedFoods(dateCalendar){
       });
     }
 
-    // console.log("Alimentos carregados do banco de dados com sucesso!");
   } catch (error) {
     console.error("Erro ao carregar alimentos do banco de dados:", error);
   }
@@ -1027,11 +1017,15 @@ function clearMealSections() {
 async function deleteFoodItem(foodId) {
 
   const deleteConfirmationModal =  deleteConfirmation();
+  const deleteWarningText = deleteConfirmationModal.querySelector("#delete_warning");
+  const deleteText = deleteConfirmationModal.querySelector("#delete_h3");
 
 
   const cancelConfirmDelete = deleteConfirmationModal.querySelector("#cancelConfirmDelete");
   const confirmDelete = deleteConfirmationModal.querySelector("#confirmDelete");
- 
+  deleteWarningText.innerText ="";
+  deleteText.innerText ="";
+  deleteWarningText.innerText="Tem certeza que deseja remover esse alimento da refeição?"
    
   cancelConfirmDelete.addEventListener("click", ()=>{
    deleteConfirmationModal.remove();
@@ -1047,8 +1041,8 @@ async function deleteFoodItem(foodId) {
       if (!response.ok) {
         throw new Error("Erro ao deletar alimento.");
       }
+
   
-      console.log("Alimento deletado com sucesso!");
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
     } catch (error) {
@@ -1083,7 +1077,6 @@ async function editFoodItem(foodId, foodName,foodGrams, meal, id_food) {
   modalEditFoodAdded.querySelector("#newMeal").value = escapeHtml(meal);
   modalEditFoodAdded.querySelector("#newGrams").value = escapeHtml(foodGrams);
 
-  console.log(foodId, "teste");
   const btnSaveEdit = modalEditFoodAdded.querySelector("#btn_save_editFood");
   btnSaveEdit.addEventListener("click", async () => {
     const newGrams = escapeHtml(
@@ -1120,9 +1113,6 @@ async function editFoodItem(foodId, foodName,foodGrams, meal, id_food) {
         throw new Error("Erro ao editar alimento.");
       }
 
-      console.log("Alimento editado com sucesso!");
-
-      // Atualizar a página para refletir as mudanças
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
 
@@ -1141,8 +1131,6 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
 
   const btnCancelEdit = modalEditMyFood.querySelector("#btn_cancel_create");
   btnCancelEdit.addEventListener("click", () => modalEditMyFood.remove());
-
-  console.log(myFoodItemId, "teste");
 
   modalEditMyFood.querySelector("#nameCreate").value = escapeHtml(nameCreate);
   modalEditMyFood.querySelector("#caloriesCreate").value =
@@ -1254,11 +1242,7 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
       if (!response.ok) {
         throw new Error("Erro ao editar alimento.");
       }
-
   
-      console.log("Alimento editado com sucesso!");
-
-
       // Atualizar a página para refletir as mudanças
      
       const customEvent = createCustomEvent("/home");
@@ -1303,8 +1287,6 @@ async function deleteMyFoodItem(myFoodItemId){
     if (!response.ok) {
       throw new Error("Erro ao deletar alimento.");
     }
-
-    console.log("Alimento deletado com sucesso!");
 
     // Atualizar a lista de alimentos após a exclusão
     const customEventmodal = new CustomEvent("updateModal");
@@ -1372,7 +1354,6 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
       // btnEditMyFoodElement.classList.add("icone-editar");
       btnEdit.addEventListener("click", async () => {
         try {
-          console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
           await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
           
           
@@ -1414,7 +1395,6 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
 
 function handleModalUpdate(event) {
   if (event.type === "updateModal") {
-    console.log("Modais atualizados após edição");
     openModalWithMeal(selectedMealType);
   }
 }
