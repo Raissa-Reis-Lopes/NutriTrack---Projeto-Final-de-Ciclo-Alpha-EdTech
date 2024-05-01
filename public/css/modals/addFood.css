@@ -7,16 +7,16 @@
 
 
 .calories span{
-  color: #17F3E6;
+  color: var(--cor-calorie);
 }
 .carb span{
-  color: #FF0DE5;
+  color: var(--cor-carbo);
 }
 .proteins span{
-  color: #E96001;
+  color: var(--cor-protein);
 }
 .fat span{
-  color: #FFF500;
+  color: var(--cor-lipid);
 }
 
 .grams_input, .grams_select{
