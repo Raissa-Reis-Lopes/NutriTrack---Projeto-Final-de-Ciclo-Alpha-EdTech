@@ -224,7 +224,6 @@ export async function uploadImage(){
 
         
         if (inputImage.files.length === 0) {
-            console.log('Por favor, selecione uma imagem.');
             return;
         }
     
@@ -233,7 +232,6 @@ export async function uploadImage(){
     
         if (!validateImageFormat(imageName)) {
             messageError("message_picture","Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif")
-            console.log('Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif.');
             return;
         }
         
@@ -254,7 +252,7 @@ export async function uploadImage(){
                 imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
                 showMessage('success','Imagem atualizada com sucesso!', "-5%");
             } else {
-                console.log("Falha ao atualizar a imagem");
+                showMessage('fail','Falha ao atualizar a foto de perfil!', "-5%");
             }
 
              // Após o fetch ser concluído, esconda o loader
@@ -618,7 +616,6 @@ export function navProfile(){
 }
 
 export async function deleteAccount(){  
-    console.log("Chegou aqui na função delete!");
     try {        
         const deleteResponse = await fetch(`/api/users`,{
             method: 'DELETE'
@@ -633,8 +630,6 @@ export async function deleteAccount(){
         document.getElementById("body2").style.display = "block";
         
         const responseData = await deleteResponse.json();       
-        console.log('Usuário excluído com sucesso:', responseData);
-
         // Espera 2 segundos antes de redirecionar para a página inicial
         setTimeout(() => {
             const customEvent = createCustomEvent('/');
