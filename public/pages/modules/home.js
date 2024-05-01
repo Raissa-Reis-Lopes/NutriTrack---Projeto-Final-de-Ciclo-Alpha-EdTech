@@ -967,25 +967,42 @@ function clearMealSections() {
 }
 
 async function deleteFoodItem(foodId) {
-  if (!confirm("Tem certeza que deseja deletar este alimento?")) {
-    return;
-  }
 
-  try {
-    const response = await fetch(`/api/foodAdded/${foodId}`, {
-      method: "DELETE",
-    });
+  const deleteConfirmationModal =  deleteConfirmation();
 
-    if (!response.ok) {
-      throw new Error("Erro ao deletar alimento.");
+
+  const cancelConfirmDelete = deleteConfirmationModal.querySelector("#cancelConfirmDelete");
+  const confirmDelete = deleteConfirmationModal.querySelector("#confirmDelete");
+ 
+   
+  cancelConfirmDelete.addEventListener("click", ()=>{
+   deleteConfirmationModal.remove();
+   return
+  });
+  
+  confirmDelete.addEventListener("click", async()=>{
+    try {
+      const response = await fetch(`/api/foodAdded/${foodId}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Erro ao deletar alimento.");
+      }
+  
+      console.log("Alimento deletado com sucesso!");
+      const customEvent = createCustomEvent("/home");
+      window.dispatchEvent(customEvent);
+    } catch (error) {
+      console.error("Erro ao deletar alimento:", error);
     }
-
-    console.log("Alimento deletado com sucesso!");
-    const customEvent = createCustomEvent("/home");
-    window.dispatchEvent(customEvent);
-  } catch (error) {
-    console.error("Erro ao deletar alimento:", error);
-  }
+ 
+   deleteConfirmationModal.remove();
+ 
+  });
+   
+   document.body.appendChild(deleteConfirmationModal);
+  
 }
 
 async function editFoodItem(foodId, foodName,foodGrams, meal, id_food) {
@@ -1261,11 +1278,7 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         } catch (error) {
           console.error("Erro ao editar alimento:", error);
         }
-        const customEventmodal = new CustomEvent("updateModal");
-        window.dispatchEvent(customEventmodal);
-
-        const customEvent = createCustomEvent("/history");
-        window.dispatchEvent(customEvent);
+   
       });
 
       const btnDelete = document.createElement("img");
@@ -1280,11 +1293,7 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         } catch (error) {
           console.error("Erro ao deletar alimento:", error);
         }
-        const customEventmodal = new CustomEvent("updateModal");
-        window.dispatchEvent(customEventmodal);
 
-        const customEvent = createCustomEvent("/home");
-          window.dispatchEvent(customEvent);
       });
       myFoodName.addEventListener("click", async () => {
         await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
