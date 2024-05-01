@@ -452,6 +452,8 @@ export function homeBtns() {
 }
 
 let selectedMealType = "";
+let lastSelectedList = "showFoods";
+
 
 async function openModalWithMeal(meal) {
   selectedMealType = meal;
@@ -473,9 +475,24 @@ async function openModalWithMeal(meal) {
   const showFoods = modal.querySelector("#showFoods");
   const showMyFoods = modal.querySelector("#showMyFoods");
 
-  if (showFoods) {
-    showFoods.addEventListener("click", async () => {
-      datafoodContainer.innerHTML = "";
+  if (lastSelectedList === "showMyFoods") {
+    await showMyFoodsList();
+  } else {
+    await showFoodsList();
+  }
+
+  showFoods.addEventListener("click", async () => {
+    lastSelectedList = "showFoods";
+    await showFoodsList();
+  });
+
+  showMyFoods.addEventListener("click", async () => {
+    lastSelectedList = "showMyFoods";
+    await showMyFoodsList();
+  });
+
+  async function showFoodsList() {
+    datafoodContainer.innerHTML = "";
       btnCreatefoodContainer.innerHTML = "";
       let foodList;
 
@@ -523,12 +540,9 @@ async function openModalWithMeal(meal) {
           // Atualizar a lista de alimentos filtrados
           renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, listCreatefoodContainer, meal,modal);
         });
-      
-      });
-    }
+  }
 
-  if (showMyFoods) {
-    showMyFoods.addEventListener("click", async function showMyFoodsRender() {
+  async function showMyFoodsList() {
       datafoodContainer.innerHTML = "";
       btnCreatefoodContainer.innerHTML = "";
       let myFoodList;      
@@ -653,7 +667,7 @@ async function openModalWithMeal(meal) {
                   } catch (error) {
                     console.error("Erro ao editar alimento:", error);
                   }
-                  showMyFoodsRender()
+        
                 });
           
 
@@ -666,13 +680,10 @@ async function openModalWithMeal(meal) {
                   } catch (error) {
                     console.error("Erro ao deletar alimento:", error);
                   }
-                  const customEvent = createCustomEvent("/home");
-                  window.dispatchEvent(customEvent);
-                  showMyFoodsRender();
+                
                 });
 
                 myFoodElementName.addEventListener("click", async () => {
-                  showMyFoodsRender()
                   await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
                   modal.remove(); // Remove o modal após clicar em um elemento do foodlist
                 });
@@ -744,10 +755,7 @@ async function openModalWithMeal(meal) {
             // Atualizar a lista de alimentos filtrados
             renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, listCreatefoodContainer, meal,modal)
           });
-        })
-       
-
-      };
+  }
 
   modal
     .querySelector("#back_modal_searchFood")
@@ -760,9 +768,6 @@ async function openModalWithMeal(meal) {
   datafood.appendChild(btnCreatefoodContainer);
   datafood.appendChild(datafoodContainer);
 
-  if (showFoods) {
-    showFoods.click();
-  }
 }
 
 function openAddFoodModal(item,meal) {
@@ -890,12 +895,12 @@ async function fetchAddedFoods(dateCalendar){
         const btnEditFoodElement = document.createElement("img");
         btnEditFoodElement.src = "./img/edit.svg";
         btnEditFoodElement.alt = "Editar";
-        // btnEditFoodElement.classList.add("icone-editar");
+      
         const btnDeleteFoodElement = document.createElement("img");
         btnDeleteFoodElement.src = "./img/trash.svg";
         btnDeleteFoodElement.alt = "Deletar";
-        // btnDeleteFoodElement.classList.add("icone-deletar");
-console.log(food);
+    
+
         // Event listener para o botão de editar
         btnEditFoodElement.addEventListener("click", async () => {
           try {
@@ -1145,6 +1150,9 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
      
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
+
+      const customEventmodal = new CustomEvent("updateModal");
+      window.dispatchEvent(customEventmodal);
      
     } catch (error) {
       console.error("Erro ao editar alimento:", error);
@@ -1156,7 +1164,7 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
 }
 
 async function deleteMyFoodItem(myFoodItemId){
-  console.log(myFoodItemId);
+  
  const deleteConfirmationModal =  deleteConfirmation();
 
 
@@ -1182,14 +1190,20 @@ async function deleteMyFoodItem(myFoodItemId){
 
     console.log("Alimento deletado com sucesso!");
     // Atualizar a lista de alimentos após a exclusão
+    const customEventmodal = new CustomEvent("updateModal");
+    window.dispatchEvent(customEventmodal);
+
+    const customEvent = createCustomEvent("/home");
+   window.dispatchEvent(customEvent);
 
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);
   }
   
   deleteConfirmationModal.remove();
-  const customEvent = createCustomEvent("/home");
-   window.dispatchEvent(customEvent);
+
+
+  
  });
 
   
@@ -1247,6 +1261,9 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         } catch (error) {
           console.error("Erro ao editar alimento:", error);
         }
+        const customEventmodal = new CustomEvent("updateModal");
+        window.dispatchEvent(customEventmodal);
+
         const customEvent = createCustomEvent("/history");
         window.dispatchEvent(customEvent);
       });
@@ -1260,11 +1277,12 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
         try {
           
           await deleteMyFoodItem(myFoodItem.id);
-          // const customEvent = createCustomEvent("/home");
-          // window.dispatchEvent(customEvent);
         } catch (error) {
           console.error("Erro ao deletar alimento:", error);
         }
+        const customEventmodal = new CustomEvent("updateModal");
+        window.dispatchEvent(customEventmodal);
+
         const customEvent = createCustomEvent("/home");
           window.dispatchEvent(customEvent);
       });
@@ -1283,3 +1301,11 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
     });
   }
 }
+
+function handleModalUpdate(event) {
+  if (event.type === "updateModal") {
+    console.log("Modais atualizados após edição");
+    openModalWithMeal(selectedMealType);
+  }
+}
+window.addEventListener("updateModal", handleModalUpdate);
