@@ -236,9 +236,11 @@ async function getUsername(){
             method: "GET",
         });
 
+
     if (!getUsername.ok) {
       throw new Error("Erro ao localizar o nome do usuário pelo id");
     }
+
 
     const userData = await getUsername.json();
 
@@ -266,14 +268,16 @@ async function getUserAvatar(){
   } catch (error) {}
 }
 
-//Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
-const computedStyle = getComputedStyle(document.documentElement);
-const corProtein = computedStyle.getPropertyValue("--cor-protein").trim();
-const corBgProtein = computedStyle.getPropertyValue("--cor-bg-protein").trim();
-const corCarbo = computedStyle.getPropertyValue("--cor-carbo").trim();
-const corBgCarbo = computedStyle.getPropertyValue("--cor-bg-carbo").trim();
-const corLipid = computedStyle.getPropertyValue("--cor-lipid").trim();
-const corBgLipid = computedStyle.getPropertyValue("--cor-bg-lipid").trim();
+
+ //Para poder passar a cor dos gráficos usando variável, assim, se a gente mudar a variável já muda tudo
+ const computedStyle = getComputedStyle(document.documentElement);
+ const corProtein = computedStyle.getPropertyValue('--cor-protein').trim(); 
+ const corBgProtein = computedStyle.getPropertyValue('--cor-bg-protein').trim(); 
+ const corCarbo = computedStyle.getPropertyValue('--cor-carbo').trim(); 
+ const corBgCarbo = computedStyle.getPropertyValue('--cor-bg-carbo').trim(); 
+ const corLipid = computedStyle.getPropertyValue('--cor-lipid').trim(); 
+ const corBgLipid = computedStyle.getPropertyValue('--cor-bg-lipid').trim(); 
+
 
 async function loadUserDataForDate(date) {
   const noConfig = document.getElementById("no_config");
@@ -551,7 +555,7 @@ async function openModalWithMeal(meal) {
         createMyFoodbtn.classList.add("btn_stroke", "createMyFoodbtn");
         createMyFoodbtn.innerText="criar alimento"
         btnCreatefoodContainer.appendChild(createMyFoodbtn);
-        
+
 
         createMyFoodbtn.addEventListener("click", ()=>{
           const modalCreate = CreateMyFoodbtn();
@@ -622,7 +626,9 @@ async function openModalWithMeal(meal) {
       });
 
           refreshFoodList();
+
           // função para listar os alimentos da tabela food 
+
           async function refreshFoodList() {
             try {
               const responseFood = await fetch(`/api/food/user`, {
@@ -662,7 +668,9 @@ async function openModalWithMeal(meal) {
               
                   try {
                     console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
+
                    await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
+
                     
                   } catch (error) {
                     console.error("Erro ao editar alimento:", error);
@@ -676,7 +684,7 @@ async function openModalWithMeal(meal) {
                   try {
                     // console.log("Botão Deletar clicado para o alimento:", food.id);
                     await deleteMyFoodItem(myFoodItem.id);
-         
+
                   } catch (error) {
                     console.error("Erro ao deletar alimento:", error);
                   }
@@ -730,6 +738,7 @@ async function openModalWithMeal(meal) {
               const newFood = await responseFood.json(); 
               refreshFoodList();
 
+
           console.log("Alimento criado com sucesso:", newFood);
         } catch (error) {
           console.error("Erro ao criar alimento:", error);
@@ -771,6 +780,7 @@ async function openModalWithMeal(meal) {
 }
 
 function openAddFoodModal(item,meal) {
+
   
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
@@ -1163,10 +1173,12 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
   
       console.log("Alimento editado com sucesso!");
 
+
       // Atualizar a página para refletir as mudanças
      
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
+
 
       const customEventmodal = new CustomEvent("updateModal");
       window.dispatchEvent(customEventmodal);
@@ -1181,6 +1193,7 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
 }
 
 async function deleteMyFoodItem(myFoodItemId){
+
   
  const deleteConfirmationModal =  deleteConfirmation();
 
@@ -1196,6 +1209,7 @@ async function deleteMyFoodItem(myFoodItemId){
  
  confirmDelete.addEventListener("click", async()=>{
 
+
   try {
     const response = await fetch(`/api/food/${myFoodItemId}`, {
       method: "DELETE",
@@ -1206,12 +1220,14 @@ async function deleteMyFoodItem(myFoodItemId){
     }
 
     console.log("Alimento deletado com sucesso!");
+
     // Atualizar a lista de alimentos após a exclusão
     const customEventmodal = new CustomEvent("updateModal");
     window.dispatchEvent(customEventmodal);
 
     const customEvent = createCustomEvent("/home");
    window.dispatchEvent(customEvent);
+
 
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);
@@ -1288,7 +1304,7 @@ function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodCon
 
       btnDelete.addEventListener("click", async () => {
         try {
-          
+
           await deleteMyFoodItem(myFoodItem.id);
         } catch (error) {
           console.error("Erro ao deletar alimento:", error);

@@ -17,18 +17,18 @@
 .titles {
     color: var(--cor-p5);
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .history_container{  
     height: calc(100vh - 143px);
     display: flex;
     gap: 25px;
-    padding-top: 40px;
     padding-left: 200px;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
+    margin-bottom: 30px;
 }
 
 .align_row{
@@ -52,29 +52,35 @@
 }
 
 .btn_history{
-    padding: 6px 30px;
+    padding: 6px 20px;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.8rem;
     color: var(--cor-p5);
     border-radius: 10px;
     border: 2px solid var(--cor-p5);
-    background-color: var(--cor-p1);
 }
 
 .btn_history:hover{
  cursor: pointer;
  border: 2px solid var(--cor-p3);
  background-color: transparent;
+ color: var(--cor-p6);
+ border: 2px solid var(--cor-p6);
 }
 
 .date_display{
-    font-weight: 500;
+    padding-bottom: 20px;
+    font-weight:600;
+    font-size: 1rem;
+    color: var(--cor-p6);
 }
 
 .chart_title{
-    padding-bottom: 40px;
+    padding-bottom: 10px;
     font-weight:600;
     font-size: 1.5rem;
     color: var(--cor-p6);
 }
+
+
