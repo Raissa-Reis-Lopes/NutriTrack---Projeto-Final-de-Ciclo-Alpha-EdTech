@@ -205,9 +205,9 @@ const getFoodAddedById = async(id) => {
 }
 
 
-const getFoodsAddedByUserId = async(id)=> {
+const getFoodsAddedByUserId = async(user_id)=> {
     try {
-        const foodsAdded = await foodAddedRepository.getFoodsAddedByUserId(id);
+        const foodsAdded = await foodAddedRepository.getFoodsAddedByUserId(user_id);
         return foodsAdded;
     } catch (error) {
         console.log(error);

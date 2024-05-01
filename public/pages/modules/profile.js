@@ -215,23 +215,6 @@ export function activateSaveBtn() {
     });
 };
 
-async function getUserId(){
-    try {
-        const getUserId = await fetch("/api/login/", {
-            method: "GET",
-        });
-
-        if(!getUserId.ok){
-            throw new Error("Falha ao localizar o id do usuáiro")
-        }
-        const userIdResponse = await getUserId.json();
-        const userId = userIdResponse.user;
-        return userId;
-
-    } catch (error) {
-        
-    }
-}
 
 export async function uploadImage(){
         showLoader();

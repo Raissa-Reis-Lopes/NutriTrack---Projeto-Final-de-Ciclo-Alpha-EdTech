@@ -4,6 +4,7 @@ import {
   SearchFood,
   CreateMyFoodbtn,
   EditFoodAdded,
+  deleteConfirmation,
 } from "./modals.js";
 import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
@@ -26,11 +27,11 @@ let carboChartInstance = null;
 let lipidChartInstance = null;
 
 export function Home() {
-  proteinChartInstance = null;
-  carboChartInstance = null;
-  lipidChartInstance = null;
-  const div = document.createElement("div");
-  div.innerHTML = `  
+    proteinChartInstance = null;
+    carboChartInstance = null;
+    lipidChartInstance = null;
+    const div = document.createElement("div");
+    div.innerHTML=`  
     <div id="modal_container_home" class="modal_container_home hidden"></div>
         <header>
             <div class="logo" id="logo">
@@ -229,26 +230,11 @@ function clearScreenValues() {
   progressBar.style.width = "0%";
 }
 
-async function getUserId() {
-  try {
-    const getUserId = await fetch("/api/login/", {
-      method: "GET",
-    });
-
-    if (!getUserId.ok) {
-      throw new Error("Falha ao localizar o id do usuáiro");
-    }
-    const userIdResponse = await getUserId.json();
-    const userId = userIdResponse.user;
-    return userId;
-  } catch (error) {}
-}
-
-async function getUsername(userId) {
-  try {
-    const getUsername = await fetch(`/api/users/${userId}`, {
-      method: "GET",
-    });
+async function getUsername(){
+    try {
+        const getUsername = await fetch(`/api/users/byId`,{
+            method: "GET",
+        });
 
     if (!getUsername.ok) {
       throw new Error("Erro ao localizar o nome do usuário pelo id");
@@ -262,11 +248,11 @@ async function getUsername(userId) {
   } catch (error) {}
 }
 
-async function getUserAvatar(userId) {
-  try {
-    const getUserAvatar = await fetch(`/api/users/${userId}`, {
-      method: "GET",
-    });
+async function getUserAvatar(){
+    try {
+        const getUserAvatar = await fetch(`/api/users/byId`,{
+            method: "GET",
+        });
 
     if (!getUserAvatar.ok) {
       throw new Error("Erro ao localizar a foto do usuário pelo id");
@@ -293,34 +279,21 @@ async function loadUserDataForDate(date) {
   const noConfig = document.getElementById("no_config");
   noConfig.innerText = "";
 
-  clearScreenValues(); // Limpa os valores da tela
-  try {
-    const userId = await getUserId();
-
-    if (userId) {
-      const username = await getUsername(userId);
+    clearScreenValues(); // Limpa os valores da tela
+    try { 
+            const username = await getUsername();
 
       const usernameElement = document.getElementById("username");
       usernameElement.innerText = username;
 
-      const userAvatar = await getUserAvatar(userId);
+            const userAvatar = await getUserAvatar();
 
-      // Pegar o local onde está a imagem do usuário na home
-      const imgHome = document.querySelector("#img-user");
-      imgHome.src = `/assets/${userAvatar}`;
-
-      const userAndDate = {
-        user_id: userId,
-        date: date,
-      };
-
-      const getDailyGoal = await fetch("/api/calculate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userAndDate),
-      });
+            const imgHome = document.querySelector("#img-user");
+            imgHome.src = `/assets/${userAvatar}`;
+          
+            const getDailyGoal = await fetch(`/api/calculate?date=${date}`,{
+                method:"GET",
+            });
 
       if (!getDailyGoal.ok) {
         throw new Error(
@@ -345,12 +318,10 @@ async function loadUserDataForDate(date) {
       const totalLipidSpan = document.getElementById("total-lipid");
       totalLipidSpan.innerText = userTotalLipid;
 
-      const getDailyConsumed = await fetch(
-        `/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${date}`,
-        {
-          method: "GET",
-        }
-      );
+
+            const getDailyConsumed = await fetch(`/api/foodAdded/dailyConsumedWithDetail?date=${date}`,{
+                method: "GET",
+            });
 
       const userDailyConsumed = await getDailyConsumed.json();
 
@@ -362,15 +333,14 @@ async function loadUserDataForDate(date) {
         Math.ceil(totalNutrition.carbohydrate) || 0;
       const dailyLipidConsumed = Math.ceil(totalNutrition.lipid) || 0;
 
-      const consumedProtein = document.getElementById("consumed-protein");
-      consumedProtein.innerText = dailyProteinConsumed;
-      consumedProtein.style.color = "orangered";
-
-      const consumedCarbo = document.getElementById("consumed-carbo");
-      consumedCarbo.innerText = dailyCarbohydrateConsumed;
-
-      const consumedLipid = document.getElementById("consumed-lipid");
-      consumedLipid.innerText = dailyLipidConsumed;
+            const consumedProtein = document.getElementById("consumed-protein");
+            consumedProtein.innerText = dailyProteinConsumed;
+            
+            const consumedCarbo = document.getElementById("consumed-carbo");
+            consumedCarbo.innerText = dailyCarbohydrateConsumed;
+            
+            const consumedLipid = document.getElementById("consumed-lipid");
+            consumedLipid.innerText = dailyLipidConsumed;
 
       const consumedCalories = document.getElementById("consumed-calories");
       consumedCalories.innerText = dailyCaloriesConsumed;
@@ -401,66 +371,18 @@ async function loadUserDataForDate(date) {
       progressBar.style.width = consumedPercent + "%";
       remainingCalories.innerHTML = message;
 
-      proteinChartInstance = updateOrCreateDonutChart(
-        "Proteínas",
-        userTotalProtein,
-        dailyProteinConsumed,
-        proteinChartInstance,
-        "protein-chart",
-        corProtein,
-        corBgProtein
-      );
-      carboChartInstance = updateOrCreateDonutChart(
-        "Carboidratos",
-        userTotalCarbo,
-        dailyCarbohydrateConsumed,
-        carboChartInstance,
-        "carbo-chart",
-        corCarbo,
-        corBgCarbo
-      );
-      lipidChartInstance = updateOrCreateDonutChart(
-        "Gorduras",
-        userTotalLipid,
-        dailyLipidConsumed,
-        lipidChartInstance,
-        "lipid-chart",
-        corLipid,
-        corBgLipid
-      );
+            proteinChartInstance = updateOrCreateDonutChart('Proteínas', userTotalProtein, dailyProteinConsumed, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+            carboChartInstance = updateOrCreateDonutChart('Carboidratos', userTotalCarbo, dailyCarbohydrateConsumed, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+            lipidChartInstance = updateOrCreateDonutChart('Gorduras', userTotalLipid, dailyLipidConsumed, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
+        
+    } catch(error) {
+      proteinChartInstance = updateOrCreateDonutChart('Proteínas', 0, 0, proteinChartInstance, 'protein-chart', corProtein, corBgProtein);
+      carboChartInstance = updateOrCreateDonutChart('Carboidratos', 0, 0, carboChartInstance, 'carbo-chart', corCarbo, corBgCarbo);
+      lipidChartInstance = updateOrCreateDonutChart('Gorduras', 0, 0, lipidChartInstance, 'lipid-chart', corLipid, corBgLipid);
+      noConfig.innerText = "Você não tem dados cadastrados para esta data!"
+      console.log(error.message)
     }
-  } catch (error) {
-    proteinChartInstance = updateOrCreateDonutChart(
-      "Proteínas",
-      0,
-      0,
-      proteinChartInstance,
-      "protein-chart",
-      corProtein,
-      corBgProtein
-    );
-    carboChartInstance = updateOrCreateDonutChart(
-      "Carboidratos",
-      0,
-      0,
-      carboChartInstance,
-      "carbo-chart",
-      corCarbo,
-      corBgCarbo
-    );
-    lipidChartInstance = updateOrCreateDonutChart(
-      "Gorduras",
-      0,
-      0,
-      lipidChartInstance,
-      "lipid-chart",
-      corLipid,
-      corBgLipid
-    );
-    noConfig.innerText = "Não há dados cadastrados para o usuário nesta data!";
-    console.log(error.message);
-  }
-  loadAddedFoods();
+    loadAddedFoods();
 }
 
 function updateOrCreateDonutChart(
@@ -511,7 +433,7 @@ export function navRoutes() {
     window.dispatchEvent(customEvent);
   });
 
-  btnExit.addEventListener("click", () => {
+  btnExit.addEventListener("click", ()=>{
     logout();
   });
 }
@@ -543,7 +465,6 @@ async function openModalWithMeal(meal) {
   const listCreatefoodContainer = document.createElement("div");
   listCreatefoodContainer.classList.add("dataFoodScroll");
 
-  let userId;
 
   // variavel para o inputSearch
 
@@ -558,79 +479,69 @@ async function openModalWithMeal(meal) {
       btnCreatefoodContainer.innerHTML = "";
       let foodList;
 
-      try {
-        const responseFood = await fetch("/api/food", {
-          method: "GET",
-        });
-
-        if (!responseFood.ok) {
-          throw new Error("Falha ao tentar localizar os alimentos");
-        }
-
-        foodList = await responseFood.json(); // Trata a resposta JSON
-        userId = await getUserId();
-        // console.log(userId);
-
-        // Adiciona os alimentos à lista no modal
-        foodList.forEach((foodItem) => {
-          const foodElement = document.createElement("div");
-          foodElement.textContent = escapeHtml(foodItem.name);
-          foodElement.addEventListener("click", async () => {
-            await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
-            modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+        try {
+          const responseFood = await fetch("/api/food", {
+            method: "GET",
           });
-          datafoodContainer.appendChild(foodElement);
+      
+          if (!responseFood.ok) {
+            throw new Error("Falha ao tentar localizar os alimentos");
+          }
+      
+          foodList = await responseFood.json(); // Trata a resposta JSON
+      
+          // Adiciona os alimentos à lista no modal
+          foodList.forEach((foodItem) => {
+            const foodElement = document.createElement("div");
+            foodElement.textContent = escapeHtml(foodItem.name);
+            foodElement.addEventListener("click", async () => {
+              await openAddFoodModal(foodItem, meal); // Abre o modal de adicionar comida
+              modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+            });
+            datafoodContainer.appendChild(foodElement);
+          });
+        } catch (error) {
+          console.log("Erro ao buscar alimentos:", error);
+        }
+        
+        inputSearch.addEventListener("input", () => {
+          const searchTerm = inputSearch.value.toLowerCase().trim();
+      
+          // Filtrar alimentos com base na sequência digitada
+          const filteredFoods = foodList.filter(foodItem => {
+            const foodName = foodItem.name.toLowerCase();
+            return foodName.includes(searchTerm); // Usar includes para verificar a presença da sequência
+          });
+
+          // Ordenar a lista de alimentos filtrados com base na posição da sequência no nome
+          filteredFoods.sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+            return nameA.indexOf(searchTerm) - nameB.indexOf(searchTerm);
+          });
+      
+          // Atualizar a lista de alimentos filtrados
+          renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, listCreatefoodContainer, meal,modal);
         });
-      } catch (error) {
-        console.log("Erro ao buscar alimentos:", error);
-      }
-
-      inputSearch.addEventListener("input", () => {
-        const searchTerm = inputSearch.value.toLowerCase().trim();
-
-        // Filtrar alimentos com base na sequência digitada
-        const filteredFoods = foodList.filter((foodItem) => {
-          const foodName = foodItem.name.toLowerCase();
-          return foodName.includes(searchTerm); // Usar includes para verificar a presença da sequência
-        });
-
-        // Ordenar a lista de alimentos filtrados com base na posição da sequência no nome
-        filteredFoods.sort((a, b) => {
-          const nameA = a.name.toLowerCase();
-          const nameB = b.name.toLowerCase();
-          return nameA.indexOf(searchTerm) - nameB.indexOf(searchTerm);
-        });
-
-        // Atualizar a lista de alimentos filtrados
-        renderFilteredFoods(
-          filteredFoods,
-          btnCreatefoodContainer,
-          datafoodContainer,
-          listCreatefoodContainer,
-          userId,
-          meal,
-          modal
-        );
+      
       });
-    });
-  }
+    }
 
   if (showMyFoods) {
-    showMyFoods.addEventListener("click", async () =>{
+    showMyFoods.addEventListener("click", async function showMyFoodsRender() {
       datafoodContainer.innerHTML = "";
       btnCreatefoodContainer.innerHTML = "";
-      let myFoodList;
+      let myFoodList;      
 
-      const createMyFoodbtn = document.createElement("button");
-      createMyFoodbtn.classList.add("btn_stroke", "createMyFoodbtn");
-      createMyFoodbtn.innerText = "criar alimento";
-      btnCreatefoodContainer.appendChild(createMyFoodbtn);
+        const createMyFoodbtn = document.createElement("button");
+        createMyFoodbtn.classList.add("btn_stroke", "createMyFoodbtn");
+        createMyFoodbtn.innerText="criar alimento"
+        btnCreatefoodContainer.appendChild(createMyFoodbtn);
+        
 
-      userId = await getUserId();
-
-      createMyFoodbtn.addEventListener("click", () => {
-        console.log(userId, "create");
-        const modalCreate = CreateMyFoodbtn();
+        createMyFoodbtn.addEventListener("click", ()=>{
+          const modalCreate = CreateMyFoodbtn();
+          
 
         const btnsCreateFood = modalCreate.querySelector("#btnsCreateFood");
 
@@ -642,7 +553,6 @@ async function openModalWithMeal(meal) {
         btnCancelCreate.addEventListener("click", () => modalCreate.remove());
 
         btnCreateNew.addEventListener("click", async () => {
-          // errorMessageCreate="";
           const nameCreate = escapeHtml(
             modalCreate.querySelector("#nameCreate").value
           );
@@ -684,104 +594,95 @@ async function openModalWithMeal(meal) {
             errorMessageCreate.innerText =
               "Precisa ser um numero inteiro maior que 0";
             return;
-          }
+        }
 
-          // função para salvar o alimento no banco de dados
-          createNewFood(
-            userId,
-            nameCreate,
-            caloriesCreate,
-            carbCreate,
-            proteinCreate,
-            fatCreate
-          );
-
-          modalCreate.remove();
-        });
+        
+            // função para salvar o alimento no banco de dados
+            createNewFood(nameCreate,caloriesCreate,carbCreate,proteinCreate,fatCreate);
+            
+            modalCreate.remove();
+          });
 
         btnsCreateFood.appendChild(errorMessageCreate);
         document.body.appendChild(modalCreate);
       });
 
-      refreshFoodList(userId);
-      // função para listar os alimentos da tabela food que contenham o userID
-      async function refreshFoodList(userId) {
-        try {
-          const responseFood = await fetch(`/api/food/user/${userId}`, {
-            method: "GET",
-          });
-
-          if (!responseFood.ok) {
-            throw new Error("Falha ao tentar localizar os alimentos");
-          }
-
-          myFoodList = await responseFood.json(); // Trata a resposta JSON
-
-          // Limpa a lista existente antes de adicionar os novos alimentos
-          listCreatefoodContainer.innerHTML = "";
-
-          // Adiciona os alimentos à lista no modal
-          myFoodList.forEach((myFoodItem) => {
-            const myFoodElement = document.createElement("div");
-            myFoodElement.classList.add("myFoodElementContainer");
-            const myFoodElementName = document.createElement("div");
-            myFoodElementName.textContent = escapeHtml(myFoodItem.name);
+          refreshFoodList();
+          // função para listar os alimentos da tabela food 
+          async function refreshFoodList() {
+            try {
+              const responseFood = await fetch(`/api/food/user`, {
+                method: "GET",
+              });
+          
+              if (!responseFood.ok) {
+                throw new Error("Falha ao tentar localizar os alimentos");
+              }
+          
+              myFoodList = await responseFood.json(); // Trata a resposta JSON
+          
+              // Limpa a lista existente antes de adicionar os novos alimentos
+              listCreatefoodContainer.innerHTML = "";
+          
+              // Adiciona os alimentos à lista no modal
+              myFoodList.forEach((myFoodItem) => {
+                const myFoodElement = document.createElement("div");
+                myFoodElement.classList.add("myFoodElementContainer");
+                const myFoodElementName =document.createElement("div");
+                myFoodElementName.textContent = escapeHtml(myFoodItem.name);
 
             const btnEditDeleteMyFood = document.createElement("div");
             btnEditDeleteMyFood.classList.add("btnsEditDeleteContainer");
 
-            const btnEditMyFoodElement = document.createElement("img");
-            btnEditMyFoodElement.src = "./img/edit.svg";
-            btnEditMyFoodElement.alt = "Editar";
-            // btnEditMyFoodElement.classList.add("icone-editar");
-            const btnDeleteMyFoodElement = document.createElement("img");
-            btnDeleteMyFoodElement.src = "./img/trash.svg";
-            btnDeleteMyFoodElement.alt = "Deletar";
-            // btnDeleteMyFoodElement.classList.add("icone-deletar");
+                const btnEditMyFoodElement = document.createElement("img");
+                btnEditMyFoodElement.src = "./img/edit.svg"; 
+                btnEditMyFoodElement.alt = "Editar";
+               
+                const btnDeleteMyFoodElement = document.createElement("img");
+                btnDeleteMyFoodElement.src = "./img/trash.svg"; 
+                btnDeleteMyFoodElement.alt = "Deletar"; 
+           
+          
+               // Event listener para o botão de editar
+                btnEditMyFoodElement.addEventListener("click", async () => {
+              
+                  try {
+                    console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
+                   await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
+                    
+                  } catch (error) {
+                    console.error("Erro ao editar alimento:", error);
+                  }
+                  showMyFoodsRender()
+                });
+          
 
-            // Event listener para o botão de editar
-            btnEditMyFoodElement.addEventListener("click", async () => {
-              try {
-                console.log(
-                  "Botão Editar clicado para o alimento:",
-                  myFoodItem.id
-                );
-                await editMyFoodItem(
-                  userId,
-                  myFoodItem.id,
-                  myFoodItem.name,
-                  myFoodItem.calorie,
-                  myFoodItem.carbohydrate_g,
-                  myFoodItem.protein_g,
-                  myFoodItem.lipid_g
-                );
-              } catch (error) {
-                console.error("Erro ao editar alimento:", error);
-              }
-            });
+                // Event listener para o botão de deletar
+                btnDeleteMyFoodElement.addEventListener("click", async () => {
+                  try {
+                    // console.log("Botão Deletar clicado para o alimento:", food.id);
+                    await deleteMyFoodItem(myFoodItem.id);
+         
+                  } catch (error) {
+                    console.error("Erro ao deletar alimento:", error);
+                  }
+                  const customEvent = createCustomEvent("/home");
+                  window.dispatchEvent(customEvent);
+                  showMyFoodsRender();
+                });
 
-            // Event listener para o botão de deletar
-            btnDeleteMyFoodElement.addEventListener("click", async () => {
-              try {
-                // console.log("Botão Deletar clicado para o alimento:", food.id);
-                await deleteMyFoodItem(userId, myFoodItem.id);
-                const customEvent = createCustomEvent("/home");
-                window.dispatchEvent(customEvent);
-              } catch (error) {
-                console.error("Erro ao deletar alimento:", error);
-              }
-            });
+                myFoodElementName.addEventListener("click", async () => {
+                  showMyFoodsRender()
+                  await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
+                  modal.remove(); // Remove o modal após clicar em um elemento do foodlist
+                });
 
-            myFoodElementName.addEventListener("click", async () => {
-              await openAddFoodModal(userId, myFoodItem, meal); // Abre o modal de adicionar comida
-              modal.remove(); // Remove o modal após clicar em um elemento do foodlist
-            });
-
-            myFoodElement.appendChild(myFoodElementName);
-            myFoodElement.appendChild(btnEditDeleteMyFood);
-            // Adicionar botões ao elemento do alimento
-            btnEditDeleteMyFood.appendChild(btnEditMyFoodElement);
-            btnEditDeleteMyFood.appendChild(btnDeleteMyFoodElement);
+              
+                myFoodElement.appendChild(myFoodElementName);
+                myFoodElement.appendChild(btnEditDeleteMyFood);
+                 // Adicionar botões ao elemento do alimento
+                 btnEditDeleteMyFood.appendChild(btnEditMyFoodElement);
+                 btnEditDeleteMyFood.appendChild(btnDeleteMyFoodElement);
 
             listCreatefoodContainer.appendChild(myFoodElement);
             btnCreatefoodContainer.appendChild(listCreatefoodContainer);
@@ -792,23 +693,15 @@ async function openModalWithMeal(meal) {
         }
       }
 
-      // função para criar um novo alimento no banco de dados food
-      async function createNewFood(
-        userId,
-        nameCreate,
-        caloriesCreate,
-        carbCreate,
-        proteinCreate,
-        fatCreate
-      ) {
-        const foodData = {
-          user_id: userId,
-          name: nameCreate,
-          calorie: caloriesCreate,
-          carbohydrate_g: carbCreate,
-          protein_g: proteinCreate,
-          lipid_g: fatCreate,
-        };
+          // função para criar um novo alimento no banco de dados food
+          async function createNewFood(nameCreate, caloriesCreate, carbCreate, proteinCreate, fatCreate) {
+            const foodData = {
+              name: nameCreate,
+              calorie: caloriesCreate,
+              carbohydrate_g: carbCreate,
+              protein_g: proteinCreate,
+              lipid_g: fatCreate,
+            };
 
         try {
           const responseFood = await fetch("/api/food", {
@@ -823,8 +716,8 @@ async function openModalWithMeal(meal) {
             throw new Error("Falha ao tentar criar o alimento");
           }
 
-          const newFood = await responseFood.json();
-          refreshFoodList(userId);
+              const newFood = await responseFood.json(); 
+              refreshFoodList();
 
           console.log("Alimento criado com sucesso:", newFood);
         } catch (error) {
@@ -832,35 +725,29 @@ async function openModalWithMeal(meal) {
         }
       }
 
-      inputSearch.addEventListener("input", () => {
-        const searchTerm = inputSearch.value.toLowerCase().trim();
+          inputSearch.addEventListener("input", () => {
+            const searchTerm = inputSearch.value.toLowerCase().trim();
+        
+            // Filtrar alimentos com base na sequência digitada
+            const filteredFoods = myFoodList.filter(foodItem => {
+              const foodName = foodItem.name.toLowerCase();
+              return foodName.includes(searchTerm); // Usar includes para verificar a presença da sequência
+            });
+  
+            // Ordenar a lista de alimentos filtrados com base na posição da sequência no nome
+            filteredFoods.sort((a, b) => {
+              const nameA = a.name.toLowerCase();
+              const nameB = b.name.toLowerCase();
+              return nameA.indexOf(searchTerm) - nameB.indexOf(searchTerm);
+            });
+        
+            // Atualizar a lista de alimentos filtrados
+            renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, listCreatefoodContainer, meal,modal)
+          });
+        })
+       
 
-        // Filtrar alimentos com base na sequência digitada
-        const filteredFoods = myFoodList.filter((foodItem) => {
-          const foodName = foodItem.name.toLowerCase();
-          return foodName.includes(searchTerm); // Usar includes para verificar a presença da sequência
-        });
-
-        // Ordenar a lista de alimentos filtrados com base na posição da sequência no nome
-        filteredFoods.sort((a, b) => {
-          const nameA = a.name.toLowerCase();
-          const nameB = b.name.toLowerCase();
-          return nameA.indexOf(searchTerm) - nameB.indexOf(searchTerm);
-        });
-
-        // Atualizar a lista de alimentos filtrados
-        renderMyFilteredFoods(
-          filteredFoods,
-          btnCreatefoodContainer,
-          datafoodContainer,
-          listCreatefoodContainer,
-          userId,
-          meal,
-          modal
-        );
-      });
-    });
-  }
+      };
 
   modal
     .querySelector("#back_modal_searchFood")
@@ -878,7 +765,7 @@ async function openModalWithMeal(meal) {
   }
 }
 
-function openAddFoodModal(userId, item, meal) {
+function openAddFoodModal(item,meal) {
   
   const modal = AddFood(); // Cria o modal de adicionar comida
   // Define os valores no modal com base nos dados do item clicado
@@ -919,7 +806,6 @@ function openAddFoodModal(userId, item, meal) {
     }
     // console.log(dateCalendar);
     const foodId = item.id;
-    // console.log(userId);
 
     try {
       const response = await fetch("/api/foodAdded/", {
@@ -929,14 +815,13 @@ function openAddFoodModal(userId, item, meal) {
         },
 
         body: JSON.stringify({
-          user_id: userId,
           food_id: foodId,
           food_quantity: gramsInput,
           meal: mealSelect,
           date: dateCalendar,
         }),
       });
-      // console.log(response);
+  
 
       if (!response.ok) {
         throw new Error("Erro ao salvar alimento");
@@ -945,7 +830,7 @@ function openAddFoodModal(userId, item, meal) {
       loadUserDataForDate(dateCalendar);
       // console.log("Alimento salvo com sucesso!");
       modal.remove(); // Fecha o modal após salvar
-      updateMealSection(userId, dateCalendar);
+      updateMealSection(dateCalendar);
     } catch (error) {
       console.error("Erro ao salvar alimento:", error);
     }
@@ -959,29 +844,27 @@ function openAddFoodModal(userId, item, meal) {
   document.body.appendChild(modal); // Adiciona o modal ao body
 }
 
-async function updateMealSection(userId, dateCalendar) {
+async function updateMealSection(dateCalendar) {
+ 
   clearMealSections();
-  fetchAddedFoods(userId, dateCalendar);
+  fetchAddedFoods(dateCalendar);
 }
 
 async function loadAddedFoods() {
   const dateCalendar = escapeHtml(document.getElementById("input-date").value);
   // console.log(dateCalendar, "carregando")
-  const userId = await getUserId();
   clearMealSections();
 
-  fetchAddedFoods(userId, dateCalendar);
-  // console.log(userId, "carregando")
+  fetchAddedFoods(dateCalendar)
+
 }
 
-async function fetchAddedFoods(userId, dateCalendar) {
+
+async function fetchAddedFoods(dateCalendar){
   try {
-    const response = await fetch(
-      `/api/foodAdded/dailyConsumedWithDetail?user_id=${userId}&date=${dateCalendar}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`/api/foodAdded/dailyConsumedWithDetail?date=${dateCalendar}`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error("Erro ao obter alimentos adicionados");
@@ -1012,7 +895,7 @@ async function fetchAddedFoods(userId, dateCalendar) {
         btnDeleteFoodElement.src = "./img/trash.svg";
         btnDeleteFoodElement.alt = "Deletar";
         // btnDeleteFoodElement.classList.add("icone-deletar");
-
+console.log(food);
         // Event listener para o botão de editar
         btnEditFoodElement.addEventListener("click", async () => {
           try {
@@ -1020,6 +903,7 @@ async function fetchAddedFoods(userId, dateCalendar) {
             await editFoodItem(
               food.id,
               food.food_name,
+              food.food_quantity,
               food.meal,
               food.food_id
             );
@@ -1099,7 +983,7 @@ async function deleteFoodItem(foodId) {
   }
 }
 
-async function editFoodItem(foodId, foodName, meal, id_food) {
+async function editFoodItem(foodId, foodName,foodGrams, meal, id_food) {
   const modalEditFoodAdded = EditFoodAdded();
   modalEditFoodAdded.querySelector("#nameEditFood").textContent =
     escapeHtml(foodName);
@@ -1117,6 +1001,7 @@ async function editFoodItem(foodId, foodName, meal, id_food) {
   );
 
   modalEditFoodAdded.querySelector("#newMeal").value = escapeHtml(meal);
+  modalEditFoodAdded.querySelector("#newGrams").value = escapeHtml(foodGrams);
 
   console.log(foodId, "teste");
   const btnSaveEdit = modalEditFoodAdded.querySelector("#btn_save_editFood");
@@ -1134,8 +1019,8 @@ async function editFoodItem(foodId, foodName, meal, id_food) {
     }
 
     try {
-      const userId = await getUserId();
-      const dateCalendar = document.getElementById("input-date").value;
+      const dateCalendar = document.getElementById('input-date').value;
+      
 
       const response = await fetch(`/api/foodAdded/${foodId}`, {
         method: "PUT",
@@ -1143,7 +1028,6 @@ async function editFoodItem(foodId, foodName, meal, id_food) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: userId,
           food_id: id_food,
           date: dateCalendar,
           food_quantity: newGrams,
@@ -1171,15 +1055,8 @@ async function editFoodItem(foodId, foodName, meal, id_food) {
   document.body.appendChild(modalEditFoodAdded);
 }
 
-async function editMyFoodItem(
-  userId,
-  myFoodItemId,
-  nameCreate,
-  caloriesCreate,
-  carbCreate,
-  proteinCreate,
-  fatCreate
-) {
+
+async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate, proteinCreate,fatCreate ){
   const modalEditMyFood = CreateMyFoodbtn();
 
   const btnCancelEdit = modalEditMyFood.querySelector("#btn_cancel_create");
@@ -1249,12 +1126,11 @@ async function editMyFoodItem(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: userId,
-          name: newNameCreate,
-          calorie: newCaloriesCreate,
-          carbohydrate_g: newCarbCreate,
-          protein_g: newProteinCreate,
-          lipid_g: newFatCreate,
+          name: newNameCreate, 
+          calorie: newCaloriesCreate, 
+          carbohydrate_g: newCarbCreate, 
+          protein_g: newProteinCreate, 
+          lipid_g: newFatCreate
         }),
       });
 
@@ -1262,27 +1138,38 @@ async function editMyFoodItem(
         throw new Error("Erro ao editar alimento.");
       }
 
+  
       console.log("Alimento editado com sucesso!");
 
       // Atualizar a página para refletir as mudanças
-      
+     
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
-      
+     
     } catch (error) {
       console.error("Erro ao editar alimento:", error);
     }
     modalEditMyFood.remove();
+    
   });
-
   document.body.appendChild(modalEditMyFood);
 }
 
-async function deleteMyFoodItem(userId, myFoodItemId) {
+async function deleteMyFoodItem(myFoodItemId){
   console.log(myFoodItemId);
-  if (!confirm("Tem certeza que deseja deletar este alimento?")) {
-    return;
-  }
+ const deleteConfirmationModal =  deleteConfirmation();
+
+
+ const cancelConfirmDelete = deleteConfirmationModal.querySelector("#cancelConfirmDelete");
+ const confirmDelete = deleteConfirmationModal.querySelector("#confirmDelete");
+
+  
+ cancelConfirmDelete.addEventListener("click", ()=>{
+  deleteConfirmationModal.remove();
+  return
+ });
+ 
+ confirmDelete.addEventListener("click", async()=>{
 
   try {
     const response = await fetch(`/api/food/${myFoodItemId}`, {
@@ -1295,25 +1182,23 @@ async function deleteMyFoodItem(userId, myFoodItemId) {
 
     console.log("Alimento deletado com sucesso!");
     // Atualizar a lista de alimentos após a exclusão
-    // refreshFoodList(userId);
-    const customEvent = createCustomEvent("/home");
-    window.dispatchEvent(customEvent);
+
   } catch (error) {
     console.error("Erro ao deletar alimento:", error);
   }
   
+  deleteConfirmationModal.remove();
+  const customEvent = createCustomEvent("/home");
+   window.dispatchEvent(customEvent);
+ });
+
+  
+ 
+  document.body.appendChild(deleteConfirmationModal);
 }
 
 // Função para renderizar os alimentos filtrados no modal
-function renderFilteredFoods(
-  filteredFoods,
-  btnCreatefoodContainer,
-  datafoodContainer,
-  listCreatefoodContainer,
-  userId,
-  meal,
-  modal
-) {
+function renderFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer,listCreatefoodContainer, meal,modal) {
   listCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
   datafoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
 
@@ -1324,7 +1209,7 @@ function renderFilteredFoods(
       const foodElement = document.createElement("div");
       foodElement.textContent = escapeHtml(foodItem.name);
       foodElement.addEventListener("click", async () => {
-        await openAddFoodModal(userId, foodItem, meal); // Abre o modal de adicionar comida
+        await openAddFoodModal(foodItem, meal); // Abre o modal de adicionar comida
         modal.remove(); // Remove o modal após clicar em um elemento do foodlist
       });
       datafoodContainer.appendChild(foodElement);
@@ -1332,17 +1217,10 @@ function renderFilteredFoods(
   }
 }
 
-function renderMyFilteredFoods(
-  filteredFoods,
-  btnCreatefoodContainer,
-  datafoodContainer,
-  listCreatefoodContainer,
-  userId,
-  meal,
-  modal
-) {
+function renderMyFilteredFoods(filteredFoods, btnCreatefoodContainer,datafoodContainer, listCreatefoodContainer, meal,modal) {
   listCreatefoodContainer.innerHTML = ""; // Limpar o conteúdo atual do contêiner
-  datafoodContainer.innerHTML = "";
+ datafoodContainer.innerHTML ="";
+
 
   if (filteredFoods.length === 0) {
     listCreatefoodContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
@@ -1363,15 +1241,9 @@ function renderMyFilteredFoods(
       btnEdit.addEventListener("click", async () => {
         try {
           console.log("Botão Editar clicado para o alimento:", myFoodItem.id);
-          await editMyFoodItem(
-            userId,
-            myFoodItem.id,
-            myFoodItem.name,
-            myFoodItem.calorie,
-            myFoodItem.carbohydrate_g,
-            myFoodItem.protein_g,
-            myFoodItem.lipid_g
-          );
+          await editMyFoodItem(myFoodItem.id, myFoodItem.name, myFoodItem.calorie,myFoodItem.carbohydrate_g, myFoodItem.protein_g, myFoodItem.lipid_g);
+          
+          
         } catch (error) {
           console.error("Erro ao editar alimento:", error);
         }
@@ -1382,12 +1254,12 @@ function renderMyFilteredFoods(
       const btnDelete = document.createElement("img");
       btnDelete.src = "./img/trash.svg";
       btnDelete.alt = "Deletar";
-      // btnDelete.classList.add("icone-deletar");
+     
 
       btnDelete.addEventListener("click", async () => {
         try {
-          // console.log("Botão Deletar clicado para o alimento:", food.id);
-          await deleteMyFoodItem(userId, myFoodItem.id);
+          
+          await deleteMyFoodItem(myFoodItem.id);
           // const customEvent = createCustomEvent("/home");
           // window.dispatchEvent(customEvent);
         } catch (error) {
@@ -1397,7 +1269,7 @@ function renderMyFilteredFoods(
           window.dispatchEvent(customEvent);
       });
       myFoodName.addEventListener("click", async () => {
-        await openAddFoodModal(userId, myFoodItem, meal); // Abre o modal de adicionar comida
+        await openAddFoodModal(myFoodItem, meal); // Abre o modal de adicionar comida
         modal.remove(); // Remove o modal após clicar em um elemento do foodlist
       });
 
