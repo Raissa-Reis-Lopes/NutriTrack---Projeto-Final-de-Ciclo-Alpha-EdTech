@@ -8,7 +8,11 @@ const config = {
     DB_HOST: process.env.DB_HOST || "localhost",
     DB_DATABASE: process.env.DB_DATABASE || "nutritrack",
     DB_PASSWORD: process.env.DB_PASSWORD,
-    DB_PORT: process.env.DB_PORT || 5432
+    DB_PORT: process.env.DB_PORT || 5432,
+    PRIVATE_KEY_PATH: process.env.PRIVATE_KEY_PATH,
+    CERTIFICATE_PATH: process.env.CERTIFICATE_PATH,
+    CA_PATH: process.env.CA_PATH,
+
 }
 
 module.exports = config;

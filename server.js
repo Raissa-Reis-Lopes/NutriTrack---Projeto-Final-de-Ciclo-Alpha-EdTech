@@ -30,10 +30,10 @@ app.get('/*', (req, res)=>{
     res.sendFile(path.resolve('public', 'index.html'));
 })
 
-// Carrega as opções de certificado SSL
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/alpha03.alphaedtech.org.br/chain.pem', 'utf8');
+const privateKey = fs.readFileSync(config.PRIVATE_KEY_PATH, 'utf8');
+const certificate = fs.readFileSync(config.CERTIFICATE_PATH, 'utf8');
+const ca = fs.readFileSync(config.CA_PATH, 'utf8');
+
 
 const credentials = {
     key: privateKey,
