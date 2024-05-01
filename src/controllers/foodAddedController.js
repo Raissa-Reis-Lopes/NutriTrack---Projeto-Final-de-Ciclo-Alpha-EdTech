@@ -49,6 +49,7 @@ const calculatePeriodNutritionSummary = async (req, res) => {
         const { start_date, end_date } = req.query;
         const user_id = req.user;
 
+        console.log(`Essa é a data inicial:${start_date} e final ${end_date} no controller`);
         if(!user_id){
             throw new Error('O id do usuário é obrigatório');
         }
