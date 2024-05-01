@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-// import { limitDate } from "../utils/limitDates.js";
+import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 // import { generateBarChart } from '../utils/barchart.js';
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
