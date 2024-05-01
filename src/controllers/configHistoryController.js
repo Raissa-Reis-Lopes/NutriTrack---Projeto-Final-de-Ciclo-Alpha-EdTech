@@ -1,4 +1,4 @@
-const configHistoryServices = require("../services/configHistoryServices");
+const configHistoryServices = require("../services/configHistoryServices")
 
 const getLatestConfigHistoryByUserId = async(req, res) => {
     const user_id = req.user;

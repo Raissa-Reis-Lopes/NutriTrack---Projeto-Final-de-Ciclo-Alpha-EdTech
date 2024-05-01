@@ -1,5 +1,5 @@
 import createCustomEvent from "./event.js";
-// import { limitDate } from "../utils/limitDates.js";
+import { limitDate } from "../utils/limitDates.js";
 import { logout } from "../utils/logout.js";
 // import { generateBarChart } from '../utils/barchart.js';
 import { privacyPolicyModal, termsModal, sacModal, createModalEventsDefault } from "./modals.js";
@@ -24,13 +24,12 @@ export function History() {
             <button id="btnExit" class="btn_stroke btn_exit btn_exit_light">Sair</button>
         </nav>
     </header>
-    <main class="history_container">
-       
-        <div id="dateDisplay" class="date_display"></div>
+    <main class="history_container">   
         <div class="chart_history">
         <section>
             <div class="chart-container">
                 <span class="chart_title">Gráfico Semanal</span>
+                <div id="dateDisplay" class="date_display"></div>
                 <div>
                   <canvas class="chart_canvas" id="week-chart"></canvas>
                 </div>
@@ -137,7 +136,9 @@ async function getDateAndRenderChart() {
         const [startOfWeek, endOfWeek] = getWeekRange(date);
         const startDate = formatDate(startOfWeek);
         const endDate = formatDate(endOfWeek);
-        dateDisplay.textContent = `Período: ${startDate} - ${endDate}`;
+
+        dateDisplay.textContent = `${startDate} - ${endDate}`;
+
         const responseData = await fetchChartData(convertDateFormat(startDate), convertDateFormat(endDate));
         console.log(`Esse é o responseData na função updateDateDisplay: ${responseData}`)
         renderBarChart(responseData, chartContainer,corCalorie, corProtein, corCarbo, corLipid)
