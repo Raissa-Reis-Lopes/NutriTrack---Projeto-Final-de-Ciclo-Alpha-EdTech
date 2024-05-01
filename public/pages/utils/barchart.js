@@ -4,10 +4,6 @@ export function renderBarChart(responseData, container, colorCalorie, colorProte
   // Dias da semana
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
-  console.log(`Esse é o responseData no barchart: ${responseData}`)
-  console.log(responseData)
-  console.log(responseData.data)
-
 const chartOptions = {
     responsive: true,
     scales: {
@@ -17,11 +13,19 @@ const chartOptions = {
             position: 'left',
             title: {
                 display: true,
-                text: 'Calorias',
+                text: 'Calorias (kcal)',
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
             },
-            // Define o range do eixo y para calorias
+            ticks: {
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
+            },
             min: 0,
-            // max: 3000, // Defina o valor máximo conforme necessário
         },
         y1: {
             type: 'linear',
@@ -29,20 +33,39 @@ const chartOptions = {
             position: 'right',
             title: {
                 display: true,
-                text: 'Proteína, Gordura e Carboidrato',
+                text: 'Proteína, Gordura e Carboidrato (g)',
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
             },
-            min: 0,
-            // max: 200, 
+            min: 0, 
             grid: {
                 drawOnChartArea: false,
             },
+            ticks: {
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
+            }
         },
         x: {
             stacked: false,
             title: {
                 display: true,
                 text: 'Dias da Semana',
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
             },
+            ticks: {
+                font: {
+                    size: 16, // Define o tamanho da fonte
+                    weight: 'bold' // Define a espessura da fonte
+                }
+            }
         },
     },
 };
@@ -51,28 +74,48 @@ const chartData = {
     labels: daysOfWeek,
     datasets: [
         {
-            label: 'Calorias',
+            label: 'Calorias (Kcal)',
+            font: {
+                size: 16, // Define o tamanho da fonte
+                weight: 'bold' // Define a espessura da fonte
+            },
             backgroundColor: colorCalorie,
             data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.calories) : 0),
             yAxisID: 'y', // Associando ao eixo y
+            borderRadius: 5,
         },
         {
-            label: 'Proteína',
+            label: 'Proteína (g)',
+            font: {
+                size: 16, // Define o tamanho da fonte
+                weight: 'bold' // Define a espessura da fonte
+            },
             backgroundColor: colorProtein,
             data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.protein) : 0),
             yAxisID: 'y1', // Associando ao eixo y1
+            borderRadius: 5,
         },
         {
-            label: 'Carboidrato',
+            label: 'Carboidrato (g)',
+            font: {
+                size: 16, // Define o tamanho da fonte
+                weight: 'bold' // Define a espessura da fonte
+            },
             backgroundColor: colorCarbo,
             data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.carbohydrate) : 0),
             yAxisID: 'y1', // Associando ao eixo y1
+            borderRadius: 5,
         },
         {
-            label: 'Gordura',
+            label: 'Gordura (g)',
+            font: {
+                size: 16, // Define o tamanho da fonte
+                weight: 'bold' // Define a espessura da fonte
+            },
             backgroundColor: colorLipid,
             data: daysOfWeek.map(day => responseData.data[day] ? Math.ceil(responseData.data[day].totalNutrition.lipid) : 0),
             yAxisID: 'y1', // Associando ao eixo y1
+            borderRadius: 5,
         }
     ]
 };
