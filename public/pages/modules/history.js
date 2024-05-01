@@ -136,7 +136,9 @@ async function getDateAndRenderChart() {
         const [startOfWeek, endOfWeek] = getWeekRange(date);
         const startDate = formatDate(startOfWeek);
         const endDate = formatDate(endOfWeek);
+
         dateDisplay.textContent = `${startDate} - ${endDate}`;
+
         const responseData = await fetchChartData(convertDateFormat(startDate), convertDateFormat(endDate));
         console.log(`Esse é o responseData na função updateDateDisplay: ${responseData}`)
         renderBarChart(responseData, chartContainer,corCalorie, corProtein, corCarbo, corLipid)

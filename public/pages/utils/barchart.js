@@ -4,6 +4,7 @@ export function renderBarChart(responseData, container, colorCalorie, colorProte
   // Dias da semana
   const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
+
 const chartOptions = {
     responsive: true,
     scales: {
@@ -49,6 +50,7 @@ const chartOptions = {
                     weight: 'bold' // Define a espessura da fonte
                 }
             }
+
         },
         x: {
             stacked: false,
