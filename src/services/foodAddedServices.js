@@ -117,8 +117,6 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
             nutritionSummary[formattedDate].totalNutrition.lipid += (lipid_g / 100) * food_quantity;
         }
 
-        console.log(`Esse é o nutritionSummary sem formatar as datas para dom, seg: ${JSON.stringify(nutritionSummary)}`);
-
         // Converter as chaves do objeto para strings no formato 'Dom', 'Seg', etc.
         const formattedNutritionSummary = {};
         Object.keys(nutritionSummary).forEach(date => {
@@ -131,8 +129,6 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
 
             formattedNutritionSummary[dayOfWeek] = nutritionSummary[date];
         });
-
-        console.log(`Esse é o nutritionSummary depois de formatar as datas para dom, seg: ${JSON.stringify(formattedNutritionSummary)}`);
 
         return formattedNutritionSummary;
     } catch (error) {

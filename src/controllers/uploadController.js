@@ -53,7 +53,6 @@ function removeActualAvatar(actual_avatar) {
                 console.log('Erro ao excluir o arquivo:', unlinkError);
                 return;
             }
-            console.log('Arquivo excluído com sucesso.');
         });
     });
 }
@@ -69,8 +68,6 @@ const uploadAvatar = async (req, res) => {
 
         // Busca e apaga a imagem atual do avatar
         const actual_avatar = await uploadServices.getActualAvatar(user_id);
-
-        console.log('actual_avatar:', actual_avatar);
         
         if (actual_avatar !== 'default-avatar.png') {
             removeActualAvatar(actual_avatar);
