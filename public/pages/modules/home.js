@@ -21,6 +21,7 @@ import { footerHome } from "./footer.js";
 import { loader } from "../utils/loader.js";
 import { panAnimation } from "../utils/panAnimation.js";
 import { scroller } from "../utils/scrollerAnimation.js";
+import { messageError } from "../utils/messageError.js" 
 
 let proteinChartInstance = null;
 let carboChartInstance = null;
@@ -481,16 +482,24 @@ async function openModalWithMeal(meal) {
 
   if (lastSelectedList === "showMyFoods") {
     await showMyFoodsList();
+    showMyFoods.classList.add("selectedList")
+    showFoods.classList.remove("selectedList");
   } else {
     await showFoodsList();
+    showMyFoods.classList.remove("selectedList")
+    showFoods.classList.add("selectedList");
   }
 
   showFoods.addEventListener("click", async () => {
+    showMyFoods.classList.remove("selectedList")
+    showFoods.classList.add("selectedList");
     lastSelectedList = "showFoods";
     await showFoodsList();
   });
 
   showMyFoods.addEventListener("click", async () => {
+    showMyFoods.classList.add("selectedList")
+    showFoods.classList.remove("selectedList");
     lastSelectedList = "showMyFoods";
     await showMyFoodsList();
   });
@@ -563,7 +572,7 @@ async function openModalWithMeal(meal) {
 
         const btnsCreateFood = modalCreate.querySelector("#btnsCreateFood");
 
-        const errorMessageCreate = document.createElement("div");
+        // const errorMessageCreate = document.createElement("div");
 
         const btnCancelCreate = modalCreate.querySelector("#btn_cancel_create");
         const btnCreateNew = modalCreate.querySelector("#btn_create_new");
@@ -571,6 +580,9 @@ async function openModalWithMeal(meal) {
         btnCancelCreate.addEventListener("click", () => modalCreate.remove());
 
         btnCreateNew.addEventListener("click", async () => {
+
+
+
           const nameCreate = escapeHtml(
             modalCreate.querySelector("#nameCreate").value
           );
@@ -587,32 +599,71 @@ async function openModalWithMeal(meal) {
             modalCreate.querySelector("#fatCreate").value
           );
 
-          errorMessageCreate.innerText = "";
-          if (
-            !nameCreate ||
-            !caloriesCreate ||
-            !carbCreate ||
-            !proteinCreate ||
-            !fatCreate
-          ) {
-            errorMessageCreate.innerText = "Dados de criação incompletos.";
+          if (!nameCreate){
+            messageError("message_new_name","O nome não pode ser vazio");
             return;
           }
-          if (!nameValid(nameCreate)) {
-            errorMessageCreate.innerText = "Formato de nome inválido!";
+          if (!caloriesCreate){
+            messageError("message_new_calories","A quantidade de calorias não pode ser vazia");
             return;
           }
-          if (
-            !numberValid(caloriesCreate) ||
-            !numberValid(carbCreate) ||
-            !numberValid(proteinCreate) ||
-            !numberValid(caloriesCreate) ||
-            !numberValid(fatCreate)
-          ) {
-            errorMessageCreate.innerText =
-              "Precisa ser um numero inteiro maior que 0";
+          if (!numberValid(caloriesCreate)){
+            messageError("message_new_calories","Precisa ser um número positivo");
             return;
-        }
+          }
+          if (!carbCreate){
+            messageError("message_new_carbo","A quantidade de carboidrato não pode ser vazio");
+            return;
+          }
+          
+          if (!numberValid(carbCreate)){
+            messageError("message_new_carbo","Precisa ser um número positivo");
+            return;
+          }
+          if (!proteinCreate){
+            messageError("message_new_protein","A quantidade de proteína não pode ser vazia");
+            return;
+          }
+          if (!numberValid(proteinCreate)){
+            messageError("message_new_protein","Precisa ser um número positivo");
+            return;
+          }
+          if (!fatCreate){
+            messageError("message_new_lipid","A quantidade de gordura não pode ser vazia");
+            return;
+          }        
+          if (!numberValid(fatCreate)){
+            messageError("message_new_lipid","Precisa ser um número positivo");
+            return;
+          }
+       
+
+        //   errorMessageCreate.innerText = "";
+        //   if (
+        //     !nameCreate ||
+        //     !caloriesCreate ||
+        //     !carbCreate ||
+        //     !proteinCreate ||
+        //     !fatCreate
+        //   ) {
+        //     errorMessageCreate.innerText = "Dados de criação incompletos.";
+        //     return;
+        //   }
+        //   if (!nameValid(nameCreate)) {
+        //     errorMessageCreate.innerText = "Formato de nome inválido!";
+        //     return;
+        //   }
+        //   if (
+        //     !numberValid(caloriesCreate) ||
+        //     !numberValid(carbCreate) ||
+        //     !numberValid(proteinCreate) ||
+        //     !numberValid(caloriesCreate) ||
+        //     !numberValid(fatCreate)
+        //   ) {
+        //     errorMessageCreate.innerText =
+        //       "Precisa ser um numero inteiro maior que 0";
+        //     return;
+        // }
 
         
             // função para salvar o alimento no banco de dados
@@ -621,7 +672,7 @@ async function openModalWithMeal(meal) {
             modalCreate.remove();
           });
 
-        btnsCreateFood.appendChild(errorMessageCreate);
+        // btnsCreateFood.appendChild(errorMessageCreate);
         document.body.appendChild(modalCreate);
       });
 
@@ -786,23 +837,15 @@ function openAddFoodModal(item,meal) {
   // Define os valores no modal com base nos dados do item clicado
 
 
-  modal.querySelector("#nameFood").textContent = escapeHtml(item.name);
-  modal.querySelector("#quantity_calories").textContent = escapeHtml(
-    Number(item.calorie).toFixed(2)
-  );
-  modal.querySelector("#quantity_carb").textContent = escapeHtml(
-    Number(item.carbohydrate_g).toFixed(2)
-  );
-  modal.querySelector("#quantity_proteins").textContent = escapeHtml(
-    Number(item.protein_g).toFixed(2)
-  );
-  modal.querySelector("#quantity_fat").textContent = escapeHtml(
-    Number(item.lipid_g).toFixed(2)
-  );
+  modal.querySelector("#nameFood").textContent = item.name;
+  modal.querySelector("#quantity_calories").textContent = Math.ceil(Number(item.calorie));
+  modal.querySelector("#quantity_carb").textContent = Math.ceil(Number(item.carbohydrate_g));
+  modal.querySelector("#quantity_proteins").textContent = Math.ceil(Number(item.protein_g));
+  modal.querySelector("#quantity_fat").textContent = Math.ceil(Number(item.lipid_g));
   // Define a opção do select com base no meal
   modal.querySelector("#meal").value = escapeHtml(meal);
 
-  const errorMessage = modal.querySelector("#errorMessage");
+  // const errorMessage = modal.querySelector("#errorMessage");
 
   const btnCancel = modal.querySelector("#btn_cancel_addFood");
   btnCancel.addEventListener("click", () => modal.remove());
@@ -814,11 +857,16 @@ function openAddFoodModal(item,meal) {
     const dateCalendar = escapeHtml(
       document.getElementById("input-date").value
     );
-    errorMessage.innerText = "";
-    if (!numberValid(gramsInput) || !grams) {
-      errorMessage.innerText = "Precisa ser um numero inteiro maior que 0";
+    // errorMessage.innerText = "";
+    // if (!numberValid(gramsInput) || !grams) {
+    //   errorMessage.innerText = "Precisa ser um numero inteiro maior que 0";
+    //   return;
+    // }
+    if (!numberValid(gramsInput) || !gramsInput) {
+      messageError("message_add_grams","Precisa ser um número positivo");
       return;
     }
+
     // console.log(dateCalendar);
     const foodId = item.id;
 
@@ -950,7 +998,7 @@ async function fetchAddedFoods(dateCalendar){
         const newFoodElementcalorie = document.createElement("div");
         newFoodElementcalorie.classList.add("newFoodElementcalorie");
         newFoodElementcalorie.textContent = escapeHtml(
-          `${Number(food.calorie).toFixed(2)} Kcal`
+          `${Number(food.calorie)} Kcal`
         );
 
         divFoodElement.appendChild(newFoodElementQuantity);
@@ -1121,35 +1169,72 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
     const newFatCreate = escapeHtml(
       modalEditMyFood.querySelector("#fatCreate").value
     );
-    const errorMessageCreateEdit = modalEditMyFood.querySelector(
-      "#errorMessageCreateEdit"
-    );
+    // const errorMessageCreateEdit = modalEditMyFood.querySelector(
+    //   "#errorMessageCreateEdit"
+    // );
 
-    errorMessageCreateEdit.innerText = "";
-    if (
-      !newNameCreate ||
-      !newCaloriesCreate ||
-      !newCarbCreate ||
-      !newProteinCreate ||
-      !newFatCreate
-    ) {
-      errorMessageCreateEdit.innerText = "Dados de criação incompletos.";
+    if (!newNameCreate){
+      messageError("message_new_name","O nome não pode ser vazio");
       return;
     }
-    if (!nameValid(newNameCreate)) {
-      errorMessageCreateEdit.innerText = "Formato de nome inválido!";
+    if (!newCaloriesCreate){
+      messageError("message_new_calories","A quantidade de calorias não pode ser vazia");
       return;
     }
-    if (
-      !numberValid(newCaloriesCreate) ||
-      !numberValid(newCarbCreate) ||
-      !numberValid(newProteinCreate) ||
-      !numberValid(newFatCreate)
-    ) {
-      errorMessageCreateEdit.innerText =
-        "Precisa ser um numero inteiro maior que 0";
+    if (!newCarbCreate){
+      messageError("message_new_carbo","A quantidade de carboidrato não pode ser vazio");
       return;
     }
+    if (!newProteinCreate){
+      messageError("message_new_protein","A quantidade de proteína não pode ser vazia");
+      return;
+    }
+    if (!newFatCreate){
+      messageError("message_new_lipid","A quantidade de gordura não pode ser vazia");
+      return;
+    }
+    if (!numberValid(caloriesCreate)){
+      messageError("message_new_calories","Precisa ser um número positivo");
+      return;
+    }
+    if (!numberValid(carbCreate)){
+      messageError("message_new_carbo","Precisa ser um número positivo");
+      return;
+    }
+    if (!numberValid(proteinCreate)){
+      messageError("message_new_protein","Precisa ser um número positivo");
+      return;
+    }
+    if (!numberValid(fatCreate)){
+      messageError("message_add_lipid","Precisa ser um número positivo");
+      return;
+    }
+
+    // errorMessageCreateEdit.innerText = "";
+    // if (
+    //   !newNameCreate ||
+    //   !newCaloriesCreate ||
+    //   !newCarbCreate ||
+    //   !newProteinCreate ||
+    //   !newFatCreate
+    // ) {
+    //   errorMessageCreateEdit.innerText = "Dados de criação incompletos.";
+    //   return;
+    // }
+    // if (!nameValid(newNameCreate)) {
+    //   errorMessageCreateEdit.innerText = "Formato de nome inválido!";
+    //   return;
+    // }
+    // if (
+    //   !numberValid(newCaloriesCreate) ||
+    //   !numberValid(newCarbCreate) ||
+    //   !numberValid(newProteinCreate) ||
+    //   !numberValid(newFatCreate)
+    // ) {
+    //   errorMessageCreateEdit.innerText =
+    //     "Precisa ser um numero inteiro maior que 0";
+    //   return;
+    // }
 
     try {
       const response = await fetch(`/api/food/${myFoodItemId}`, {

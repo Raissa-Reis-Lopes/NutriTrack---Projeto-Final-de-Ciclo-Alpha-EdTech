@@ -1,9 +1,12 @@
 .input_create_food{
     display: flex;
-   justify-content: left;
+   /* justify-content: left; */
     gap: 10px;
     font-weight: 500;
     align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 
 }
 
@@ -21,6 +24,7 @@
     flex-direction: column;
     gap: 15px;
     align-items: end;
+    width: 70%;
 
 }
 
@@ -34,4 +38,13 @@
 
 .container_modal_create span{
     font-size: 0.85rem;
+}
+
+#btnsCreateFood{
+    gap: 10px;
+    font-weight: 500;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }

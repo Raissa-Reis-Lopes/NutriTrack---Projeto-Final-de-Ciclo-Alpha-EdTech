@@ -44,18 +44,22 @@ export function AddFood(){
                 <div id="quantity_calories"></div>
                 <span>Calorias</span>
             </div>
+            <div id="message_add_calories"></div>
             <div class="carb">
                 <div id="quantity_carb"></div>
                 <span>Carboidratos</span>
             </div>
+            <div id="message_add_carbo"></div>
             <div class="proteins">
                 <div id="quantity_proteins"></div>
                 <span>Proteínas</span>
             </div>
+            <div id="message_add_protein"></div>
             <div class="fat">
                 <div id="quantity_fat"></div>
                 <span>Gorduras</span>
             </div>
+            <div id="message_add_lipid"></div>
         </div>
         <div class="container_grams">
             <div class="grams_input">
@@ -73,7 +77,8 @@ export function AddFood(){
                 </select>
             </div>
         </div>
-        <div id="errorMessage"></div>
+        <div id="message_add_grams"></div>
+       <!-- <div id="errorMessage"></div> -->
         <div class="btns_addFood" id ="btnsAddFood">
             <button id="btn_cancel_addFood" class="btn_stroke btn_cancel">Cancelar</button>
             <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
@@ -95,27 +100,32 @@ export function CreateMyFoodbtn(){
                 <label for="nameCreate">Nome</label>
                 <input type="text" id="nameCreate">
             </div>
+            <div id="message_new_name"></div>
             <div class="input_create_food">
                 <label for="caloriesCreate">Calorias</label>
                 <input type="text" id="caloriesCreate">
             </div>
+            <div id="message_new_calories"></div>
             <div class="input_create_food">
                 <label for="carbCreate">Carboidratos <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="carbCreate">
             </div>
+            <div id="message_new_carbo"></div>
             <div class="input_create_food">
                 <label for="proteinCreate">Proteínas <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="proteinCreate">
             </div>
+            <div id="message_new_protein"></div>
             <div class="input_create_food">
                 <label for="fatCreate">Gorduras <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="fatCreate">
             </div>
+            <div id="message_new_lipid"></div>
             <div id="btnsCreateFood">
                 <button id="btn_cancel_create" class="btn_stroke btn_cancel btn_create">Cancelar</button>
                 <button id="btn_create_new" class="btn_stroke btn_create">Salvar alimento</button>
              </div>
-             <div id="errorMessageCreateEdit"></div>
+          <!--   <div id="errorMessageCreateEdit"></div> -->
         </div> 
     </div>
     `;

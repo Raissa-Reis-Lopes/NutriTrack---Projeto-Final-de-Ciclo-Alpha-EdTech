@@ -20,3 +20,7 @@
   cursor: pointer;
   color:var(--cor-p3) ;
 }
+
+.selectedList{
+  background-color: var(--cor-p2);
+}
