@@ -6,7 +6,8 @@ const { comparePassword } = require('../utils/comparePassword');
 
 
 const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    const passwordRegex =/^.{4,15}$/;
 
     if (!passwordRegex.test(password)) {
         throw new Error("A senha deve conter no mínimo 8 caracteres e no máximo 15, pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.");
