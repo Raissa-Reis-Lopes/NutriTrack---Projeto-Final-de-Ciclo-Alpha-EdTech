@@ -5,6 +5,7 @@
 }
 body{
     font-family: 'Montserrat', sans-serif;
+    background-color: var(--cor-p9);
 }
 
 ul {
@@ -98,4 +99,99 @@ ul {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--cor-p4); /* cor do scroll ao passar o mouse */
+}
+
+
+/* Novo estilo para os checkbox */
+
+.label_checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #394a56;
+}
+
+.label-text {
+  margin-left: 16px;
+  color: var(--cor-p7);
+}
+
+.toggle {
+  isolation: isolate;
+  position: relative;
+  height: 30px;
+  width: 60px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow:
+    -8px -4px 8px 0px #ffffff,
+    8px 4px 12px 0px #d1d9e6,
+    4px 4px 4px 0px #d1d9e6 inset,
+    -4px -4px 4px 0px #ffffff inset;
+}
+
+.toggle-state {
+  display: none;
+}
+
+.indicator {
+  height: 100%;
+  width: 200%;
+  background: #ecf0f3;
+  border-radius: 15px;
+  transform: translate3d(-75%, 0, 0);
+  transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+  box-shadow:
+    -8px -4px 8px 0px #ffffff,
+    8px 4px 12px 0px #d1d9e6;
+}
+
+.toggle-state:checked ~ .indicator {
+  background: var(--cor-p7);
+  transform: translate3d(25%, 0, 0);
+}
+
+/* Novo estilo para os inputs */
+
+.form-control {
+  position: relative;
+  margin: 20px 0;
+  width: 300px;
+}
+
+.form-control input {
+  border: 0;
+  border-bottom: 2px solid #333;
+  padding: 15px 0;
+  display: block;
+  font-size: 18px;
+  font-family: 'Muli', sans-serif;
+  width: 100%;
+  transition: 0.1s ease-in;
+  background-color: var(--cor-p9);
+}
+
+.form-control input:focus, 
+.form-control input:valid {
+  border-bottom-color: var(--cor-p7);
+  outline: none;
+}
+
+.form-control input:focus + label span ,
+.form-control input:valid + label span{
+  color: var(--cor-p7);
+  transform: translateY(-30px);
+}
+
+.form-control label {
+  position: absolute;
+  top: 0px;
+  left: 0;
+}
+
+.form-control label span {
+  display: inline-block;
+  font-size: 18px;
+  min-width: 5px;
+  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }

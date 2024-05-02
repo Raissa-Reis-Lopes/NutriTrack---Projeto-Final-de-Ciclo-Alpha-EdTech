@@ -18,25 +18,28 @@ export function Login() {
         <div class="welcome">
             <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
             <div class="div_input">
-                <label for="email">E-mail</label>
-                <div class="input_email_container">
-                <input type="email" name="email" id="email" class="input_email"> 
-                <div id="icon_email"></div>
+                <div class="form-control">
+                    <input type="text" required id="email" />
+                    <label>Email</label>
+                    <div id="icon_email"></div>
                 </div>
                 <div id="message_email"></div>
-                <label for="password">Senha</label>
-                <div class="input_password_container">
-                <input type="password" name="password" id="password" class="input_pass">
+                <div class="form-control">
+                <input type="text" required id="password"/>
+                <label>Password</label>
                 <div id="icon"></div>
                 </div>
                 <div id="message_password"></div>
                 <div class="align_row"> 
-                <input type="checkbox" name="connect" id="connect" class="connect">
-                <label for="connect">Me manter conectado</label>
+                <label class="label_checkbox">
+                <div class="toggle">
+                    <input class="toggle-state" type="checkbox" name="check" value="check" id="connect" />
+                    <div class="indicator"></div>
                 </div>
-                <div id="message" class="message-container hidden">
-                <div id="message-content" class="message-content hidden"></div>
+                <div class="label-text">Me manter conectado</div>
+                </label>
                 </div>
+                <div id="message_error_login"></div>
             </div>
             <div class="btns_index">
                     <button id="btn_back" class="btn_stroke">Voltar</button>
@@ -54,7 +57,23 @@ export function Login() {
     document.getElementById("icon").addEventListener("click", showPassword)
     loginBtns();
     logoNav();
+    waveInput();
     return div
+}
+
+
+function waveInput(){
+const inputs = document.querySelectorAll('.form-control input');
+const labels = document.querySelectorAll('.form-control label');
+
+labels.forEach(label => {
+	label.innerHTML = label.innerText
+		.split('')
+		.map((letter, idx) => `<span style="
+				transition-delay: ${idx * 50}ms
+			">${letter}</span>`)
+		.join('');
+});
 }
 
 function showPassword(){
@@ -108,6 +127,8 @@ export function loginBtns(){
              btnEnter.disabled = true;
 
              const rememberMe = connectCheckbox.checked; 
+             console.log(rememberMe)
+
 
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -134,8 +155,8 @@ export function loginBtns(){
                     body: JSON.stringify({ email, password, rememberMe }),
                 });
             
-                if (!response.ok) {          
-                    showMessage("fail", "Usuário e/ou senha inválidos!","-8%");
+                if (!response.ok) { 
+                    messageError("message_error_login", "Usuário e/ou senha inválidos!")         
                     btnEnter.disabled = false;
                     throw new Error('Erro ao fazer login, usuário não localizado');
                 }    

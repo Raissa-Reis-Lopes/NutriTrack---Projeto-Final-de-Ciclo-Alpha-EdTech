@@ -1,6 +1,7 @@
 .welcome h1{
     max-width: 40ch;
     text-align: center;
+    color: var(--cor-p5);
 }
 
 .div_input{
@@ -55,7 +56,7 @@ label{
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p0);
+    background-color: var(--cor-p8);
     min-width: 800px
   }
 
@@ -65,7 +66,11 @@ label{
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p0);
+    background-color: var(--cor-p8);
+  }
+
+  .register:hover{
+    color: var(--cor-p7);
   }
 
   .input_email_container,
