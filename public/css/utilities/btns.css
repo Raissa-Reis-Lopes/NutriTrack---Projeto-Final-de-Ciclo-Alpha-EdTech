@@ -4,29 +4,67 @@
     font-weight: bold;
     font-size: 1.2rem;
     color: var(--cor-p5);
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .btn_colorLinear{
-    border: 1px solid var(--cor-p0);
-    background: linear-gradient(to bottom, var(--cor-p0), var(--cor-p4));
+    border: none;
+    background-color:transparent;
+    letter-spacing: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.btn_colorLinear:hover{
-    cursor: pointer;
-    color: var(--cor-p1);
-    border: 1px solid var(--cor-p3);
-    background: linear-gradient(to bottom, var(--cor-p5), var(--cor-p3));
+
+.btn_colorLinear:hover,
+.btn_colorLinear:active {
+  cursor: pointer;
+  letter-spacing: 5px;
+}
+
+.btn_colorLinear:after,
+.btn_colorLinear:before {
+  backface-visibility: hidden;
+  content: "";
+  display: block;
+  height: 2px;
+  background-color: var(--cor-p5);
+  position: absolute;
+  width: 0;
+  bottom: 0px;
+  transition: all 280ms ease-in-out;
+}
+.btn_colorLinear:before{
+    bottom: auto;
+    top: 0;
+}
+
+.btn_colorLinear:hover:after,
+.btn_colorLinear:hover:before {
+  transition: width 350ms ease-in-out;
+  width: 70%;
+  bottom: 0;
+}
+
+.btn_colorLinear:hover:before {
+  bottom: auto;
+  top: 0;
 }
 
 .btn_stroke{
+    font-weight: 500;
     background-color: transparent;
-    border: 3px solid var(--cor-p5);
+    border: 1px solid var(--cor-p5);
+    box-shadow: -1px 4px 8px 0px rgba(0, 0, 0, 0.5);
 }
 
 .btn_stroke:hover{
+    background-color: var(--cor-p2);
+    transition: ease-in-out;
     cursor: pointer;
-    border: 3px solid var(--cor-p4);
-    color: var(--cor-p4);
+    border: 1px solid var(--cor-p5);
+    
 }
 
 .btns{
@@ -83,3 +121,5 @@
     padding: 5px 10px;
     font-size: 0.90rem;
   }
+
+
