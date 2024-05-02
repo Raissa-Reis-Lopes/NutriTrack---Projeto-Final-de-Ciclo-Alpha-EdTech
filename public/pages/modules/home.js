@@ -989,7 +989,7 @@ async function fetchAddedFoods(dateCalendar){
         const newFoodElementcalorie = document.createElement("div");
         newFoodElementcalorie.classList.add("newFoodElementcalorie");
         newFoodElementcalorie.textContent = escapeHtml(
-          `${Number(food.calorie)} Kcal`
+          `${Number(food.calorie).toFixed(2)} Kcal`
         );
 
         divFoodElement.appendChild(newFoodElementQuantity);
