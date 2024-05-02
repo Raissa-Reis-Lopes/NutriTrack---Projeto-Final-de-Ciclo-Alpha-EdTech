@@ -294,7 +294,7 @@ async function loadUserDataForDate(date) {
             const userAvatar = await getUserAvatar();
 
             const imgHome = document.querySelector("#img-user");
-            imgHome.src = `uploads/${userAvatar}`;
+            imgHome.src = `/assets/${userAvatar}`;
           
             const getDailyGoal = await fetch(`/api/calculate?date=${date}`,{
                 method:"GET",
