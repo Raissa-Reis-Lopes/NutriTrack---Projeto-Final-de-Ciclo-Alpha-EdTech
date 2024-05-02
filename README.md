@@ -3,7 +3,7 @@ Projeto final do Ciclo 1 da Alpha EdTech
 # NutriTrack
 
 
-![alt text](<capa nutritrack.png>)
+![alt text](<capa_nutritrack.png>)
 
 
 <h2>Descrição</h2>
@@ -25,7 +25,9 @@ Gráficos de histórico: Gráfico para realizar o acompanhamento de toda a traje
     <li>Node.js: Plataforma para execução do backend da aplicação.</li>
     <li>Express: Framework web para Node.js, utilizado para construir as rotas da API.</li>
     <li>PostgreSQL: Banco de dados relacional para armazenar dados da aplicação.</li>
+    <li>Figma: Para a prototipagem do projeto.</li>
     <li>HTML/CSS/JavaScript: Frontend para interação com os usuários.</li>
+    <li>Graphs.js: Para apresentar os dados em gráficos e facilitar a visualização para o usuário.</li>
     <li>Git/GitHub: Controle de versão e hospedagem do código-fonte.</li>
     <li>JWT: Utilizado para autenticação de usuários e geração de tokens de sessão.</li>
     <li>Cookie-Parser: Middleware para o Express que facilita o gerenciamento de cookies em aplicativos web.</li>
@@ -54,7 +56,6 @@ Gráficos de histórico: Gráfico para realizar o acompanhamento de toda a traje
 <ul>
     <li><a href="https://github.com/gabriela-sg">Gabriela Gamba</a></li>
     <li><a href="https://github.com/LuizCrashAlves">Luiz Alves</a></li>    
-    <li><a href="https://github.com/matheusnl">Matheus Nogueira</a></li>
     <li><a href="https://github.com/Raissa-Reis-Lopes">Raissa Reis</a></li>
 </ul>
 

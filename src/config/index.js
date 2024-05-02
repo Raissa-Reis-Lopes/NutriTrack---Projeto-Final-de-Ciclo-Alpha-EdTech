@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const config = {
     NODE_ENV: process.env.NODE_ENV || "development",
-    PORT: process.env.PORT || 443,
+    HOSTNAME: process.env.HOSTNAME,
+    PORT: process.env.PORT || 3000,
     SECRET_KEY: process.env.SECRET_KEY,
     DB_USER: process.env.DB_USER,
     DB_HOST: process.env.DB_HOST || "localhost",
@@ -12,7 +13,6 @@ const config = {
     PRIVATE_KEY_PATH: process.env.PRIVATE_KEY_PATH,
     CERTIFICATE_PATH: process.env.CERTIFICATE_PATH,
     CA_PATH: process.env.CA_PATH,
-
 }
 
 module.exports = config;

@@ -3,17 +3,19 @@ const uploadServices = require('../services/uploadServices');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { error } = require('console');
+// const { error } = require('console');
 
 // Configuração do armazenamento e nome do arquivo
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Pasta onde os arquivos serão armazenados
+        cb(null, './public/uploads'); // Pasta onde os arquivos serão armazenados
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname); // Nome do arquivo
     }
 });
+
+
 
 // Função para verificar se o arquivo é uma imagem
 function verifyFileType(file, cb) {
