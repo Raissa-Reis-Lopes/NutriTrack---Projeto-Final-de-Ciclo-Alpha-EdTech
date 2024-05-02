@@ -84,7 +84,6 @@ async function deleteFoodAdded(id){
     const query = 'DELETE FROM food_added WHERE id=$1';
     try {
         await pool.query(query,[id]);
-        console.log('Alimento removido com sucesso da refeição');
     } catch (error) {
         console.log('Erro ao remover o alimento selecionado');
         throw error;

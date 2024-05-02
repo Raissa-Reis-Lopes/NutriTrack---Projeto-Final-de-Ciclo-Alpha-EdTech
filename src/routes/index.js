@@ -9,15 +9,13 @@ const calculateRoutes = require('./calculateRoutes');
 const foodAddedRoutes = require('./foodAddedRoutes');
 const uploadRoutes = require('./uploadRoutes');
 
-//Aqui serão criadas as rotas da aplicação
-
-router.use('/users', userRoutes);            //checked on postman
-router.use('/login', loginRoutes);           //checked on postman
-router.use('/foodPlan', foodPlanRoutes);     //checked on postman
-router.use('/food', foodRoutes);             //checked on postman 
-router.use('/config', configHistoryRoutes);  //Need update due to changes in "date"
-router.use('/calculate', calculateRoutes);   //Need update due to changes in "date"
-router.use('/foodAdded', foodAddedRoutes);   //Need update due to changes in "date"
+router.use('/users', userRoutes);            
+router.use('/login', loginRoutes);           
+router.use('/foodPlan', foodPlanRoutes);     
+router.use('/food', foodRoutes);              
+router.use('/config', configHistoryRoutes);  
+router.use('/calculate', calculateRoutes);   
+router.use('/foodAdded', foodAddedRoutes);   
 router.use('/upload', uploadRoutes);
 
 
