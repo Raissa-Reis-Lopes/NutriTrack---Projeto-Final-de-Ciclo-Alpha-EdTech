@@ -18,6 +18,7 @@ export function Profile() {
         <nav class="header_nav">
         <div id="navHome">Home</div>
         <div id="navHistory">Histórico</div>
+        <div id="navAbout">Sobre Nós</div>
         <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
     </nav>
     </header>
@@ -591,6 +592,7 @@ async function saveChanges(){
 export function navProfile(){
     const navHome = document.getElementById("navHome");
     const navHistory = document.getElementById("navHistory");
+    const navAbout = document.getElementById("navAbout");
     const btnExit = document.getElementById("btnExit");
     const logo = document.getElementById("logo");
  
@@ -608,6 +610,11 @@ export function navProfile(){
     navHistory.addEventListener ("click",()=>{
         const customEvent = createCustomEvent('/history');
         window.dispatchEvent(customEvent); 
+    })
+
+    navAbout.addEventListener ("click", ()=> {
+        const customEvent = createCustomEvent('/about');
+        window.dispatchEvent(customEvent);
     })
 
     btnExit.addEventListener ("click", logout);

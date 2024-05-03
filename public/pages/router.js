@@ -5,6 +5,7 @@ import { Home } from "./modules/home.js";
 import { History } from "./modules/history.js";
 import { Profile } from "./modules/profile.js";
 import { Config } from "./modules/config.js";
+import { About } from "./modules/about.js";
 
 function router() {
     const routes = {
@@ -15,6 +16,7 @@ function router() {
       "/history": History,
       "/profile": Profile,
       "/config": Config,
+      "/about": About,
     };
   
     function getPage(path) {
