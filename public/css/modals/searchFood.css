@@ -1,6 +1,6 @@
 
 #search{
-  border: 2px solid var(--cor-p5);
+  border: 1px solid var(--cor-p5);
   padding: 10px 15px;
   width: 80%;
 }
@@ -12,17 +12,43 @@
   color: var(--cor-p5);
   border-radius: 10px;
   background-color: transparent;
-  border: 2px solid var(--cor-p5);
+  /* border: 1px solid var(--cor-p5); */
   padding: 10px 15px;
+
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .foodSearch:hover{
   cursor: pointer;
-  color:var(--cor-p3) ;
+  color:var(--cor-p6) ;
 }
 
 .selectedList{
-  box-shadow: 0px 0px 7px 6px var(--cor-p7);
-    border: none;
-    color: orangered;
+border: 1px solid var(--cor-p6);
+box-shadow: -1px 4px 8px 0px rgba(233, 96, 1, 0.5);
+color: var(--cor-p6);
 }
+
+
+.foodSearch::after {
+backface-visibility: hidden;
+content: "";
+display: block;
+height: 1px;
+background-color: var(--cor-p6);
+position: absolute;
+width: 0;
+bottom: 0px;
+transition: all 280ms ease-in-out;
+}
+
+.foodSearch:hover::after {
+transition: width 350ms ease-in-out;
+width: 90%;
+bottom: 0;
+}
+

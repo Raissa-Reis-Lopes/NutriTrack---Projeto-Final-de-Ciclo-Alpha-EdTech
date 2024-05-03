@@ -17,7 +17,7 @@
     top: 45%;
     z-index: 10;
     transform: translate(-50%, -50%);
-    background-color: var(--cor-0);
+    background-color: var(--cor-1);
     width: 500px;
     max-width: 90%;
     padding: 20px;
@@ -25,7 +25,8 @@
     /* height: 80%; */
     margin: 50px auto;
     /* max-height: 500px; */
-    border: 2px solid var(--cor-p5);
+    /* border: 1px solid var(--cor-p5); */
+    box-shadow: 0px 0px 20px 4px rgba(1, 65, 0, 0.2);
 }
 
 
