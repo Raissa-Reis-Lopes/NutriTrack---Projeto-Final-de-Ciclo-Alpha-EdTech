@@ -51,7 +51,7 @@ export function Register() {
     <section id="terms_container"></section>
 
     <footer class="footer footer_full">
-        <span>all rights reserved</span>
+        <span>todos os direitos reservados</span>
     </footer>
     `;
     
