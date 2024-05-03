@@ -113,9 +113,7 @@ export function registerBtns() {
         if (!passwordValid(password)) {
             messageError("message_password",
             `Insira uma senha válida:
-            - mín. 8 e máx. 15 caracteres
-            - pelo menos um número, uma letra maiúscula e uma minúscula
-            - pelo menos um caractere especial`,5000,"0.8rem") 
+            - mín. 4 e máx. 15 caracteres`,5000,"0.8rem") 
             return;
         }
     

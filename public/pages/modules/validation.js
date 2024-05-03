@@ -11,7 +11,8 @@ export function emailValid(email) {
   }
 
   export function passwordValid(password) {
-    const valid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,15}$/;
+    // const valid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,15}$/;
+    const valid = /^.{4,15}$/;
     return valid.test(password);
   }
 

@@ -121,3 +121,10 @@ label{
     background: url('../../img/open-eye.png');
     background-size: cover;
   }
+
+  .btns_index{
+    display: flex;
+    width: 150px;
+    gap: 20px;
+    flex-direction: column;
+  }
