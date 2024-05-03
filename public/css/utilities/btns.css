@@ -60,7 +60,8 @@
 }
 
 .btn_stroke:hover{
-    background-color: var(--cor-p2);
+    /* background-color: var(--cor-p2); */
+    scale: 1.05;
     transition: ease-in-out;
     cursor: pointer;
     border: 1px solid var(--cor-p5);

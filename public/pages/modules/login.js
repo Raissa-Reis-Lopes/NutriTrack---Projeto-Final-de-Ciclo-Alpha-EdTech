@@ -25,7 +25,7 @@ export function Login() {
                 </div>
                 <div id="message_email"></div>
                 <div class="form-control">
-                <input type="text" required id="password"/>
+                <input type="password" required id="password"/>
                 <label>Password</label>
                 <div id="icon"></div>
                 </div>
@@ -40,13 +40,14 @@ export function Login() {
                 </label>
                 </div>
                 <div id="message_error_login"></div>
+                <div class="btns_index btns_login">
+                <button id="btn_enter" class="btn_colorLinear">Entrar</button>
+                <button id="btn_back" class="btn_stroke">Voltar</button>
+                <span id="register" class="register"><a href="" >Não tem conta? Cadastre-se</a></span>
             </div>
-            <div class="btns_index">
-                    <button id="btn_enter" class="btn_colorLinear">Entrar</button>
-                    <button id="btn_back" class="btn_stroke">Voltar</button>
-                </div>
-            <span id="register" class="register"><a href="" >Não tem conta? Cadastre-se</a></span>
-        </div>
+    </div>
+            </div>
+          
     </main>
     <footer class="footer footer_full">
         <span>all rights reserved</span>

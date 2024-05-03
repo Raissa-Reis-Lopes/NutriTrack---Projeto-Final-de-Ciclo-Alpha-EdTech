@@ -60,6 +60,11 @@ label{
     min-width: 800px
   }
 
+  .register{
+    width: max-content;
+    align-self: center;
+  }
+  
   .register::before{
     content: "";
     display: block;
@@ -127,4 +132,8 @@ label{
     width: 150px;
     gap: 20px;
     flex-direction: column;
+  }
+
+  .btns_login{
+    align-self: center;
   }
