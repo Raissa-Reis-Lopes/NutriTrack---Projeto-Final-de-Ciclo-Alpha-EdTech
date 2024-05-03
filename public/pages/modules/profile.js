@@ -108,11 +108,12 @@ export function Profile() {
             </div>
             <div id="message_plan"></div>
         </div>
-    </div>
-    <div class="btns_profile">
+        <div class="btns_profile">
         <button id="btn-save-changes" class="btn_stroke">Salvar Alterações</button>
         <button class="btn_stroke" id="btn-delete">APAGAR CONTA</button>
     </div>
+    </div>
+  
     </section>
     <!-- Tags para o footer e modais -->
     <section id="privacy_policy_container"></section>

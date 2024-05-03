@@ -29,6 +29,7 @@
     justify-content: center;
     flex-direction: column;
     margin-bottom: 30px;
+    padding-bottom: 50px;
 }
 
 .align_row{

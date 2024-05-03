@@ -16,7 +16,6 @@ export function History() {
             <img src="./img/logo.svg" alt="NutriTrack">
         </div>
         <div class="titles">
-        <h1>Histórico</h1>
     </div>
         <nav class="header_nav">
             <div id="navHome">Home</div>
@@ -35,8 +34,8 @@ export function History() {
                 </div>
             </div>
             <div class="align_row"> 
-            <button id="previousWeekBtn" class="btn_history">Semana Anterior</button>
-            <button id="nextWeekBtn" class="btn_history">Próxima Semana</button>
+            <button id="previousWeekBtn" class="btn_colorLinear">Semana Anterior</button>
+            <button id="nextWeekBtn" class="btn_colorLinear">Próxima Semana</button>
             </div>
         </section>
         </div>
@@ -45,7 +44,7 @@ export function History() {
         <section id="privacy_policy_container"></section>
         <section id="terms_container"></section>
         <section id="sac_container"></section>
-        <section id="footer_container"></section>
+        <section id="footer_container" class="footer_history_container"></section>
     `;
 
     document.getElementById("root").innerHTML = '';
