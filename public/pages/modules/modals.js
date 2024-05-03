@@ -283,7 +283,7 @@ export function deleteConfirmation(){
             <p id="delete_warning">Esta ação é irreversível e você perderá todos os dados e histórico desse alimento.</p>
             <div class="btn_delete_confirmation">
             <button id= "cancelConfirmDelete" class="btn_stroke">Cancelar</button>
-            <button id="confirmDelete" class="btn_stroke">Deletar</button>
+            <button id="confirmDelete" class="btn_stroke btn_cancel">Deletar</button>
             </div>
         </div>
     </div>

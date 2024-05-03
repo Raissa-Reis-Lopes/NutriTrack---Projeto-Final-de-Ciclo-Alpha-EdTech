@@ -3,7 +3,9 @@ export function footerProfile(){
     sectionFooterProfile.classList.add("footer")
     sectionFooterProfile.classList.add("footer_profile")
     sectionFooterProfile.innerHTML=`
-        <span>Todos os direitos reservados</span>
+    
+        <span>todos os direitos reservados</span>
+
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
         <div >
@@ -19,7 +21,8 @@ export function footerHome(){
     sectionFooterHome.classList.add("footer")
     sectionFooterHome.classList.add("footer_home")
     sectionFooterHome.innerHTML=`
-        <span>Todos os direitos reservados</span>
+        <span>todos os direitos reservados</span>
+
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
         <div >
@@ -35,7 +38,8 @@ export function footerHistory(){
     sectionFooterHistory.classList.add("footer")
     sectionFooterHistory.classList.add("footer_history")
     sectionFooterHistory.innerHTML=`
-        <span>Todos os direitos reservados</span>
+        <span>todos os direitos reservados</span>
+
         <span id="open-modal-terms">Termos de uso</span>
         <span id="open-modal-privacy">Politica de Privacidade</span>
         <div >

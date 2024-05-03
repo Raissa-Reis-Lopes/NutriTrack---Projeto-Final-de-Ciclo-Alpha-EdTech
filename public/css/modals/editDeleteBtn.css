@@ -8,7 +8,9 @@
 
 .btnsEditDeleteContainer img:hover{
     cursor: pointer;
-    width: 15px;
+    scale: 1.1
+    ;
+    transition: ease-in-out;
 }
 
 .myFoodElementContainer{
