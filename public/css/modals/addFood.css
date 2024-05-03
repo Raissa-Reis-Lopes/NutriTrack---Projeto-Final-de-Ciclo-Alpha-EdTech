@@ -4,7 +4,12 @@
 .quantity_nutri{
   padding: 40px 0;
 }
-
+.quantity_nutri div{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
 
 .calories span{
   color: var(--cor-calorie);
@@ -32,12 +37,12 @@
 }
 
 .grams_input input{
-  border: 2px solid var(--cor-p5);
+  border: 1px solid var(--cor-p5);
   max-width: 150px;
   padding: 10px 15px;
 }
 .grams_select select{
-  border: 2px solid var(--cor-p5);
+  border: 1px solid var(--cor-p5);
   max-width: 300px;
   padding: 10px 15px;
 }

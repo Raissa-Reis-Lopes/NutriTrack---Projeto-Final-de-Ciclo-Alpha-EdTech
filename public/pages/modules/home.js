@@ -851,7 +851,10 @@ function openAddFoodModal(item,meal) {
   // const errorMessage = modal.querySelector("#errorMessage");
 
   const btnCancel = modal.querySelector("#btn_cancel_addFood");
-  btnCancel.addEventListener("click", () => modal.remove());
+  btnCancel.addEventListener("click", () => {
+    modal.remove();
+    openModalWithMeal(meal);
+  });
 
   const btnSave = modal.querySelector("#btn_save_addFood");
   btnSave.addEventListener("click", async () => {
@@ -996,7 +999,7 @@ async function fetchAddedFoods(dateCalendar){
         const newFoodElementcalorie = document.createElement("div");
         newFoodElementcalorie.classList.add("newFoodElementcalorie");
         newFoodElementcalorie.textContent = escapeHtml(
-          `${Number(food.calorie).toFixed(2)} Kcal`
+          `${Math.ceil(Number(food.calorie))} Kcal`
         );
 
         divFoodElement.appendChild(newFoodElementQuantity);
