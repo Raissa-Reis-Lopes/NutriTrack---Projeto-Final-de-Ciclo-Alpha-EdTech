@@ -20,7 +20,6 @@ export function History() {
         <nav class="header_nav">
             <div id="navHome">Home</div>
             <div id="navProfile">Perfil</div>
-            <div id="navAbout">Sobre Nós</div>
             <button id="btnExit" class="btn_stroke btn_exit btn_exit_light">Sair</button>
         </nav>
     </header>
@@ -166,7 +165,6 @@ async function getDateAndRenderChart() {
 export function navRoutes() {
     const navProfile = document.getElementById("navProfile");
     const navHome = document.getElementById("navHome");
-    const navAbout = document.getElementById("navAbout");
     const logo = document.getElementById("logo");
     const btnExit = document.getElementById("btnExit");
 
@@ -182,11 +180,6 @@ export function navRoutes() {
 
     navHome.addEventListener("click", () => {
         const customEvent = createCustomEvent("/home");
-        window.dispatchEvent(customEvent);
-    });
-
-    navAbout.addEventListener("click", () => {
-        const customEvent = createCustomEvent("/about");
         window.dispatchEvent(customEvent);
     });
 
