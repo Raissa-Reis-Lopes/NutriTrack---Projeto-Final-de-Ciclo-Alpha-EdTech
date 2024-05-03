@@ -16,7 +16,6 @@ export function History() {
             <img src="./img/logo.svg" alt="NutriTrack">
         </div>
         <div class="titles">
-        <h1>Histórico</h1>
     </div>
         <nav class="header_nav">
             <div id="navHome">Home</div>
