@@ -60,12 +60,11 @@
 }
 
 .btn_stroke:hover{
-    /* background-color: var(--cor-p2); */
-    scale: 1.05;
-    transition: ease-in-out;
-    cursor: pointer;
-    border: 1px solid var(--cor-p5);
-    
+  /* background-color: var(--cor-p2); */
+  scale: 1.05;
+  transition: ease-in-out;
+  cursor: pointer;
+  border: 1px solid var(--cor-p5);
 }
 
 .btns{
@@ -100,23 +99,20 @@
 }
 
 .btn_cancel{
-    border: 3px solid rgb(206, 12, 12);
+    border: 1px solid rgb(206, 12, 12);
     color: rgb(206, 12, 12);
   }
   .btn_cancel:hover{
-    border: 3px solid rgb(134, 30, 30);
+    border: 1px solid rgb(134, 30, 30);
     color: rgb(134, 30, 30);
   }
 
   .createMyFoodbtn{
     padding: 5px 15px;
     font-size: 0.85rem;
-    color: var(--cor-p6);
   }
 
-  .createMyFoodbtn:hover{
-    color: var(--cor-p7);
-  }
+ 
 
   .btn_create{
     padding: 5px 10px;

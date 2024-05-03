@@ -10,10 +10,10 @@
     gap: 10px;
     width: 220px;
     min-width: 220px;
-
-    border: 2px solid var(--cor-p5);
+    border: 1px solid var(--cor-p5);
     border-radius: 5px;
     padding: 10px;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
 .newFoodElementName{

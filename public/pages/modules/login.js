@@ -51,7 +51,9 @@ export function Login() {
           
     </main>
     <footer class="footer footer_full">
-        <span>Todos os direitos reservados</span>
+
+        <span>todos os direitos reservados</span>
+
     </footer>`;
 
     document.getElementById("root").innerHTML = '';
