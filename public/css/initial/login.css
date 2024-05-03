@@ -1,6 +1,7 @@
 .welcome h1{
     max-width: 40ch;
     text-align: center;
+    color: var(--cor-p5);
 }
 
 .div_input{
@@ -55,17 +56,26 @@ label{
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p0);
+    background-color: var(--cor-p8);
     min-width: 800px
   }
 
+  .register{
+    width: max-content;
+    align-self: center;
+  }
+  
   .register::before{
     content: "";
     display: block;
     width: 110%;
     height: 2px;
     border-radius: 5px;
-    background-color: var(--cor-p0);
+    background-color: var(--cor-p8);
+  }
+
+  .register:hover{
+    color: var(--cor-p7);
   }
 
   .input_email_container,
@@ -122,4 +132,8 @@ label{
     width: 150px;
     gap: 20px;
     flex-direction: column;
+  }
+
+  .btns_login{
+    align-self: center;
   }
