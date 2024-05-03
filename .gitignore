@@ -1,4 +1,5 @@
 .env
 node_modules/
-uploads/*
-!uploads/default-avatar.png
+public/uploads/*
+!public/uploads/default-avatar.png
+
