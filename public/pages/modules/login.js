@@ -1,6 +1,7 @@
 import createCustomEvent from "./event.js";
 import { showMessage } from "../utils/message.js";
 import { messageError } from "../utils/messageError.js";
+import { waveInput } from "../utils/waveInput.js";
 
 
 export function Login() {
@@ -15,38 +16,42 @@ export function Login() {
         </div>
     </header>
     <main class="container_left container_login">
-        <div class="welcome">
+        <div class="login_container">
             <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
+            <div id="message_error_login"></div>
             <div class="div_input">
-                <label for="email">E-mail</label>
-                <div class="input_email_container">
-                <input type="email" name="email" id="email" class="input_email"> 
-                <div id="icon_email"></div>
+                <div class="form-control">
+                    <input type="text" required id="email" />
+                    <label>Email</label>
+                    <div id="icon_email"></div>
                 </div>
                 <div id="message_email"></div>
-                <label for="password">Senha</label>
-                <div class="input_password_container">
-                <input type="password" name="password" id="password" class="input_pass">
+                <div class="form-control">
+                <input type="password" required id="password"/>
+                <label>Password</label>
                 <div id="icon"></div>
                 </div>
                 <div id="message_password"></div>
                 <div class="align_row"> 
-                <input type="checkbox" name="connect" id="connect" class="connect">
-                <label for="connect">Me manter conectado</label>
+                <label class="label_checkbox">
+                <div class="toggle">
+                    <input class="toggle-state" type="checkbox" name="check" value="check" id="connect" />
+                    <div class="indicator"></div>
                 </div>
-                <div id="message" class="message-container hidden">
-                <div id="message-content" class="message-content hidden"></div>
+                <div class="label-text">Me manter conectado</div>
+                </label>
                 </div>
+                <div class="btns_index btns_login">
+                <button id="btn_enter" class="btn_colorLinear">Entrar</button>
+                <button id="btn_back" class="btn_stroke">Voltar</button>
+                <span id="register" class="register"><a href="" >Não tem conta? Cadastre-se</a></span>
             </div>
-            <div class="btns_index">
-                    <button id="btn_back" class="btn_stroke">Voltar</button>
-                    <button id="btn_enter" class="btn_colorLinear">Entrar</button>
-                </div>
-            <span id="register" class="register"><a href="" >Não tem conta? Cadastre-se</a></span>
-        </div>
+    </div>
+            </div>
+          
     </main>
     <footer class="footer footer_full">
-        <span>all rights reserved</span>
+        <span>Todos os direitos reservados</span>
     </footer>`;
 
     document.getElementById("root").innerHTML = '';
@@ -54,6 +59,7 @@ export function Login() {
     document.getElementById("icon").addEventListener("click", showPassword)
     loginBtns();
     logoNav();
+    waveInput();
     return div
 }
 
@@ -109,6 +115,7 @@ export function loginBtns(){
 
              const rememberMe = connectCheckbox.checked; 
 
+
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
@@ -134,8 +141,8 @@ export function loginBtns(){
                     body: JSON.stringify({ email, password, rememberMe }),
                 });
             
-                if (!response.ok) {          
-                    showMessage("fail", "Usuário e/ou senha inválidos!","-8%");
+                if (!response.ok) { 
+                    messageError("message_error_login", "Usuário e/ou senha inválidos!")         
                     btnEnter.disabled = false;
                     throw new Error('Erro ao fazer login, usuário não localizado');
                 }    

@@ -220,12 +220,10 @@ export async function uploadImage(){
         showLoader();
         const inputImage = document.querySelector("#input-image");
         const imgProfile = document.querySelector("#img-user");         
-        const userId = await getUserId();
         const formData = new FormData();
 
         
         if (inputImage.files.length === 0) {
-            console.log('Por favor, selecione uma imagem.');
             return;
         }
     
@@ -234,7 +232,6 @@ export async function uploadImage(){
     
         if (!validateImageFormat(imageName)) {
             messageError("message_picture","Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif")
-            console.log('Formato de imagem inválido. Por favor, selecione uma imagem com formato jpeg, jpg, png ou gif.');
             return;
         }
         
@@ -244,7 +241,7 @@ export async function uploadImage(){
         
         
         try {
-            const response = await fetch(`/api/upload/${userId}`, {
+            const response = await fetch(`/api/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -252,10 +249,10 @@ export async function uploadImage(){
             const data = await response.json();
             
             if (data.success) {
-                imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
+                imgProfile.src = `uploads/${data.new_avatar}`; // Atualizando o src da imagem
                 showMessage('success','Imagem atualizada com sucesso!', "-5%");
             } else {
-                console.log("Falha ao atualizar a imagem");
+                showMessage('fail','Falha ao atualizar a foto de perfil!', "-5%");
             }
 
              // Após o fetch ser concluído, esconda o loader
@@ -272,26 +269,23 @@ export async function uploadImage(){
 export async function fillProfileData(){
 
     try {
-        const userId = await getUserId();
 
-           // Obter dados do usuário com base no ID para o form 1
-           const userMainInfo = await fetch(`/api/users/${userId}`,{
-            method: "GET"
-           });
-
-           if(!userMainInfo){
-            throw new Error("Falha ao buscar as informações do usuário")
-           }
-
-           const user = await userMainInfo.json();
-
+            // Obter dados do usuário com base no ID para o form 1
+            const userMainInfo = await fetch(`/api/users/byId`,{
+                method: "GET"
+               });
+    
+               if(!userMainInfo){
+                throw new Error("Falha ao buscar as informações do usuário")
+               }
+    
+               const user = await userMainInfo.json();
            const userAvatar = user.avatar_img;
 
            const imgProfile = document.querySelector("#img-user");
-           imgProfile.src = `/assets/${userAvatar}`;
-           
+           imgProfile.src = `uploads/${userAvatar}`;
 
-           const userConfigInfo = await fetch(`/api/config/${userId}`,{
+           const userConfigInfo = await fetch(`/api/config/lastConfig`,{
             method: 'GET',
             });
 
@@ -433,7 +427,6 @@ function disableEdit(event) {
 
 async function saveChanges(){
 
-    //Para o user (username, email, currentPassword, newPassword)
     const username = document.getElementById("input-name").value;
     const email = document.getElementById("input-email").value;
     const password = document.getElementById("input-password").value;
@@ -441,7 +434,6 @@ async function saveChanges(){
     const confirmPassword = document.getElementById("input-repeat-password").value;   
  
     
-    //Para o configHistory (user_id, food_plan_id, activity_level, weight, height, birth_date, gender, date)
     const weight = document.getElementById("input-weight").value;
     const height = document.getElementById("input-height").value;
     const birthDate = document.getElementById("input-birth").value ;
@@ -527,14 +519,6 @@ async function saveChanges(){
     }
 
     try {
-        const getUserId = await fetch("/api/login/", {
-            method: "GET",
-        });
-
-        if(getUserId.ok){
-        const userIdResponse = await getUserId.json();
-        const userId = userIdResponse.user;
-
           //Aqui eu vou ter que construi 2 tipos diferentes de userData para fazer o fetch, um que tem a senha e outro que não tem
           let userData;
 
@@ -557,7 +541,6 @@ async function saveChanges(){
 
   
           const configData = {
-              user_id: userId, 
               food_plan_id: selectedPlanId, 
               activity_level: activityLevel, 
               weight, 
@@ -567,7 +550,7 @@ async function saveChanges(){
               date
           }
         
-            const userUpdateResponse = await fetch(`/api/users/${userId}`, {
+            const userUpdateResponse = await fetch(`/api/users`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -596,9 +579,7 @@ async function saveChanges(){
             // Mostrar mensagem de sucesso se passar por todas as etapas acima
             showMessage('success', "Dados atualizados com sucesso","80%","10%","2");
 
-        } else{
-            throw new Error("Falha ao obter ID do usuário");
-        }
+       
         } catch (error) {
             console.log("Falha ao completar a atualização dos dados", error.message)
             throw new Error("Erro ao atualizar o registro");
@@ -634,11 +615,8 @@ export function navProfile(){
 }
 
 export async function deleteAccount(){  
-    console.log("Chegou aqui na função delete!");
-    try {
-        const userId = await getUserId();
-        
-        const deleteResponse = await fetch(`/api/users/${userId}`,{
+    try {        
+        const deleteResponse = await fetch(`/api/users`,{
             method: 'DELETE'
         })
 
@@ -651,9 +629,6 @@ export async function deleteAccount(){
         document.getElementById("body2").style.display = "block";
         
         const responseData = await deleteResponse.json();       
-        console.log('Usuário excluído com sucesso:', responseData);
-
-
         // Espera 2 segundos antes de redirecionar para a página inicial
         setTimeout(() => {
             const customEvent = createCustomEvent('/');

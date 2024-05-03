@@ -4,7 +4,6 @@ async function insertUser(username , email , password){
     const query = 'INSERT INTO users(username , email , password) VALUES($1, $2, $3)';
     try {
         await pool.query(query,[username , email , password]);
-        console.log("Novo usuário criado com sucesso");
         return { username , email , password };
     } catch (error) {
         console.log('Falha ao inserir os dados do novo usuário', error);

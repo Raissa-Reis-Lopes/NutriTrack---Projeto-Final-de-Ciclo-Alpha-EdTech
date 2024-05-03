@@ -80,18 +80,19 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
     try {
         const foodsAdded = await foodAddedRepository.getFoodsAddedByUserInPeriod(user_id, start_date, end_date);
 
-        // Objeto para armazenar os totais de nutrientes por dia
         const nutritionSummary = {};
 
-        // Calcular totais de nutrientes para cada dia
         for (const food of foodsAdded) {
             const { created_at, food_id, food_quantity } = food;
 
-            // Verificar se o dia já está no objeto nutritionSummary
-            const day = created_at.toISOString().split('T')[0]; // Obtém a data no formato 'YYYY-MM-DD'
+            const year = created_at.getFullYear();
+            const month = created_at.getMonth() + 1; 
+            const day = created_at.getDate();
+            const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
 
-            if (!nutritionSummary[day]) {
-                nutritionSummary[day] = {
+            if (!nutritionSummary[formattedDate]) {
+                nutritionSummary[formattedDate] = {
+                    formattedDate,
                     totalNutrition: {
                         calories: 0,
                         protein: 0,
@@ -101,7 +102,6 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
                 };
             }
 
-            // Buscar detalhes do alimento pelo food_id
             const foodInfo = await foodRepository.getFoodById(food_id);
 
             if (!foodInfo) {
@@ -111,18 +111,22 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
             const { calorie, protein_g, carbohydrate_g, lipid_g } = foodInfo;
 
             // Calcular nutrientes para este alimento e adicioná-los aos totais do dia
-            nutritionSummary[day].totalNutrition.calories += (calorie / 100) * food_quantity;
-            nutritionSummary[day].totalNutrition.protein += (protein_g / 100) * food_quantity;
-            nutritionSummary[day].totalNutrition.carbohydrate += (carbohydrate_g / 100) * food_quantity;
-            nutritionSummary[day].totalNutrition.lipid += (lipid_g / 100) * food_quantity;
+            nutritionSummary[formattedDate].totalNutrition.calories += (calorie / 100) * food_quantity;
+            nutritionSummary[formattedDate].totalNutrition.protein += (protein_g / 100) * food_quantity;
+            nutritionSummary[formattedDate].totalNutrition.carbohydrate += (carbohydrate_g / 100) * food_quantity;
+            nutritionSummary[formattedDate].totalNutrition.lipid += (lipid_g / 100) * food_quantity;
         }
 
         // Converter as chaves do objeto para strings no formato 'Dom', 'Seg', etc.
         const formattedNutritionSummary = {};
         Object.keys(nutritionSummary).forEach(date => {
-            const dayOfWeekIndex = new Date(date).getDay(); // Índice do dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
+            const localDateString = new Date(date).toISOString().slice(0, -1);
+            const localDate = new Date(localDateString);
+            const dayOfWeekIndex = localDate.getDay();
             const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
+
             const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+
             formattedNutritionSummary[dayOfWeek] = nutritionSummary[date];
         });
 
@@ -132,7 +136,6 @@ const calculatePeriodNutritionSummary = async (user_id, start_date, end_date) =>
         throw new Error('Erro ao calcular os valores nutricionais consumidos no período');
     }
 }
-
 
 
 const getAllFoodsAdded = async() => {

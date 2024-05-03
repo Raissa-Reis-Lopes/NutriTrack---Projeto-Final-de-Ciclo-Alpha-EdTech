@@ -20,10 +20,7 @@ const getFoodAddedById = async(req, res) => {
 }
 
 const getFoodsAddedByUserId =  async(req, res) => {
-    console.log("Chegou aqui no foodAddedByUserId")
     const user_id = req.user;
-    console.log("User_id no controller do foodAdded By user Id")
-    console.log(user_id)
     try {
         const foods = await foodAddedServices.getFoodsAddedByUserId(user_id);
         return res.status(200).json(foods);

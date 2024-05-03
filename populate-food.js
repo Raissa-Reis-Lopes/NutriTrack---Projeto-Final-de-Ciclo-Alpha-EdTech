@@ -1,9 +1,8 @@
 // Use o seguinte comando no terminal para realizar o preenchimento da tabela food:
 // node populate-food.js
 
-const internal = require('stream');
-const { connectToDatabase } = require('./src/db/postgresql');
 const fs = require('fs');
+const { pool } = require("./src/db/postgresql");
 
 // Função para ler o arquivo JSON
 function readJSONFile(filename) {
@@ -16,21 +15,18 @@ function readJSONFile(filename) {
     }
 }
 
-function validateNum (value) {
+function validateNum(value) {
     return typeof value === 'number' && value > 0;
 }
 
 // Função para preencher a tabela
 async function populateFood() {
-    const pool = await connectToDatabase();
-  
     const jsonData = readJSONFile('table-taco.json');
     if (!jsonData) {
         console.error('Não foi possível ler os dados do JSON.');
-        await pool.end();
         return;
     }
-  
+
     for (const item of jsonData) {
         if (validateNum(item.energy_kcal) && validateNum(item.carbohydrate_g) && validateNum(item.protein_g) && validateNum(item.lipid_g)) {
             try {
@@ -46,9 +42,8 @@ async function populateFood() {
             }
         }
     }
-  
+
     console.log("Preenchimento realizado com sucesso!");
-    await pool.end();
 }
 
 // Chama a função para inserir os dados

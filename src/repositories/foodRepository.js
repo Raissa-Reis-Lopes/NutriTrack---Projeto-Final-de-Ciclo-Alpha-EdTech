@@ -50,7 +50,6 @@ async function createUserFood(user_id, name, calorie, carbohydrate_g, protein_g,
     const query = 'INSERT INTO food (user_id, name, calorie, carbohydrate_g, protein_g, lipid_g) VALUES($1, $2, $3, $4, $5, $6)';
     try {
         await pool.query(query,[user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
-        console.log("Alimento adicionado com sucesso");
         return { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g };
     } catch (error) {
         console.log('Erro ao criar alimento do usuário', error);
@@ -62,7 +61,6 @@ async function updateUserFood(id, user_id, name, calorie, carbohydrate_g, protei
     const query = 'UPDATE food SET name=$3, calorie=$4, carbohydrate_g=$5, protein_g=$6, lipid_g=$7 WHERE id=$1 AND user_id=$2';
     try {
         await pool.query(query,[id, user_id, name, calorie, carbohydrate_g, protein_g, lipid_g]);
-        console.log("Alimento atualizado com sucesso");
         return { user_id, name, calorie, carbohydrate_g, protein_g, lipid_g };
     } catch (error) {
         console.log('Erro ao atualizar alimento do usuário', error);

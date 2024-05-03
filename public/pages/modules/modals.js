@@ -44,18 +44,22 @@ export function AddFood(){
                 <div id="quantity_calories"></div>
                 <span>Calorias</span>
             </div>
+            <div id="message_add_calories"></div>
             <div class="carb">
                 <div id="quantity_carb"></div>
                 <span>Carboidratos</span>
             </div>
+            <div id="message_add_carbo"></div>
             <div class="proteins">
                 <div id="quantity_proteins"></div>
                 <span>Proteínas</span>
             </div>
+            <div id="message_add_protein"></div>
             <div class="fat">
                 <div id="quantity_fat"></div>
                 <span>Gorduras</span>
             </div>
+            <div id="message_add_lipid"></div>
         </div>
         <div class="container_grams">
             <div class="grams_input">
@@ -73,7 +77,8 @@ export function AddFood(){
                 </select>
             </div>
         </div>
-        <div id="errorMessage"></div>
+        <div id="message_add_grams"></div>
+       <!-- <div id="errorMessage"></div> -->
         <div class="btns_addFood" id ="btnsAddFood">
             <button id="btn_cancel_addFood" class="btn_stroke btn_cancel">Cancelar</button>
             <button id="btn_save_addFood" class="btn_stroke">Salvar</button>
@@ -95,27 +100,32 @@ export function CreateMyFoodbtn(){
                 <label for="nameCreate">Nome</label>
                 <input type="text" id="nameCreate">
             </div>
+            <div id="message_new_name"></div>
             <div class="input_create_food">
                 <label for="caloriesCreate">Calorias</label>
                 <input type="text" id="caloriesCreate">
             </div>
+            <div id="message_new_calories"></div>
             <div class="input_create_food">
                 <label for="carbCreate">Carboidratos <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="carbCreate">
             </div>
+            <div id="message_new_carbo"></div>
             <div class="input_create_food">
                 <label for="proteinCreate">Proteínas <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="proteinCreate">
             </div>
+            <div id="message_new_protein"></div>
             <div class="input_create_food">
                 <label for="fatCreate">Gorduras <span class="span_grams_create">(gramas)</span></label>
                 <input type="text" id="fatCreate">
             </div>
+            <div id="message_new_lipid"></div>
             <div id="btnsCreateFood">
                 <button id="btn_cancel_create" class="btn_stroke btn_cancel btn_create">Cancelar</button>
                 <button id="btn_create_new" class="btn_stroke btn_create">Salvar alimento</button>
              </div>
-             <div id="errorMessageCreateEdit"></div>
+          <!--   <div id="errorMessageCreateEdit"></div> -->
         </div> 
     </div>
     `;
@@ -178,6 +188,7 @@ export function privacyPolicyModal(){
             <p>Não vendemos ou alugamos suas informações pessoais com terceiros. Podemos compartilhar suas informações com parceiros de negócios ou fornecedores que nos ajudam a operar o site.</p>
             <p>Implementamos medidas de segurança para proteger suas informações pessoais.</p>
             <p>Podemos atualizar esta política de privacidade periodicamente. Se fizermos alterações significativas, notificaremos você.</p>
+            <p>É importante notar que as proporções dos planos são diretrizes gerais e podem precisar ser ajustadas com base nas necessidades individuais e na resposta do corpo a determinadas dietas. Consultar um nutricionista ou profissional de saúde é sempre recomendado para obter um plano alimentar adequado às suas necessidades específicas.</p>
             <p>Se você tiver alguma dúvida sobre esta política de privacidade, entre em contato conosco em contato@email.com ou (11) 0800 1234-5678</p>
         </div>
     </div>
@@ -259,6 +270,25 @@ export function deleteAccountModal(){
 
     return sectionModal;
 
+}
+
+export function deleteConfirmation(){
+    const divDeleteConfirm = document.createElement("div");
+    divDeleteConfirm.classList.add("modal_food_container");;
+    divDeleteConfirm.innerHTML=`
+    <div  class="modal">
+        <div id="body1" class="modal-body modal-body-account">
+            <h1 class="delete_account_title">ATENÇÃO!</h1>
+            <h3 id="delete_h3">Tem certeza que deseja apagar esse alimento?</h3>
+            <p id="delete_warning">Esta ação é irreversível e você perderá todos os dados e histórico desse alimento.</p>
+            <div class="btn_delete_confirmation">
+            <button id= "cancelConfirmDelete" class="btn_stroke">Cancelar</button>
+            <button id="confirmDelete" class="btn_stroke">Deletar</button>
+            </div>
+        </div>
+    </div>
+    `
+    return divDeleteConfirm;
 }
 
 

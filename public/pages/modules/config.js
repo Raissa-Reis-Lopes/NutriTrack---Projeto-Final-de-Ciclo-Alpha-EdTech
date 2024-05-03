@@ -47,11 +47,11 @@ export function Config() {
             <label for="activity">Nivel de atividade</label>
             <select class="input_config"  name="activity" id="activity">
                 <option value="">Selecione</option>
-                <option value="sedentary">Sedentário (0 a 1 vez por semana) </option>
-                <option value="lightlyActive">Levemente Ativo (2 a 3 vezes por semana)</option>
-                <option value="moderatelyActive">Moderadamente Ativo (3 a 5 vezes por semana)</option>
-                <option value="veryActive">Ativo (mais de 5 vezes na semana) </option>
-                <option value="extraActive">Muito Ativo (atleta / esforço físico diário)</option>
+                <option value="sedentary">Sedentário - Pouca ou nenhuma atividade física regular.</option>
+                <option value="lightlyActive">Levemente Ativo - Alguma atividade física, como caminhada leve ou exercícios leves. </option>
+                <option value="moderatelyActive">Moderadamente Ativo - Exercícios regulares, como caminhadas, corridas ou exercícios moderados. </option>
+                <option value="veryActive">Ativo - Atividades físicas frequentes, como treinos regulares ou esportes recreativos. </option>
+                <option value="extraActive">Muito Ativo - Atividades físicas intensas ou treinamento atlético regular. </option>
             </select>
         </div>
         <div id="message_activity"></div>
@@ -128,7 +128,7 @@ export function Config() {
     </div>
 </main>
 <footer class="footer footer_full">
-    <span>all rights reserved</span>
+    <span>Todos os direitos reservados</span>
 </footer>
     `;
 

@@ -24,13 +24,12 @@ export function History() {
             <button id="btnExit" class="btn_stroke btn_exit btn_exit_light">Sair</button>
         </nav>
     </header>
-    <main class="history_container">
-       
-        <div id="dateDisplay" class="date_display"></div>
+    <main class="history_container">   
         <div class="chart_history">
         <section>
             <div class="chart-container">
                 <span class="chart_title">Gráfico Semanal</span>
+                <div id="dateDisplay" class="date_display"></div>
                 <div>
                   <canvas class="chart_canvas" id="week-chart"></canvas>
                 </div>
@@ -90,9 +89,7 @@ async function fetchChartData(startDate, endDate) {
     try {
         const response = await fetch(`/api/foodAdded/periodNutrition?start_date=${startDate}&end_date=${endDate}`);
         const responseData = await response.json();
-        console.log(responseData)
 
-        console.log(`Esse é o responseData na função fetchCharData: ${responseData}`)
         return responseData;
     } catch (error) {
         console.log(error)
@@ -124,7 +121,6 @@ async function getDateAndRenderChart() {
 
     // Função para converter o formato da data de DD/MM/YYYY para YYYY-MM-DD
     const convertDateFormat = (date) => {
-        console.log(`Data no formatDate ${date}`)
         const [day, month, year] = date.split('/');
         return `${year}-${month}-${day}`;
     }
@@ -137,9 +133,10 @@ async function getDateAndRenderChart() {
         const [startOfWeek, endOfWeek] = getWeekRange(date);
         const startDate = formatDate(startOfWeek);
         const endDate = formatDate(endOfWeek);
-        dateDisplay.textContent = `Período: ${startDate} - ${endDate}`;
+
+        dateDisplay.textContent = `${startDate} - ${endDate}`;
+
         const responseData = await fetchChartData(convertDateFormat(startDate), convertDateFormat(endDate));
-        console.log(`Esse é o responseData na função updateDateDisplay: ${responseData}`)
         renderBarChart(responseData, chartContainer,corCalorie, corProtein, corCarbo, corLipid)
         return { startDate, endDate };
     };
@@ -152,7 +149,6 @@ async function getDateAndRenderChart() {
         today.setDate(today.getDate() - 7); // Retroceder 7 dias (uma semana)
         const { startDate, endDate } = updateDateDisplay(today); // Atualizar a exibição da data e obter as datas de início e fim do período
         const responseData = await fetchChartData(convertDateFormat(startDate), convertDateFormat(endDate));
-        console.log(`Esse é o responseData na função previousWeekBtn: ${responseData}`)
         renderBarChart(responseData, chartContainer,corCalorie, corProtein, corCarbo, corLipid)
     });
 
@@ -160,10 +156,7 @@ async function getDateAndRenderChart() {
     nextWeekBtn.addEventListener('click', async function () {
         today.setDate(today.getDate() + 7); // Avançar 7 dias (uma semana)
         const { startDate, endDate } = updateDateDisplay(today); // Atualizar a exibição da data e obter as datas de início e fim do período
-        console.log(startDate);
-        console.log(endDate)
         const responseData = await fetchChartData(convertDateFormat(startDate), convertDateFormat(endDate));
-        console.log(`Esse é o responseData na função nextWeekBtn: ${responseData}`)
         renderBarChart(responseData, chartContainer,corCalorie, corProtein, corCarbo, corLipid)
     });
 
