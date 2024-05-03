@@ -1,6 +1,7 @@
 import createCustomEvent from "./event.js";
 import { showMessage } from "../utils/message.js";
 import { messageError } from "../utils/messageError.js";
+import { waveInput } from "../utils/waveInput.js";
 
 
 export function Login() {
@@ -15,8 +16,9 @@ export function Login() {
         </div>
     </header>
     <main class="container_left container_login">
-        <div class="welcome">
+        <div class="login_container">
             <h1 class="title_login">Faça login para prosseguir com sua jornada saudável.</h1>
+            <div id="message_error_login"></div>
             <div class="div_input">
                 <div class="form-control">
                     <input type="text" required id="email" />
@@ -39,7 +41,6 @@ export function Login() {
                 <div class="label-text">Me manter conectado</div>
                 </label>
                 </div>
-                <div id="message_error_login"></div>
                 <div class="btns_index btns_login">
                 <button id="btn_enter" class="btn_colorLinear">Entrar</button>
                 <button id="btn_back" class="btn_stroke">Voltar</button>
@@ -50,7 +51,7 @@ export function Login() {
           
     </main>
     <footer class="footer footer_full">
-        <span>all rights reserved</span>
+        <span>Todos os direitos reservados</span>
     </footer>`;
 
     document.getElementById("root").innerHTML = '';
@@ -60,21 +61,6 @@ export function Login() {
     logoNav();
     waveInput();
     return div
-}
-
-
-function waveInput(){
-const inputs = document.querySelectorAll('.form-control input');
-const labels = document.querySelectorAll('.form-control label');
-
-labels.forEach(label => {
-	label.innerHTML = label.innerText
-		.split('')
-		.map((letter, idx) => `<span style="
-				transition-delay: ${idx * 50}ms
-			">${letter}</span>`)
-		.join('');
-});
 }
 
 function showPassword(){
@@ -128,7 +114,6 @@ export function loginBtns(){
              btnEnter.disabled = true;
 
              const rememberMe = connectCheckbox.checked; 
-             console.log(rememberMe)
 
 
         const email = document.getElementById("email").value;

@@ -27,7 +27,7 @@ export function Initial() {
     <button id="btn_register" class="btn_stroke">Cadastro</button>
 </div>
     <footer class="footer_withoutBack">
-        <span>all rights reserved</span>
+        <span>Todos os direitos reservados</span>
     </footer>
     </div>
 </div>    
