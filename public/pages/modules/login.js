@@ -39,8 +39,8 @@ export function Login() {
                 </div>
             </div>
             <div class="btns_index">
-                    <button id="btn_back" class="btn_stroke">Voltar</button>
                     <button id="btn_enter" class="btn_colorLinear">Entrar</button>
+                    <button id="btn_back" class="btn_stroke">Voltar</button>
                 </div>
             <span id="register" class="register"><a href="" >Não tem conta? Cadastre-se</a></span>
         </div>
