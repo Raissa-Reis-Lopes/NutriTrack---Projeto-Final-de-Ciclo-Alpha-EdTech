@@ -16,7 +16,7 @@ function router() {
       "/history": History,
       "/profile": Profile,
       "/config": Config,
-      "/about": About(),
+      "/about": About,
     };
   
     function getPage(path) {
