@@ -43,6 +43,7 @@ export function Home() {
             <nav class="header_nav">
                 <div id="navProfile">Perfil</div>
                 <div id="navHistory">Histórico</div>
+                <div id="navAbout">Sobre Nós</div>
                 <button id="btnExit" class="btn_stroke btn_exit">Sair</button>
             </nav>
         </header>
@@ -426,6 +427,7 @@ function updateOrCreateDonutChart(
 export function navRoutes() {
   const navProfile = document.getElementById("navProfile");
   const navHistory = document.getElementById("navHistory");
+  const navAbout = document.getElementById("navAbout");
   const btnExit = document.getElementById("btnExit");
 
   navProfile.addEventListener("click", () => {
@@ -435,6 +437,11 @@ export function navRoutes() {
 
   navHistory.addEventListener("click", () => {
     const customEvent = createCustomEvent("/history");
+    window.dispatchEvent(customEvent);
+  });
+
+  navAbout.addEventListener("click", () => {
+    const customEvent = createCustomEvent("/about");
     window.dispatchEvent(customEvent);
   });
 
