@@ -28,7 +28,7 @@ export function Initial() {
 </div>
     <footer class="footer_withoutBack">
 
-        <span>todos os direitos reservados</span>
+        <span>Todos os direitos reservados</span>
 
     </footer>
     </div>
