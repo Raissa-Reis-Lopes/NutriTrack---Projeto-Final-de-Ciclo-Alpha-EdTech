@@ -1247,10 +1247,10 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
       }
   
       // Atualizar a página para refletir as mudanças
-     
+      
       const customEvent = createCustomEvent("/home");
       window.dispatchEvent(customEvent);
-
+      
 
       const customEventmodal = new CustomEvent("updateModal");
       window.dispatchEvent(customEventmodal);
@@ -1258,6 +1258,7 @@ async function editMyFoodItem(myFoodItemId, nameCreate,caloriesCreate,carbCreate
     } catch (error) {
       console.error("Erro ao editar alimento:", error);
     }
+    document.querySelector(".modal_food_container").remove();
     modalEditMyFood.remove();
     
   });
