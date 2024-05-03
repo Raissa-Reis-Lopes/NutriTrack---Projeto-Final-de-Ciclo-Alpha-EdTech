@@ -52,7 +52,7 @@ export function Login() {
     </main>
     <footer class="footer footer_full">
 
-        <span>todos os direitos reservados</span>
+        <span>Todos os direitos reservados</span>
 
     </footer>`;
 

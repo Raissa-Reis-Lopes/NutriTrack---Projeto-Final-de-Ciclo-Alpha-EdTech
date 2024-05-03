@@ -73,7 +73,7 @@ export function Register() {
     <section id="terms_container"></section>
 
     <footer class="footer footer_full">
-        <span>todos os direitos reservados</span>
+        <span>Todos os direitos reservados</span>
     </footer>
     `;
 

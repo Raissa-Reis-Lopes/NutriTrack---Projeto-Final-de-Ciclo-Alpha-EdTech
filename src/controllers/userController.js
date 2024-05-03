@@ -86,7 +86,7 @@ const updateUser = async(req, res) => {
 const deleteUser = async(req, res) => {
     const user_id = req.user;
     try {
-        const user = await userServices.getUserById(id);
+        const user = await userServices.getUserById(user_id);
         
         if(!user){
             throw new Error('Usuário não cadastrado');
