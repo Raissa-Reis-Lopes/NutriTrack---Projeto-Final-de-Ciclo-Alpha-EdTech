@@ -34,6 +34,11 @@ span_terms {
   justify-content: left;
 }
 
+.title_register{
+  text-align: center;
+  color: var(--cor-p5);
+}
+
 .title_register::after{
   content: "";
   display: block;

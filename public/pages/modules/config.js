@@ -3,6 +3,7 @@ import { heightValid, weightValid } from "./validation.js";
 import { showMessage } from "../utils/message.js";
 import { limitDate } from "../utils/limitDates.js";
 import { messageError } from "../utils/messageError.js";
+import { waveInput } from "../utils/waveInput.js";
 
 
 export function Config() {
@@ -16,56 +17,64 @@ export function Config() {
     </div>
     </header>
     <main class="container_left container_login">
-    <div class="welcome"  id="form1" method="post" style="display:none;">
-        <h1 class="title_config">Agora vamos calcular seu gasto energético diário!</h1>
-        <div class="div_input div_input_config">
-        <div class="align_row_register">
-            <label for="weight">Peso</label>
-            <input class="input_config" type="number" name="weight" id="weight" min="10" max="500" maxlength="3" placeholder="KG" required />
-        </div> 
-        <div id="message_weight"></div>   
-        <div class="align_row_register">
-            <label for="height">Altura</label>
-            <input class="input_config"  type="number" name="height" id="height" min="10" max="300" maxlength="3" placeholder="CM" required />
+    <div class="register_container" id="form1" method="post" style="display:none;">
+        <h1 class="title_register">Agora vamos calcular seu gasto energético diário!</h1>
+        
+        <div class="div_input_config">
+        
+        <div class="div_input_config_inner">
+        <div class="form-control">
+            <input type="number" id="weight" min="10" max="500" placeholder="KG" maxlength="3" required />
+            <label>Peso</label>
+        </div>
+        <div id="message_weight"></div>
+
+
+        <div class="form-control">
+        <input placeholder="180 CM" type="number" id="height" min="10" max="300" maxlength="3" required />
+            <label>Altura</label>
         </div>
         <div id="message_height"></div>
-        <div class="align_row_register">
-            <label for="date">Data de nascimento</label>
-            <input class="input_config"  type="date" name="date" id="birth_date" />
+
+        <div id="message_birthdate" class="hidden"></div>
+        <div class="form-control">
+        <input type="date" name="date" id="birth_date" required />
+        <label>Data de nascimento</label>
         </div>
-        <div id="message_birthdate"></div>
-        <div class="align_row_register">
-            <label for="gender">Sexo biológico</label>
-            <select class="input_config"  name="gender" id="gender">
-                <option value="">Selecione</option>
-                <option value="M">Masculino</option>
-                <option value="F">Feminino</option>
-            </select>
         </div>
+
+        <div class="div_input_config_inner_select">
+        <div class="align_column_config">
+        <label for="gender">Sexo biológico</label>
+        <select class="input_config"  name="gender" id="gender">
+            <option value="" disabled selected>Selecione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+        </select>
         <div id="message_gender"></div>
-        <div class="align_row_register">
-            <label for="activity">Nivel de atividade</label>
-            <select class="input_config"  name="activity" id="activity">
-                <option value="">Selecione</option>
-                <option value="sedentary">Sedentário - Pouca ou nenhuma atividade física regular.</option>
-                <option value="lightlyActive">Levemente Ativo - Alguma atividade física, como caminhada leve ou exercícios leves. </option>
-                <option value="moderatelyActive">Moderadamente Ativo - Exercícios regulares, como caminhadas, corridas ou exercícios moderados. </option>
-                <option value="veryActive">Ativo - Atividades físicas frequentes, como treinos regulares ou esportes recreativos. </option>
-                <option value="extraActive">Muito Ativo - Atividades físicas intensas ou treinamento atlético regular. </option>
-            </select>
         </div>
+        <div class="align_column_config">
+        <label for="activity">Nivel de atividade</label>
+        <select class="input_config"  name="activity" id="activity">
+            <option value="" disabled selected>Selecione</option>
+            <option value="sedentary">Sedentário - Pouca ou nenhuma atividade física regular.</option>
+            <option value="lightlyActive">Levemente Ativo - Alguma atividade física, como caminhada leve ou exercícios leves. </option>
+            <option value="moderatelyActive">Moderadamente Ativo - Exercícios regulares, como caminhadas, corridas ou exercícios moderados. </option>
+            <option value="veryActive">Ativo - Atividades físicas frequentes, como treinos regulares ou esportes recreativos. </option>
+            <option value="extraActive">Muito Ativo - Atividades físicas intensas ou treinamento atlético regular. </option>
+        </select>
         <div id="message_activity"></div>
-        <div id="message" class="message-container hidden">
-        <div id="message-content" class="message-content hidden"></div>
-        </div>
-        </div>
-        <div class="btns_index">
-            <button id="btn_back" class="btn_stroke">Voltar</button>
-            <button id="btn_next" class="btn_colorLinear">Próximo</button>
         </div>
     </div>
-    <div class="welcome" id="form2" method="post" style="display:none;">
-        <h1 class="title_plan">Escolha seu plano alimentar!</h1>
+    </div>
+    <div class="btns_config">
+    <button id="btn_next" class="btn_colorLinear">Próximo</button>
+    <button id="btn_back" class="btn_stroke">Voltar</button>
+    </div>
+    </div>
+   
+    <div class="register_container" id="form2" method="post" style="display:none;">
+        <h1 class="title_register">Escolha seu plano alimentar!</h1>
         <div class="div_input" >
             <div class="container_center">
                 <div class="plan">
@@ -122,8 +131,8 @@ export function Config() {
         </div>
         <div id="message_plan"></div>
         <div class="btns_index">
-            <button id="btn_back_2" class="btn_stroke">Voltar</button>
             <button id="btn_next_2" class="btn_colorLinear">Próximo</button>
+            <button id="btn_back_2" class="btn_stroke">Voltar</button>
         </div>
     </div>
 </main>
@@ -138,6 +147,7 @@ export function Config() {
     navConfig();
     limitDate('birth_date');
     addEventListenerToPlans();
+    waveInput();
     return div
 }
 
@@ -182,7 +192,6 @@ document.getElementById('plan3').addEventListener('click', () => selectPlan('pla
 function navConfig(){
     const logo = document.getElementById("logo");
  
-
     logo.addEventListener("click", ()=>{
         const customEvent = createCustomEvent('/');
         window.dispatchEvent(customEvent); 
@@ -229,6 +238,7 @@ function configBtns() {
             }
 
             if(!birthDate){
+                document.getElementById("message_birthdate").classList.remove("hidden");
                 messageError("message_birthdate","A data de nascimento é obrigatória");
                 return;
             }

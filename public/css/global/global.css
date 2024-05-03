@@ -171,6 +171,14 @@ ul {
   background-color: var(--cor-p9);
 }
 
+.form-control input[type="number"]::placeholder {
+  text-align: right; /* Alinha o placeholder à esquerda */
+  position: absolute;
+  top: 0;
+  right: 10px;
+  padding: 7px;
+}
+
 .form-control input:focus, 
 .form-control input:valid {
   border-bottom-color: var(--cor-p7);
@@ -187,6 +195,13 @@ ul {
   position: absolute;
   top: 0px;
   left: 0;
+}
+
+.form-control input[type="date"]{
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 40px;
 }
 
 .form-control label span {
