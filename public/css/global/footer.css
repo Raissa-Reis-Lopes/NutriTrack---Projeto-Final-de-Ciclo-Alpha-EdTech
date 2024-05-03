@@ -10,7 +10,7 @@
  align-items: center;
  font-size: 0.8rem;
  color: var(--cor-12);
- text-transform: capitalize;
+ /* text-transform: capitalize; */
  z-index: -1;
  /* position: absolute; */
  bottom: 50px;

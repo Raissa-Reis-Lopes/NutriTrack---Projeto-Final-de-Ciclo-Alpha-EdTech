@@ -1,9 +1,22 @@
-.form_input {
-    display: flex;
-    flex-direction: column;
+.register_container{
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  font-weight: 500;
+  max-width: 80ch;
+  text-align: center;
+  color: var(--cor-p5);
 }
 
-span {
+/* .form_input {
+    display: flex;
+    flex-direction: column;
+} */
+
+span_terms {
     color: var(--cor-p5);
 }
 
@@ -14,13 +27,21 @@ span {
     justify-content: space-between;
 }
 
+.align_row_register{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: left;
+}
+
 .title_register::after{
-    content: "";
-    display: block;
-    width: 110%;
-    height: 2px;
-    border-radius: 5px;
-    background-color: var(--cor-p0);
+  content: "";
+  display: block;
+  width: 110%;
+  height: 2px;
+  border-radius: 5px;
+  background-color: var(--cor-p8);
+  min-width: 800px
   }
 
   .input_register,
@@ -31,15 +52,21 @@ span {
 
   .div_input_register{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 3px;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-evenly;
+    gap: 20px;
     font-size: medium;
     font-weight: 600;
-    width: 55%;
-  }
-
-  .regsiter_conditons{
-    cursor: pointer;
-    color: #e96001 !important; 
+    width: 900px;
+    flex-wrap: wrap;
   } 
+
+  .register_conditons{
+    cursor: pointer;
+    color: var(--cor-p7); 
+  } 
+
+  .terms_register{
+    color: var(--cor-p5); 
+  }

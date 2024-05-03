@@ -128,7 +128,7 @@ export function Config() {
     </div>
 </main>
 <footer class="footer footer_full">
-    <span>all rights reserved</span>
+    <span>Todos os direitos reservados</span>
 </footer>
     `;
 

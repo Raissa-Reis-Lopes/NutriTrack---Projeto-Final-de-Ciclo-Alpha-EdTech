@@ -249,7 +249,7 @@ export async function uploadImage(){
             const data = await response.json();
             
             if (data.success) {
-                imgProfile.src = `/assets/${data.new_avatar}`; // Atualizando o src da imagem
+                imgProfile.src = `uploads/${data.new_avatar}`; // Atualizando o src da imagem
                 showMessage('success','Imagem atualizada com sucesso!', "-5%");
             } else {
                 showMessage('fail','Falha ao atualizar a foto de perfil!', "-5%");
@@ -283,8 +283,7 @@ export async function fillProfileData(){
            const userAvatar = user.avatar_img;
 
            const imgProfile = document.querySelector("#img-user");
-           imgProfile.src = `/assets/${userAvatar}`;
-           
+           imgProfile.src = `uploads/${userAvatar}`;
 
            const userConfigInfo = await fetch(`/api/config/lastConfig`,{
             method: 'GET',
