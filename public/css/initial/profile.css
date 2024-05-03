@@ -3,6 +3,8 @@
     margin: 0 auto;
     padding: 20px;
     margin-left: 600px;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile_picture{
@@ -94,9 +96,10 @@
     align-items: center;
     margin: 10px 0;
     display: flex;
-    justify-content: right;
-    padding-right: 169px;
+    justify-content: center;
+    /* padding-right: 169px; */
     gap: 67px;
+    margin: 30px 0;
 }
 
 .change-image-overlay {

@@ -30,9 +30,13 @@ margin-top: 50px;
 
 .footer_home{
     display: flex;
-    gap:20px;
+    gap: 20px;
     align-items: center;
     justify-content: space-around;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .footer_history{
@@ -42,13 +46,28 @@ margin-top: 50px;
     justify-content: space-between;
     padding-right: 280px;
     padding-left: 150px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
 }
 
+.footer_history_container {
+    position: relative;
+}
 .footer_profile{
     display: flex;
     gap: 80px;
     align-items: center;
     justify-content: right;
     padding-right: 50px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
